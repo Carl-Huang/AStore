@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 
 
-
+@class AKTabBarController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
 @property (strong, nonatomic) UIWindow *window;
-
-
+@property (strong, nonatomic) AKTabBarController * akTabBarController;
 
 @end

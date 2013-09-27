@@ -7,16 +7,38 @@
 //
 
 #import "AppDelegate.h"
-
-
-
+#import "AKTabBarController.h"
+#import "MainViewController.h"
+#import "CatalogViewController.h"
+#import "CartViewController.h"
+#import "UserCenterViewController.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [self customUI];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-
+    _akTabBarController = [[AKTabBarController alloc] initWithTabBarHeight:49.0];
+    //首页界面
+    MainViewController * mainViewController = [[MainViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController * nav_a = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    //分类列表界面
+    CatalogViewController * catalogViewController = [[CatalogViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController * nav_b = [[UINavigationController alloc] initWithRootViewController:catalogViewController];
+    //购物车界面
+    CartViewController * cartViewController = [[CartViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController * nav_c = [[UINavigationController alloc] initWithRootViewController:cartViewController];
+    //用户中心界面
+    UserCenterViewController * userViewController = [[UserCenterViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:userViewController];
+    _akTabBarController.viewControllers = [NSMutableArray arrayWithObjects:nav_a,nav_b,nav_c,nav_d,nil];
+    [_akTabBarController setBackgroundImageName:@"未选中bg"];
+    [_akTabBarController setSelectedBackgroundImageName:@"选中bg"];
+    [_akTabBarController setSelectedIconColors:@[[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1],
+     [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1]]];
+    self.window.rootViewController = _akTabBarController;
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -46,6 +68,12 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)customUI
+{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"导航背景"] forBarMetrics:UIBarMetricsDefault];
 }
 
 @end

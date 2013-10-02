@@ -12,6 +12,7 @@
 #import "CatalogViewController.h"
 #import "CartViewController.h"
 #import "UserCenterViewController.h"
+#import "LoginViewController.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -31,8 +32,11 @@
     CartViewController * cartViewController = [[CartViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController * nav_c = [[UINavigationController alloc] initWithRootViewController:cartViewController];
     //用户中心界面
-    UserCenterViewController * userViewController = [[UserCenterViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:userViewController];
+//    UserCenterViewController * userViewController = [[UserCenterViewController alloc] initWithNibName:nil bundle:nil];
+//    UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:userViewController];
+    //用户登陆界面
+    LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:loginViewController];
     _akTabBarController.viewControllers = [NSMutableArray arrayWithObjects:nav_a,nav_b,nav_c,nav_d,nil];
     [_akTabBarController setBackgroundImageName:@"未选中bg"];
     [_akTabBarController setSelectedBackgroundImageName:@"选中bg"];

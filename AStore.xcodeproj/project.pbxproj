@@ -94,6 +94,8 @@
 		C3845CE317F3F19400DED3C5 /* UserCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3845CE117F3F19400DED3C5 /* UserCenterViewController.m */; };
 		C3845CE417F3F19400DED3C5 /* UserCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3845CE217F3F19400DED3C5 /* UserCenterViewController.xib */; };
 		C3845CE617F3F63600DED3C5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845CE517F3F63500DED3C5 /* QuartzCore.framework */; };
+		C384FACE17FC812600F18A49 /* ResetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C384FACC17FC812500F18A49 /* ResetPwdViewController.m */; };
+		C384FAD117FC81C700F18A49 /* ResetPwdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C384FAD017FC81C600F18A49 /* ResetPwdViewController.xib */; };
 		C3857F3817F55B890012F8AC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3845CD217F3F03000DED3C5 /* MainViewController.m */; };
 		C3857F9217F594FB0012F8AC /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3857F8E17F594FB0012F8AC /* 1.jpg */; };
 		C3857F9317F594FB0012F8AC /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3857F8F17F594FB0012F8AC /* 2.jpg */; };
@@ -301,6 +303,9 @@
 		C3845CE117F3F19400DED3C5 /* UserCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCenterViewController.m; sourceTree = "<group>"; };
 		C3845CE217F3F19400DED3C5 /* UserCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCenterViewController.xib; sourceTree = "<group>"; };
 		C3845CE517F3F63500DED3C5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C384FACB17FC812500F18A49 /* ResetPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPwdViewController.h; sourceTree = "<group>"; };
+		C384FACC17FC812500F18A49 /* ResetPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPwdViewController.m; sourceTree = "<group>"; };
+		C384FAD017FC81C600F18A49 /* ResetPwdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPwdViewController.xib; sourceTree = "<group>"; };
 		C3857F8E17F594FB0012F8AC /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		C3857F8F17F594FB0012F8AC /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
 		C3857F9017F594FB0012F8AC /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
@@ -728,6 +733,9 @@
 				C376B95D17FB4648003BC777 /* RegisterViewController.h */,
 				C376B95E17FB4648003BC777 /* RegisterViewController.m */,
 				C376B95F17FB4648003BC777 /* RegisterViewController.xib */,
+				C384FACB17FC812500F18A49 /* ResetPwdViewController.h */,
+				C384FACC17FC812500F18A49 /* ResetPwdViewController.m */,
+				C384FAD017FC81C600F18A49 /* ResetPwdViewController.xib */,
 			);
 			path = 4;
 			sourceTree = "<group>";
@@ -912,6 +920,7 @@
 				C38262EA17F6D04100C96A38 /* NoticeContentViewController.xib in Resources */,
 				C376B95C17FB370D003BC777 /* LoginViewController.xib in Resources */,
 				C376B96117FB4649003BC777 /* RegisterViewController.xib in Resources */,
+				C384FAD117FC81C700F18A49 /* ResetPwdViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -960,6 +969,7 @@
 				C38262E917F6D04000C96A38 /* NoticeContentViewController.m in Sources */,
 				C376B95B17FB370D003BC777 /* LoginViewController.m in Sources */,
 				C376B96017FB4649003BC777 /* RegisterViewController.m in Sources */,
+				C384FACE17FC812600F18A49 /* ResetPwdViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

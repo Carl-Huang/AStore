@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserCenterViewController : UIViewController
-
+@interface UserCenterViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *userTypeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pointLabel;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+- (IBAction)loginOutAction:(id)sender;
 @end

@@ -17,8 +17,8 @@
 		4EAEE3E317FE224C002857F1 /* CommodityInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */; };
 		4EAEE3E417FE224C002857F1 /* CouponCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DE17FE224A002857F1 /* CouponCell.m */; };
 		4EAEE3E517FE224C002857F1 /* CouponCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DF17FE224B002857F1 /* CouponCell.xib */; };
-		4EAEE3EA17FE311A002857F1 /* ModifyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */; };
 		4EAEE3EB17FE311A002857F1 /* ModifyAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */; };
+		4EAEE3ED17FE3685002857F1 /* ModifyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
@@ -205,10 +205,10 @@
 		4EAEE3DD17FE2248002857F1 /* CouponCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CouponCell.h; sourceTree = "<group>"; };
 		4EAEE3DE17FE224A002857F1 /* CouponCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CouponCell.m; sourceTree = "<group>"; };
 		4EAEE3DF17FE224B002857F1 /* CouponCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CouponCell.xib; sourceTree = "<group>"; };
-		4EAEE3E617FE2F78002857F1 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 		4EAEE3E717FE3118002857F1 /* ModifyAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifyAddressViewController.h; sourceTree = "<group>"; };
 		4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifyAddressViewController.m; sourceTree = "<group>"; };
 		4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyAddressViewController.xib; sourceTree = "<group>"; };
+		4EAEE3EC17FE3621002857F1 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
@@ -803,16 +803,11 @@
 		C3C999C617F2CE1700043727 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4EAEE3EC17FE3621002857F1 /* constants.h */,
 				C3419D5517F5320D00FF0A05 /* CustomScrollView.h */,
 				C3419D5617F5320D00FF0A05 /* CustomScrollView.m */,
 				C3505A0817F6856C00D590A7 /* UIViewController+LeftTitle.h */,
 				C3505A0917F6856C00D590A7 /* UIViewController+LeftTitle.m */,
-				4EAEE3BE17FDC040002857F1 /* CommodityInfoCell.h */,
-				4EAEE3BF17FDC040002857F1 /* CommodityInfoCell.m */,
-				4EAEE3C117FDC069002857F1 /* CommodityInfoCell.xib */,
-				4EAEE3C817FDD8B2002857F1 /* CouponCell.h */,
-				4EAEE3C917FDD8B3002857F1 /* CouponCell.m */,
-				4EAEE3CB17FDD935002857F1 /* CouponCell.xib */,
 				C384FAD217FD317700F18A49 /* HttpHelper.h */,
 				C384FAD317FD317700F18A49 /* HttpHelper.m */,
 			);
@@ -1006,6 +1001,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EAEE3ED17FE3685002857F1 /* ModifyAddressViewController.m in Sources */,
 				C3857F3817F55B890012F8AC /* MainViewController.m in Sources */,
 				C34217B617F1E1F500B42F5E /* main.m in Sources */,
 				C34217BA17F1E1F600B42F5E /* AppDelegate.m in Sources */,
@@ -1051,7 +1047,6 @@
 				4EAEE3E017FE224C002857F1 /* AddressCell.m in Sources */,
 				4EAEE3E217FE224C002857F1 /* CommodityInfoCell.m in Sources */,
 				4EAEE3E417FE224C002857F1 /* CouponCell.m in Sources */,
-				4EAEE3CA17FDD8B3002857F1 /* CouponCell.m in Sources */,
 				C384FAD417FD317700F18A49 /* HttpHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

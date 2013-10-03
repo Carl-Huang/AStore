@@ -9,6 +9,9 @@
 #import "UserCenterViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "ResetPwdViewController.h"
+#import "MyOrderViewController.h"
+#import "MyCouponViewController.h"
+#import "MyAddressViewController.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @end
@@ -98,11 +101,11 @@
     {
         if(indexPath.row == 0)
         {
-            
+            [self pushMyOrderViewController];
         }
         else if(indexPath.row == 1)
         {
-            
+            [self pushMyCouponViewController];
         }
         else if(indexPath.row ==2)
         {
@@ -111,13 +114,34 @@
         }
         else if(indexPath.row == 3)
         {
-            
+            [self pushMyAddressViewController];
         }
     }
     else if (indexPath.section == 1)
     {
         
     }
+}
+
+-(void)pushMyOrderViewController
+{
+    MyOrderViewController * viewController = [[MyOrderViewController alloc]initWithNibName:@"MyOrderViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+}
+-(void)pushMyCouponViewController
+{
+    MyCouponViewController * viewController = [[MyCouponViewController alloc]initWithNibName:@"MyCouponViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+}
+
+-(void)pushMyAddressViewController
+{
+    MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+    
 }
 
 - (IBAction)loginOutAction:(id)sender

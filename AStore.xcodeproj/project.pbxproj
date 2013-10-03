@@ -106,6 +106,7 @@
 		C3845CE617F3F63600DED3C5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845CE517F3F63500DED3C5 /* QuartzCore.framework */; };
 		C384FACE17FC812600F18A49 /* ResetPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C384FACC17FC812500F18A49 /* ResetPwdViewController.m */; };
 		C384FAD117FC81C700F18A49 /* ResetPwdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C384FAD017FC81C600F18A49 /* ResetPwdViewController.xib */; };
+		C384FAD417FD317700F18A49 /* HttpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C384FAD317FD317700F18A49 /* HttpHelper.m */; };
 		C3857F3817F55B890012F8AC /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3845CD217F3F03000DED3C5 /* MainViewController.m */; };
 		C3857F9217F594FB0012F8AC /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3857F8E17F594FB0012F8AC /* 1.jpg */; };
 		C3857F9317F594FB0012F8AC /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3857F8F17F594FB0012F8AC /* 2.jpg */; };
@@ -331,6 +332,8 @@
 		C384FACB17FC812500F18A49 /* ResetPwdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPwdViewController.h; sourceTree = "<group>"; };
 		C384FACC17FC812500F18A49 /* ResetPwdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPwdViewController.m; sourceTree = "<group>"; };
 		C384FAD017FC81C600F18A49 /* ResetPwdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResetPwdViewController.xib; sourceTree = "<group>"; };
+		C384FAD217FD317700F18A49 /* HttpHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpHelper.h; sourceTree = "<group>"; };
+		C384FAD317FD317700F18A49 /* HttpHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpHelper.m; sourceTree = "<group>"; };
 		C3857F8E17F594FB0012F8AC /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		C3857F8F17F594FB0012F8AC /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
 		C3857F9017F594FB0012F8AC /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
@@ -787,6 +790,8 @@
 				4EAEE3C817FDD8B2002857F1 /* CouponCell.h */,
 				4EAEE3C917FDD8B3002857F1 /* CouponCell.m */,
 				4EAEE3CB17FDD935002857F1 /* CouponCell.xib */,
+				C384FAD217FD317700F18A49 /* HttpHelper.h */,
+				C384FAD317FD317700F18A49 /* HttpHelper.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1020,6 +1025,7 @@
 				4EAEE3C017FDC040002857F1 /* CommodityInfoCell.m in Sources */,
 				4EAEE3C617FDD804002857F1 /* MyCouponViewController.m in Sources */,
 				4EAEE3CA17FDD8B3002857F1 /* CouponCell.m in Sources */,
+				C384FAD417FD317700F18A49 /* HttpHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

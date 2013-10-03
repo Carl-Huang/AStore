@@ -17,6 +17,7 @@
 #import "MainCell3.h"
 #import "MainCell4.h"
 #import "MainCell5.h"
+#import "HttpHelper.h"
 #define TABLE_CELL_HEIGHT_1 124
 #define TABLE_CELL_HEIGHT_2 122
 #define TABLE_CELL_HEIGHT_3 94
@@ -50,7 +51,7 @@
     UIBarButtonItem * logoItem = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = logoItem;
     
-    
+    [HttpHelper getAllCatalog];
     
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 165, 35)];
     searchField.delegate = self;

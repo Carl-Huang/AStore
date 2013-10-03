@@ -14,6 +14,9 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.isChooseBtnSelect = NO;
+        self.isAlterBtnSelect = NO;
+        self.isDeleteBtnSelect = NO;
         // Initialization code
     }
     return self;
@@ -27,11 +30,36 @@
 }
 
 - (IBAction)chooseBtnAction:(id)sender {
+    NSLog(@"%s",__func__);
+    self.isChooseBtnSelect = !self.isChooseBtnSelect;
+    if (self.isChooseBtnSelect) {
+        [self.chooseBtn setBackgroundImage:nil forState:UIControlStateNormal];
+    }else
+    {
+        [self.chooseBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
+    }
+
 }
 
 - (IBAction)alterBtnAction:(id)sender {
+    NSLog(@"%s",__func__);
+    self.isAlterBtnSelect = !self.isAlterBtnSelect;
+    if (self.isAlterBtnSelect) {
+        [self.alterBtn setBackgroundImage:nil forState:UIControlStateNormal];
+    }else
+    {
+        [self.alterBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)deleteBtnAction:(id)sender {
+    NSLog(@"%s",__func__);
+    self.isDeleteBtnSelect = !self.isDeleteBtnSelect;
+    if (self.isDeleteBtnSelect) {
+        [self.deleteBtn setBackgroundImage:nil forState:UIControlStateNormal];
+    }else
+    {
+        [self.deleteBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
+    }
 }
 @end

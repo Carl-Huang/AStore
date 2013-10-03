@@ -41,17 +41,29 @@ static NSString * cellIdentifier = @"addressCell";
     UINib * cellNib = [UINib nibWithNibName:@"AddressCell" bundle:[NSBundle bundleForClass:[AddressCell class]]];
     [self.addressTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
 
-    UIImage * backImg = [UIImage imageNamed:@"删除btn"];
+    UIImage * newItemImg = [UIImage imageNamed:@"删除btn"];
+    UIButton * newItemBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [newItemBtn setFrame:CGRectMake(0, 0, newItemImg.size.width, newItemImg.size.height)];
+    [newItemBtn setBackgroundImage:newItemImg forState:UIControlStateNormal];
+    [newItemBtn setTitle:@"添加" forState:UIControlStateNormal];
+    [newItemBtn addTarget:self action:@selector(newItem) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem * newItem = [[UIBarButtonItem alloc] initWithCustomView:newItemBtn];
+    
+    UIImage *backImg = [UIImage imageNamed:@"返回btn"];
     UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setFrame:CGRectMake(0, 0, backImg.size.width, backImg.size.height)];
     [backBtn setBackgroundImage:backImg forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(newItem) forControlEvents:UIControlEventTouchUpInside];
+    [backBtn addTarget:self action:@selector(pushBack:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem * backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
-    self.navigationItem.rightBarButtonItem = backItem;
-
+    self.navigationItem.rightBarButtonItems = @[backItem,newItem];
+    backItem = nil;
+    newItem = nil;
     // Do any additional setup after loading the view from its nib.
 }
-
+- (void)pushBack:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 -(void)newItem
 {
     NSLog(@"%s",__func__);

@@ -16,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (assign, nonatomic) BOOL isChooseBtnSelect;
+@property (assign, nonatomic) BOOL isAlterBtnSelect;
+@property (assign, nonatomic) BOOL isDeleteBtnSelect;
 - (IBAction)chooseBtnAction:(id)sender;
 - (IBAction)alterBtnAction:(id)sender;
 - (IBAction)deleteBtnAction:(id)sender;

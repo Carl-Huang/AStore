@@ -17,6 +17,8 @@
 		4EAEE3E317FE224C002857F1 /* CommodityInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */; };
 		4EAEE3E417FE224C002857F1 /* CouponCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DE17FE224A002857F1 /* CouponCell.m */; };
 		4EAEE3E517FE224C002857F1 /* CouponCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DF17FE224B002857F1 /* CouponCell.xib */; };
+		4EAEE3EA17FE311A002857F1 /* ModifyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */; };
+		4EAEE3EB17FE311A002857F1 /* ModifyAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
@@ -202,6 +204,10 @@
 		4EAEE3DD17FE2248002857F1 /* CouponCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CouponCell.h; sourceTree = "<group>"; };
 		4EAEE3DE17FE224A002857F1 /* CouponCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CouponCell.m; sourceTree = "<group>"; };
 		4EAEE3DF17FE224B002857F1 /* CouponCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CouponCell.xib; sourceTree = "<group>"; };
+		4EAEE3E617FE2F78002857F1 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		4EAEE3E717FE3118002857F1 /* ModifyAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifyAddressViewController.h; sourceTree = "<group>"; };
+		4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifyAddressViewController.m; sourceTree = "<group>"; };
+		4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyAddressViewController.xib; sourceTree = "<group>"; };
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
@@ -784,6 +790,9 @@
 				4EAEE3CD17FDECE8002857F1 /* MyAddressViewController.h */,
 				4EAEE3CE17FDECE8002857F1 /* MyAddressViewController.m */,
 				4EAEE3CF17FDECE9002857F1 /* MyAddressViewController.xib */,
+				4EAEE3E717FE3118002857F1 /* ModifyAddressViewController.h */,
+				4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */,
+				4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */,
 			);
 			path = 4;
 			sourceTree = "<group>";
@@ -795,6 +804,7 @@
 				C3419D5617F5320D00FF0A05 /* CustomScrollView.m */,
 				C3505A0817F6856C00D590A7 /* UIViewController+LeftTitle.h */,
 				C3505A0917F6856C00D590A7 /* UIViewController+LeftTitle.m */,
+				4EAEE3E617FE2F78002857F1 /* constants.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -975,6 +985,7 @@
 				4EAEE3E117FE224C002857F1 /* AddressCell.xib in Resources */,
 				4EAEE3E317FE224C002857F1 /* CommodityInfoCell.xib in Resources */,
 				4EAEE3E517FE224C002857F1 /* CouponCell.xib in Resources */,
+				4EAEE3EB17FE311A002857F1 /* ModifyAddressViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,6 +1041,7 @@
 				4EAEE3E017FE224C002857F1 /* AddressCell.m in Sources */,
 				4EAEE3E217FE224C002857F1 /* CommodityInfoCell.m in Sources */,
 				4EAEE3E417FE224C002857F1 /* CouponCell.m in Sources */,
+				4EAEE3EA17FE311A002857F1 /* ModifyAddressViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

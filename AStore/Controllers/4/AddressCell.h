@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+typedef void (^configureAddressBlock) (id item);
 @interface AddressCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *chooseBtn;
 @property (weak, nonatomic) IBOutlet UIButton *alterBtn;
@@ -23,4 +23,7 @@
 - (IBAction)alterBtnAction:(id)sender;
 - (IBAction)deleteBtnAction:(id)sender;
 
+
+@property (strong ,nonatomic) configureAddressBlock addressBlock;
+-(void)setConfigureBlock:(configureAddressBlock)block;
 @end

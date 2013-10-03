@@ -1014,15 +1014,12 @@
 				C38262E917F6D04000C96A38 /* NoticeContentViewController.m in Sources */,
 				C376B95B17FB370D003BC777 /* LoginViewController.m in Sources */,
 				C376B96017FB4649003BC777 /* RegisterViewController.m in Sources */,
-<<<<<<< HEAD
 				C384FACE17FC812600F18A49 /* ResetPwdViewController.m in Sources */,
-=======
 				4EBB3EF217FD416A00BF1B47 /* UserOrderViewController.m in Sources */,
 				4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */,
 				4EAEE3C017FDC040002857F1 /* CommodityInfoCell.m in Sources */,
 				4EAEE3C617FDD804002857F1 /* MyCouponViewController.m in Sources */,
 				4EAEE3CA17FDD8B3002857F1 /* CouponCell.m in Sources */,
->>>>>>> working-2
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

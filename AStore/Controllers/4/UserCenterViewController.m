@@ -7,9 +7,10 @@
 //
 
 #import "UserCenterViewController.h"
-
+#import "UIViewController+LeftTitle.h"
+#import "ResetPwdViewController.h"
 @interface UserCenterViewController ()
-
+@property (nonatomic,retain)NSArray * dataSource;
 @end
 
 @implementation UserCenterViewController
@@ -26,13 +27,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [self setLeftTitle:@"个人中心"];
+    _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"],@[@"检查版本"]];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -41,4 +48,80 @@
 	return @"个人中心icon-n";
 }
 
+- (void)viewDidUnload {
+    [self setTableView:nil];
+    [self setUsernameLabel:nil];
+    [self setUserTypeLabel:nil];
+    [self setPointLabel:nil];
+    [super viewDidUnload];
+}
+
+
+#pragma mark - UITableViewDateSource Methods
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [_dataSource count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [[_dataSource objectAtIndex:section] count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        return 0.0;
+    }
+    return 13.0f;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    if(cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.textLabel.font = [UIFont systemFontOfSize:14];
+    }
+    
+    NSString * title = [[_dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    cell.textLabel.text = title;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 0)
+    {
+        if(indexPath.row == 0)
+        {
+            
+        }
+        else if(indexPath.row == 1)
+        {
+            
+        }
+        else if(indexPath.row ==2)
+        {
+            ResetPwdViewController * resetPwdViewController = [[ResetPwdViewController alloc] initWithNibName:nil bundle:nil];
+            [self.navigationController pushViewController:resetPwdViewController animated:YES];
+        }
+        else if(indexPath.row == 3)
+        {
+            
+        }
+    }
+    else if (indexPath.section == 1)
+    {
+        
+    }
+}
+
+- (IBAction)loginOutAction:(id)sender
+{
+    
+}
 @end

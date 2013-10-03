@@ -10,6 +10,7 @@
 #import "UIViewController+LeftTitle.h"
 #import "MyOrderViewController.h"
 #import "MyCouponViewController.h"
+#import "MyAddressViewController.h"
 @interface UserOrderViewController ()
 @property (strong ,nonatomic)NSArray * dataSource;
 @end
@@ -65,9 +66,11 @@
             break;
         case 2:
             NSLog(@"%@",cell.textLabel.text);
+            
             break;
         case 3:
             NSLog(@"%@",cell.textLabel.text);
+            [self pushMyAddressViewController];
             break;
         case 4:
             NSLog(@"%@",cell.textLabel.text);
@@ -88,6 +91,14 @@
     MyCouponViewController * viewController = [[MyCouponViewController alloc]initWithNibName:@"MyCouponViewController" bundle:nil];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
+}
+
+-(void)pushMyAddressViewController
+{
+    MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

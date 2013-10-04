@@ -13,13 +13,14 @@
 #define alterBtnTag    1002
 #define deleteBtnTag   1003
 
-#define VOrderNum      @"orderNumber"
+#define VOrderNum       @"orderNumber"
 #define VOrderTime      @"orderTime"
 #define VCommodityName  @"commodityName"
-#define VSumMoney        @"Sum"
+#define VSumMoney       @"Sum"
 #define VOrderStatus    @"orderStatus"
 #define VTotalCredits   @"totalCredits"
 
+//cartViewController
 #define ProductName     @"productName"
 #define ProductNumber   @"productNumebr"
 #define ProductPrice    @"productPrice"

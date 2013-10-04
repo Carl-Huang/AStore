@@ -179,6 +179,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"积分:";
             headerCell.moneyValue.text = @"1000";
+            [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
             return headerCell;
         }else
         {

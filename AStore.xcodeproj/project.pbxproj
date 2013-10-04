@@ -25,6 +25,12 @@
 		4EAEE3F717FE8917002857F1 /* ConfirmOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */; };
 		4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F917FE963D002857F1 /* CartCellHeader.m */; };
 		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
+		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
+		4EB7B21917FF3E9B0018AC58 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B21817FF3E9A0018AC58 /* HeaderView.m */; };
+		4EB7B21D17FF40320018AC58 /* DeliveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B21B17FF40310018AC58 /* DeliveryViewController.m */; };
+		4EB7B21E17FF40320018AC58 /* DeliveryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21C17FF40320018AC58 /* DeliveryViewController.xib */; };
+		4EB7B22117FF41500018AC58 /* DeliveryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B22017FF41500018AC58 /* DeliveryCell.m */; };
+		4EB7B22317FF41600018AC58 /* DeliveryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
@@ -224,6 +230,15 @@
 		4EAEE3F817FE963C002857F1 /* CartCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartCellHeader.h; sourceTree = "<group>"; };
 		4EAEE3F917FE963D002857F1 /* CartCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CartCellHeader.m; sourceTree = "<group>"; };
 		4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CartCellHeader.xib; sourceTree = "<group>"; };
+		4EB7B21517FF393C0018AC58 /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
+		4EB7B21717FF3E9A0018AC58 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		4EB7B21817FF3E9A0018AC58 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
+		4EB7B21A17FF40310018AC58 /* DeliveryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeliveryViewController.h; sourceTree = "<group>"; };
+		4EB7B21B17FF40310018AC58 /* DeliveryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeliveryViewController.m; sourceTree = "<group>"; };
+		4EB7B21C17FF40320018AC58 /* DeliveryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeliveryViewController.xib; sourceTree = "<group>"; };
+		4EB7B21F17FF414F0018AC58 /* DeliveryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeliveryCell.h; sourceTree = "<group>"; };
+		4EB7B22017FF41500018AC58 /* DeliveryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeliveryCell.m; sourceTree = "<group>"; };
+		4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeliveryCell.xib; sourceTree = "<group>"; };
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
@@ -780,6 +795,15 @@
 				4EAEE3F817FE963C002857F1 /* CartCellHeader.h */,
 				4EAEE3F917FE963D002857F1 /* CartCellHeader.m */,
 				4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */,
+				4EB7B21517FF393C0018AC58 /* HeaderView.xib */,
+				4EB7B21717FF3E9A0018AC58 /* HeaderView.h */,
+				4EB7B21817FF3E9A0018AC58 /* HeaderView.m */,
+				4EB7B21A17FF40310018AC58 /* DeliveryViewController.h */,
+				4EB7B21B17FF40310018AC58 /* DeliveryViewController.m */,
+				4EB7B21C17FF40320018AC58 /* DeliveryViewController.xib */,
+				4EB7B21F17FF414F0018AC58 /* DeliveryCell.h */,
+				4EB7B22017FF41500018AC58 /* DeliveryCell.m */,
+				4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */,
 			);
 			path = 3;
 			sourceTree = "<group>";
@@ -1018,6 +1042,9 @@
 				4EAEE3F217FE3D3F002857F1 /* CartCell.xib in Resources */,
 				4EAEE3F717FE8917002857F1 /* ConfirmOrderViewController.xib in Resources */,
 				4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */,
+				4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */,
+				4EB7B21E17FF40320018AC58 /* DeliveryViewController.xib in Resources */,
+				4EB7B22317FF41600018AC58 /* DeliveryCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1078,6 +1105,9 @@
 				4EAEE3F017FE3D2F002857F1 /* CartCell.m in Sources */,
 				4EAEE3F617FE8917002857F1 /* ConfirmOrderViewController.m in Sources */,
 				4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */,
+				4EB7B21917FF3E9B0018AC58 /* HeaderView.m in Sources */,
+				4EB7B21D17FF40320018AC58 /* DeliveryViewController.m in Sources */,
+				4EB7B22117FF41500018AC58 /* DeliveryCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

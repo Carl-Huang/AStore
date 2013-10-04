@@ -6,17 +6,13 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
-#define VOrderNum      @"orderNumber"
-#define VOrderTime      @"orderTime"
-#define VCommodityName  @"commodityName"
-#define VSumMoney        @"Sum"
-#define VOrderStatus    @"orderStatus"
-#define VTotalCredits   @"totalCredits"
+
 
 
 #import "MyOrderViewController.h"
 #import "CommodityInfoCell.h"
 #import "UIViewController+LeftTitle.h"
+#import "constants.h"
 @interface MyOrderViewController ()
 @property (strong ,nonatomic)NSArray * commoditiesArray;
 @property (strong ,nonatomic)NSArray * giftArray;

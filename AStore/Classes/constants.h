@@ -13,4 +13,16 @@
 #define alterBtnTag    1002
 #define deleteBtnTag   1003
 
+#define VOrderNum      @"orderNumber"
+#define VOrderTime      @"orderTime"
+#define VCommodityName  @"commodityName"
+#define VSumMoney        @"Sum"
+#define VOrderStatus    @"orderStatus"
+#define VTotalCredits   @"totalCredits"
+
+#define ProductName     @"productName"
+#define ProductNumber   @"productNumebr"
+#define ProductPrice    @"productPrice"
+#define ProductImage    @"productimage"
+#define JiFen           @"jifen"
 #endif

@@ -19,6 +19,12 @@
 		4EAEE3E517FE224C002857F1 /* CouponCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3DF17FE224B002857F1 /* CouponCell.xib */; };
 		4EAEE3EB17FE311A002857F1 /* ModifyAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */; };
 		4EAEE3ED17FE3685002857F1 /* ModifyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */; };
+		4EAEE3F017FE3D2F002857F1 /* CartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3EF17FE3D2E002857F1 /* CartCell.m */; };
+		4EAEE3F217FE3D3F002857F1 /* CartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F117FE3D3F002857F1 /* CartCell.xib */; };
+		4EAEE3F617FE8917002857F1 /* ConfirmOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F417FE8914002857F1 /* ConfirmOrderViewController.m */; };
+		4EAEE3F717FE8917002857F1 /* ConfirmOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */; };
+		4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F917FE963D002857F1 /* CartCellHeader.m */; };
+		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
@@ -209,6 +215,15 @@
 		4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModifyAddressViewController.m; sourceTree = "<group>"; };
 		4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyAddressViewController.xib; sourceTree = "<group>"; };
 		4EAEE3EC17FE3621002857F1 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		4EAEE3EE17FE3D2E002857F1 /* CartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartCell.h; sourceTree = "<group>"; };
+		4EAEE3EF17FE3D2E002857F1 /* CartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CartCell.m; sourceTree = "<group>"; };
+		4EAEE3F117FE3D3F002857F1 /* CartCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CartCell.xib; sourceTree = "<group>"; };
+		4EAEE3F317FE8913002857F1 /* ConfirmOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderViewController.h; sourceTree = "<group>"; };
+		4EAEE3F417FE8914002857F1 /* ConfirmOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderViewController.m; sourceTree = "<group>"; };
+		4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderViewController.xib; sourceTree = "<group>"; };
+		4EAEE3F817FE963C002857F1 /* CartCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartCellHeader.h; sourceTree = "<group>"; };
+		4EAEE3F917FE963D002857F1 /* CartCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CartCellHeader.m; sourceTree = "<group>"; };
+		4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CartCellHeader.xib; sourceTree = "<group>"; };
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
@@ -756,6 +771,15 @@
 				C3845CDB17F3F17600DED3C5 /* CartViewController.h */,
 				C3845CDC17F3F17600DED3C5 /* CartViewController.m */,
 				C3845CDD17F3F17600DED3C5 /* CartViewController.xib */,
+				4EAEE3EE17FE3D2E002857F1 /* CartCell.h */,
+				4EAEE3EF17FE3D2E002857F1 /* CartCell.m */,
+				4EAEE3F117FE3D3F002857F1 /* CartCell.xib */,
+				4EAEE3F317FE8913002857F1 /* ConfirmOrderViewController.h */,
+				4EAEE3F417FE8914002857F1 /* ConfirmOrderViewController.m */,
+				4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */,
+				4EAEE3F817FE963C002857F1 /* CartCellHeader.h */,
+				4EAEE3F917FE963D002857F1 /* CartCellHeader.m */,
+				4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */,
 			);
 			path = 3;
 			sourceTree = "<group>";
@@ -991,6 +1015,9 @@
 				4EAEE3E317FE224C002857F1 /* CommodityInfoCell.xib in Resources */,
 				4EAEE3E517FE224C002857F1 /* CouponCell.xib in Resources */,
 				4EAEE3EB17FE311A002857F1 /* ModifyAddressViewController.xib in Resources */,
+				4EAEE3F217FE3D3F002857F1 /* CartCell.xib in Resources */,
+				4EAEE3F717FE8917002857F1 /* ConfirmOrderViewController.xib in Resources */,
+				4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,6 +1075,9 @@
 				4EAEE3E217FE224C002857F1 /* CommodityInfoCell.m in Sources */,
 				4EAEE3E417FE224C002857F1 /* CouponCell.m in Sources */,
 				C384FAD417FD317700F18A49 /* HttpHelper.m in Sources */,
+				4EAEE3F017FE3D2F002857F1 /* CartCell.m in Sources */,
+				4EAEE3F617FE8917002857F1 /* ConfirmOrderViewController.m in Sources */,
+				4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

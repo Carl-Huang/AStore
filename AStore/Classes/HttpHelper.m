@@ -12,17 +12,18 @@
 + (NSDictionary *) getAllCatalog
 {
     NSString * urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL,@"?getCategory=\""];
-    NSLog(@"%@",urlString);
-    NSURL * url = [NSURL URLWithString:    [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    AFJSONRequestOperation * operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:[NSURLRequest requestWithURL:url] success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        
-        NSLog(@"%@:%@",[request URL],JSON);
-        
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        
-    }];
-    [operation start];
-    
+    NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.shyl8.net/youjian.php?cat_tab_getSales=15&&tag_name=7-8%E6%8A%98&&start=0&&count=10"]];
+    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+    NSLog(@"%@",json);
     return nil;
 }
+
++ (NSString *) escapeURLString:(NSString *)urlString
+{
+    CFStringRef cfString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)urlString, NULL, (CFStringRef)@"!*'();@&+$,%#[]", kCFStringEncodingUTF8);
+    return (__bridge NSString *)cfString;
+}
+
+
+
 @end

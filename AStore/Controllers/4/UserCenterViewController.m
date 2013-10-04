@@ -12,6 +12,7 @@
 #import "MyOrderViewController.h"
 #import "MyCouponViewController.h"
 #import "MyAddressViewController.h"
+#import "LoginViewController.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @end
@@ -146,6 +147,8 @@
 
 - (IBAction)loginOutAction:(id)sender
 {
-    
+    LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
+    self.navigationController.viewControllers = @[loginViewController];
+    loginViewController = nil;
 }
 @end

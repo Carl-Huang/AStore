@@ -10,6 +10,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #import "UIViewController+LeftTitle.h"
 #import "HeaderView.h"
 #import "DeliveryViewController.h"
+#import "CommodityListViewController.h"
 @interface ConfirmOrderViewController ()
 @property (strong ,nonatomic)NSArray * dataSource;
 @end
@@ -86,7 +87,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #pragma mark - UITableviewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     NSInteger rowIndex = indexPath.row+indexPath.section*2;
     switch (rowIndex) {
         case 0:
@@ -99,7 +99,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             [self pushDeliveryViewController];
             break;
         case 3:
-            
+            [self pushCommodityListViewcontroller];
             break;
             
         default:
@@ -113,6 +113,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller = nil;
 }
+
+-(void)pushCommodityListViewcontroller
+{
+    CommodityListViewController * viewcontroller = [[CommodityListViewController alloc]initWithNibName:@"CommodityListViewController" bundle:nil];
+    [self.navigationController pushViewController:viewcontroller animated:YES];
+    viewcontroller = nil;
+}
+
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50;
@@ -152,8 +161,10 @@ static NSString * cellIdentifier = @"cellIdentifier";
     UILabel * descriptionLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 5, 250, 40)];
     [descriptionLabel setBackgroundColor:[UIColor clearColor]];
     descriptionLabel.text = [self.dataSource objectAtIndex:indexPath.row+2*indexPath.section];
-   
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if (indexPath.row+2*indexPath.section != 1) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    
     UIImageView * imageview = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"购买流程bg"]];
     [imageview setFrame:CGRectMake(8, 5, 310, 40)];
     [cell.contentView addSubview:imageview];

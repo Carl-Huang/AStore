@@ -31,6 +31,10 @@
 		4EB7B21E17FF40320018AC58 /* DeliveryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21C17FF40320018AC58 /* DeliveryViewController.xib */; };
 		4EB7B22117FF41500018AC58 /* DeliveryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B22017FF41500018AC58 /* DeliveryCell.m */; };
 		4EB7B22317FF41600018AC58 /* DeliveryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */; };
+		4EB7B22717FF6C2A0018AC58 /* CommodityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B22517FF6C290018AC58 /* CommodityListViewController.m */; };
+		4EB7B22817FF6C2A0018AC58 /* CommodityListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B22617FF6C290018AC58 /* CommodityListViewController.xib */; };
+		4EB7B22B17FF72420018AC58 /* CommodityListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B22A17FF72410018AC58 /* CommodityListCell.m */; };
+		4EB7B22D17FF72580018AC58 /* CommodityListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B22C17FF72570018AC58 /* CommodityListCell.xib */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
@@ -239,6 +243,12 @@
 		4EB7B21F17FF414F0018AC58 /* DeliveryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeliveryCell.h; sourceTree = "<group>"; };
 		4EB7B22017FF41500018AC58 /* DeliveryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeliveryCell.m; sourceTree = "<group>"; };
 		4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeliveryCell.xib; sourceTree = "<group>"; };
+		4EB7B22417FF6C280018AC58 /* CommodityListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommodityListViewController.h; sourceTree = "<group>"; };
+		4EB7B22517FF6C290018AC58 /* CommodityListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommodityListViewController.m; sourceTree = "<group>"; };
+		4EB7B22617FF6C290018AC58 /* CommodityListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommodityListViewController.xib; sourceTree = "<group>"; };
+		4EB7B22917FF72400018AC58 /* CommodityListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommodityListCell.h; sourceTree = "<group>"; };
+		4EB7B22A17FF72410018AC58 /* CommodityListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommodityListCell.m; sourceTree = "<group>"; };
+		4EB7B22C17FF72570018AC58 /* CommodityListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommodityListCell.xib; sourceTree = "<group>"; };
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
@@ -804,6 +814,12 @@
 				4EB7B21F17FF414F0018AC58 /* DeliveryCell.h */,
 				4EB7B22017FF41500018AC58 /* DeliveryCell.m */,
 				4EB7B22217FF415F0018AC58 /* DeliveryCell.xib */,
+				4EB7B22417FF6C280018AC58 /* CommodityListViewController.h */,
+				4EB7B22517FF6C290018AC58 /* CommodityListViewController.m */,
+				4EB7B22617FF6C290018AC58 /* CommodityListViewController.xib */,
+				4EB7B22917FF72400018AC58 /* CommodityListCell.h */,
+				4EB7B22A17FF72410018AC58 /* CommodityListCell.m */,
+				4EB7B22C17FF72570018AC58 /* CommodityListCell.xib */,
 			);
 			path = 3;
 			sourceTree = "<group>";
@@ -1045,6 +1061,8 @@
 				4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */,
 				4EB7B21E17FF40320018AC58 /* DeliveryViewController.xib in Resources */,
 				4EB7B22317FF41600018AC58 /* DeliveryCell.xib in Resources */,
+				4EB7B22817FF6C2A0018AC58 /* CommodityListViewController.xib in Resources */,
+				4EB7B22D17FF72580018AC58 /* CommodityListCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,6 +1126,8 @@
 				4EB7B21917FF3E9B0018AC58 /* HeaderView.m in Sources */,
 				4EB7B21D17FF40320018AC58 /* DeliveryViewController.m in Sources */,
 				4EB7B22117FF41500018AC58 /* DeliveryCell.m in Sources */,
+				4EB7B22717FF6C2A0018AC58 /* CommodityListViewController.m in Sources */,
+				4EB7B22B17FF72420018AC58 /* CommodityListCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

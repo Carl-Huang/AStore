@@ -11,24 +11,44 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #import "HeaderView.h"
 #import "DeliveryViewController.h"
 #import "CommodityListViewController.h"
+#import "AppDelegate.h"
+#import "AKTabBarController.h"
+typedef NS_ENUM(NSInteger, PaymentType)
+{
+    OnlinePaymentType = 1,
+    OfflinePaymentType,
+};
 @interface ConfirmOrderViewController ()
 @property (strong ,nonatomic)NSArray * dataSource;
+@property (assign ,nonatomic)BOOL isCheck;
+@property (assign ,nonatomic)PaymentType payType;
+@property (strong ,nonatomic)HeaderView * headerView;
 @end
 
 @implementation ConfirmOrderViewController
 @synthesize dataSource;
+@synthesize isCheck;
+@synthesize headerView;
+@synthesize payType;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
         dataSource = @[@"收货人信息",@"付款方式",@"配送方式",@"查看商品清单"];
+        isCheck   = NO;
+
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
+//    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    AKTabBarController * tabBarController =  appDelegate.akTabBarController;
+//    UINavigationController * nav = [tabBarController.viewControllers objectAtIndex:3];
+//    NSLog(@"%@", [[nav.viewControllers objectAtIndex:0] class]);
+
     [super viewDidLoad];
     [self setLeftTitle:@"订单确认"];
     [self setBackItem:nil];
@@ -74,16 +94,25 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [super viewDidUnload];
 }
 
--(void)offlinePayAction
+-(void)offlinePayAction:(id)sender
 {
-    NSLog(@"%s",__func__);
+
+    payType = OfflinePaymentType;
+    NSLog(@"货到付款");
+    [headerView.offlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
+    [headerView.onlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal]; 
+   
 }
 
-
--(void)onlinePayAction
+-(void)onlinePayAction:(id)sender
 {
-    NSLog(@"%s",__func__);
+    payType = OnlinePaymentType;
+    NSLog(@"在线付款");
+    [headerView.offlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal];
+    [headerView.onlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
+     NSLog(@"%s",__func__);
 }
+
 #pragma mark - UITableviewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -130,12 +159,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-//        UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
-//        [headerView setBackgroundColor:[UIColor whiteColor]];
-//        return headerView;
-        HeaderView * headerView = [[[NSBundle mainBundle]loadNibNamed:@"HeaderView" owner:self options:nil]objectAtIndex:0];
-        [headerView.offlinePayBtn addTarget:self action:@selector(offlinePayAction) forControlEvents:UIControlEventTouchUpInside];
-        [headerView.onlinePayBtn addTarget:self action:@selector(onlinePayAction) forControlEvents:UIControlEventTouchUpInside];
+        headerView = [[[NSBundle mainBundle]loadNibNamed:@"HeaderView" owner:self options:nil]objectAtIndex:0];
+        [headerView.offlinePayBtn addTarget:self action:@selector(offlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
+        //默认为货到付款
+        payType = OfflinePaymentType;
+        [headerView.offlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
+        [headerView.onlinePayBtn addTarget:self action:@selector(onlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
         
         [headerView setBackgroundColor:[UIColor whiteColor]];
         return headerView;

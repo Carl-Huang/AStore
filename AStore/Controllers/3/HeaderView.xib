@@ -107,9 +107,9 @@
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC41AA</bytes>
 						</object>
-						<object class="NSCustomResource" key="IBUINormalBackgroundImage" id="254356827">
+						<object class="NSCustomResource" key="IBUINormalBackgroundImage" id="581690258">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">购物车数量bg@2x.png</string>
+							<string key="NSResourceName">单选btn-n@2x.png</string>
 						</object>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="746070785">
 							<int key="type">2</int>
@@ -137,7 +137,7 @@
 							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="850895075"/>
-						<reference key="IBUINormalBackgroundImage" ref="254356827"/>
+						<reference key="IBUINormalBackgroundImage" ref="581690258"/>
 						<reference key="IBUIFontDescription" ref="746070785"/>
 						<reference key="IBUIFont" ref="453514654"/>
 					</object>
@@ -251,8 +251,8 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">购物车数量bg@2x.png</string>
-			<string key="NS.object.0">{30, 30}</string>
+			<string key="NS.key.0">单选btn-n@2x.png</string>
+			<string key="NS.object.0">{24, 24}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>

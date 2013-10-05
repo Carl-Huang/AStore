@@ -51,7 +51,11 @@
     UIBarButtonItem * logoItem = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = logoItem;
     
-    [HttpHelper getAllCatalog];
+    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
+        NSLog(@"%@",catInfo);
+    } errorBlock:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
     
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 165, 35)];
     searchField.delegate = self;

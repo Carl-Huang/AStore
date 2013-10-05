@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
-#define SERVER_URL @"http://www.shyl8.net/youjian.php"
+#define SERVER_URL @"http://www.shyl8.net/"
 @interface HttpHelper : NSObject
-+ (NSDictionary *) getAllCatalog;
++ (void *) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure;
 + (NSString *) escapeURLString:(NSString *)urlString;
 @end

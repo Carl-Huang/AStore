@@ -30,4 +30,7 @@
 //HTTP Request
 #define RequestStatusKey @"ret"
 
+
+#define VUserName @"VUserName"
+#define VPasswork @"VPassword"
 #endif

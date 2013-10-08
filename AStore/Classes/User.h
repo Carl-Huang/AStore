@@ -18,4 +18,7 @@ typedef enum _error_type{
 //检查密码长度
 +(BOOL)isPwdlegal:(NSString *)pwd;
 +(BOOL)isPwdNoSpecialCharacterStr:(NSString *)pwd;
++(NSString *)userInfoFilePath;
++(BOOL)saveUserInfo:(NSString *)userName password:(NSString *)password;
++(NSDictionary *)getUserInfo;
 @end

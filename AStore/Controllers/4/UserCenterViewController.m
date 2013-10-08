@@ -13,6 +13,8 @@
 #import "MyCouponViewController.h"
 #import "MyAddressViewController.h"
 #import "LoginViewController.h"
+#import "User.h"
+#import "HttpHelper.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @end
@@ -31,8 +33,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //查询本地是否有用户已经登录
+    NSDictionary * userInfoDic = [User getUserInfo];
+    [self synchronizationWithServer:userInfoDic];
     [self setLeftTitle:@"个人中心"];
     _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"],@[@"检查版本"]];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -60,7 +69,20 @@
     [super viewDidUnload];
 }
 
-
+-(NSDictionary *)synchronizationWithServer:(NSDictionary *)userInfo
+{
+    NSLog(@"%s",__func__);
+    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",[userInfo objectForKey:VUserName],[userInfo objectForKey:VPasswork]];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+        for (NSDictionary * dic in catInfo) {
+            NSLog(@"%@",dic);
+        }
+    } errorBlock:^(NSError *error) {
+        ;
+    }];
+    return [NSDictionary dictionary];
+}
 #pragma mark - UITableViewDateSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

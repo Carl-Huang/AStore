@@ -71,7 +71,7 @@
     
 }
 
-+ (void *) getAllCatalogWithSuffix:(NSString * )suffixStr SuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
++ (void *) getAllCatalogWithSuffix:(NSString * )suffixStr SuccessBlock:(void (^)(NSArray * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
     NSString * urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL_Prefix,suffixStr];
     
@@ -81,49 +81,11 @@
         NSLog(@"%@",NSStringFromSelector(_cmd));
         
         NSArray * results = (NSArray *)responseObject;
-        //取得父节点
-        NSMutableArray * parentsCat = [NSMutableArray array];
-        for(NSDictionary * dic in results)
-        {
-            if([[dic objectForKey:@"parent_id"] intValue] == 0)
-            {
-                [parentsCat addObject:dic];
-            }
+        if (success) {
+            success(results);
         }
         
-        if(parentsCat.count == 0)
-        {
-            NSLog(@"Could not found parent catalog.");
-            NSError * error = [NSError errorWithDomain:@"Could not found parent catalog" code:100 userInfo:nil];
-            if(failure)
-            {
-                failure(error);
-            }
-        }
-        
-        NSMutableDictionary * catalogInfo = [NSMutableDictionary dictionary];
-        for(NSDictionary * dic in parentsCat)
-        {
-            int parentID = [[dic objectForKey:@"cat_id"] intValue];
-            NSString * parentCatName = [dic objectForKey:@"cat_name"];
-            NSMutableArray * childCats = [NSMutableArray array];
-            for (NSDictionary * cat in results)
-            {
-                if([[cat objectForKey:@"parent_id"] intValue] == parentID)
-                {
-                    [childCats addObject:cat];
-                }
-            }
-            [catalogInfo setObject:childCats forKey:parentCatName];
-        }
-        
-        if(success)
-        {
-            success(catalogInfo);
-        }
-        
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if(failure)
         {
             failure(error);

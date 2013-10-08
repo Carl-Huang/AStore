@@ -12,6 +12,7 @@
 
 #import "User.h"
 #import "RegularExpressions.h"
+#import "constants.h"
 @implementation User
 
 //验证用户名是否合法
@@ -45,6 +46,59 @@
     return YES;
 }
 
+//用户数据保存路径
++(NSString *)userInfoFilePath
+{
+    NSString * tempStr = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject];
+    NSString * filePath = [tempStr stringByAppendingPathComponent:@"userInfo.plist"];
+    return filePath;
+}
 
 
++(BOOL)saveUserInfo:(NSString *)userName password:(NSString *)password
+{
+    NSString *filePath = [User userInfoFilePath];
+    NSString * err;
+    NSLog(@"保存用户信息路径：%@",filePath);
+    NSDictionary *userInfoDic = @{DUserName: userName,DPassword:password};
+    [[NSUserDefaults standardUserDefaults]setObject:userInfoDic forKey:VUserInfo];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    NSData *userData = [NSPropertyListSerialization dataFromPropertyList:userInfoDic format:NSPropertyListXMLFormat_v1_0 errorDescription:&err];
+    if(!err){
+        if ([userData writeToFile:filePath atomically:YES]) {
+            NSLog(@"write userInfo successfully");
+            return YES;
+        }else
+        {
+            NSLog(@"Failed to write userInfo  to local");
+            return NO; 
+        }
+        
+    }else{
+        NSLog(@"error with:%@", err);
+    }
+    return NO;
+}
+
++(NSDictionary *)getUserInfo
+{
+    NSString *userInfoPath = [User userInfoFilePath];
+    NSData * userData = [NSData dataWithContentsOfFile:userInfoPath];
+    if (userData) {
+        NSPropertyListFormat format;
+        NSError * error = nil;
+        NSDictionary * userInfoDic = [NSPropertyListSerialization propertyListWithData:userData options:NSPropertyListMutableContainersAndLeaves  format:&format error:&error];
+        if (error == nil) {
+            NSLog(@"本地读取用户数据成功");
+            NSLog(@"%@",userInfoDic);
+            return userInfoDic;
+            
+        }else
+            NSLog(@"本地读取用户数据失败：%@",error.description);
+    }else
+    {
+        NSLog(@"用户数据不存在");
+    }
+    return [NSDictionary dictionary];
+}
 @end

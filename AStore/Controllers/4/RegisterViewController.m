@@ -6,6 +6,7 @@
 //  Copyright (c) 2013年 carl. All rights reserved.
 //
 
+
 #import "RegisterViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
@@ -33,6 +34,10 @@
     [super viewDidLoad];
     [self setLeftTitle:@"免费注册"];
     [self setBackItem:nil];
+    self.passwordField.tag = 1001;
+    self.confirmPwdField.tag = 1002;
+    self.emailField.tag =1003;
+   
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,6 +108,9 @@
          NSString * str = [[resultInfo objectAtIndex:0]objectForKey:RequestStatusKey];
          if ([str isEqualToString:@"1"]) {
              NSLog(@"注册成功");
+             //写入plish
+             
+             [User saveUserInfo:self.usernameField.text password:self.passwordField.text];
          }else
          {
              NSLog(@"注册失败");
@@ -279,6 +287,7 @@
     else if(indexPath.row == 2)
     {
         [confirmPwdField becomeFirstResponder];
+        [self.tableView setFrame:CGRectOffset(self.tableView.frame, 0, -50)];
     }
     else if(indexPath.row == 3)
     {
@@ -305,12 +314,32 @@
     if(textField == confirmPwdField)
     {
         [emailField becomeFirstResponder];
+        [self resizeTableView];
         return NO;
     }
-    
+    [self resizeTableView];
     [textField resignFirstResponder];
     return YES;
 }
 
+-(void)resizeTableView
+{
+    CGRect rect = self.tableView.frame;
+    
+    if (rect.origin.y == 15) {
+        rect.origin.y -=40;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.tableView setFrame:rect];
+        }];
+    }else if(rect.origin.y == -25)
+    {
+        rect.origin.y +=40;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.tableView setFrame:rect];
+        }];
+    }
+
+}
 
 @end

@@ -10,5 +10,5 @@
 
 @interface MyAddressViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *addressTable;
-
+-(void)setMyAddressDataSourece:(NSArray *)dataAry;
 @end

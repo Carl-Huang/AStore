@@ -20,6 +20,11 @@
 #define VOrderStatus    @"orderStatus"
 #define VTotalCredits   @"totalCredits"
 
+
+#define VUserName           @"userName"
+#define VTelePhone          @"vtelephone"
+#define VPhone              @"vphone"
+#define VAddress            @"vaddress"
 //cartViewController
 #define ProductName     @"productName"
 #define ProductNumber   @"productNumebr"
@@ -30,4 +35,8 @@
 //HTTP Request
 #define RequestStatusKey @"ret"
 
+
+#define DUserName @"VUserName"
+#define DPassword @"VPassword"
+#define VUserInfo    @"vuserInfo"
 #endif

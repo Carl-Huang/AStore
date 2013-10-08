@@ -25,6 +25,8 @@
 		4EAEE3F717FE8917002857F1 /* ConfirmOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */; };
 		4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F917FE963D002857F1 /* CartCellHeader.m */; };
 		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
+		4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */; };
+		4EB788A31803D54C00DAF3E5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB788A21803D54C00DAF3E5 /* User.m */; };
 		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
 		4EB7B21917FF3E9B0018AC58 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B21817FF3E9A0018AC58 /* HeaderView.m */; };
 		4EB7B21D17FF40320018AC58 /* DeliveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7B21B17FF40310018AC58 /* DeliveryViewController.m */; };
@@ -238,6 +240,10 @@
 		4EAEE3F817FE963C002857F1 /* CartCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CartCellHeader.h; sourceTree = "<group>"; };
 		4EAEE3F917FE963D002857F1 /* CartCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CartCellHeader.m; sourceTree = "<group>"; };
 		4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CartCellHeader.xib; sourceTree = "<group>"; };
+		4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressions.h; sourceTree = "<group>"; };
+		4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressions.m; sourceTree = "<group>"; };
+		4EB788A11803D54C00DAF3E5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4EB788A21803D54C00DAF3E5 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		4EB7B21517FF393C0018AC58 /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
 		4EB7B21717FF3E9A0018AC58 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		4EB7B21817FF3E9A0018AC58 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
@@ -886,6 +892,10 @@
 				C3505A0917F6856C00D590A7 /* UIViewController+LeftTitle.m */,
 				C384FAD217FD317700F18A49 /* HttpHelper.h */,
 				C384FAD317FD317700F18A49 /* HttpHelper.m */,
+				4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */,
+				4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */,
+				4EB788A11803D54C00DAF3E5 /* User.h */,
+				4EB788A21803D54C00DAF3E5 /* User.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1079,7 +1089,6 @@
 				C37E1D6917FEA968000E1100 /* 单选btn-s.png in Resources */,
 				C37E1D6C17FEA97E000E1100 /* 单选btn-n@2x.png in Resources */,
 				C37E1D6D17FEA97E000E1100 /* 单选btn-s@2x.png in Resources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1145,6 +1154,8 @@
 				C384FAEF17FD699F00F18A49 /* AFURLRequestSerialization.m in Sources */,
 				C384FAF017FD699F00F18A49 /* AFURLResponseSerialization.m in Sources */,
 				C384FAF117FD699F00F18A49 /* AFURLSessionManager.m in Sources */,
+				4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */,
+				4EB788A31803D54C00DAF3E5 /* User.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,4 +26,8 @@
 #define ProductPrice    @"productPrice"
 #define ProductImage    @"productimage"
 #define JiFen           @"jifen"
+
+//HTTP Request
+#define RequestStatusKey @"ret"
+
 #endif

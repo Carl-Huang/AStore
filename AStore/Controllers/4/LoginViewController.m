@@ -146,6 +146,9 @@
 
 
 - (IBAction)loginAction:(id)sender {
+    NSLog(@"%@",NSStringFromSelector(_cmd));
+    
+    
 }
 
 - (IBAction)registerAction:(id)sender

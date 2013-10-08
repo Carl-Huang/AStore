@@ -17,6 +17,8 @@
 #import "AddressCell.h"
 #import "constants.h"
 #import "ModifyAddressViewController.h"
+#import "HttpHelper.h"
+
 static NSString * cellIdentifier = @"addressCell";
 @interface MyAddressViewController ()
 @property (strong ,nonatomic)NSArray * dataSource;
@@ -60,7 +62,13 @@ static NSString * cellIdentifier = @"addressCell";
     backItem = nil;
     newItem = nil;
     
-    
+    //网络请求
+    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
+        NSLog(@"%@",catInfo);
+    } errorBlock:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
         // Do any additional setup after loading the view from its nib.
 }
 - (void)pushBack:(id)sender

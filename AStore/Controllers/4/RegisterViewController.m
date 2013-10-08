@@ -96,7 +96,7 @@
 
 -(void)regist
 {
-    NSString *cmdStr = [NSString stringWithFormat:@"addUser=\"adduser\"&&name=\"%@\"&&pwd=\"%@\"&&email=\"%@\"",self.usernameField.text,self.passwordField.text,self.emailField.text];
+    NSString *cmdStr = [NSString stringWithFormat:@"addUser=adduser&&name=%@&&pwd=%@&&email=%@",self.usernameField.text,self.passwordField.text,self.emailField.text];
     NSLog(@"CmdStr : %@",cmdStr);
     [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray * resultInfo)
      {

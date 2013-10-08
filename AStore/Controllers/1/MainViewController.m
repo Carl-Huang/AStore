@@ -51,10 +51,44 @@
     UIBarButtonItem * logoItem = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = logoItem;
     
-    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
-        NSLog(@"%@",catInfo);
-    } errorBlock:^(NSError *error) {
-        NSLog(@"%@",error);
+//    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
+//        NSLog(@"%@",catInfo);
+//    } errorBlock:^(NSError *error) {
+//        NSLog(@"%@",error);
+//    }];
+    
+    
+    [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"7-8折" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        
+    } withErrorBlock:^(NSError *error) {
+        
+    }];
+    
+    
+    [HttpHelper getCommodityWithSaleTab:@"餐饮" withStart:0 withCount:5 withSuccessBlock:^(NSArray *commoditys) {
+        
+    } withErrorBlock:^(NSError *error) {
+        
+    }];
+    
+    
+    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
+        
+    } withErrorBlock:^(NSError *error) {
+        
+    }];
+    
+    
+    [HttpHelper searchCommodityWithKeyworkd:@"A" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        
+    } withErrorBlock:^(NSError *error) {
+        
+    }];
+    
+    [HttpHelper getArticalListWithSuccessBlock:^(NSArray *commoditys) {
+        
+    } withErrorBlock:^(NSError *error) {
+        
     }];
     
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 165, 35)];

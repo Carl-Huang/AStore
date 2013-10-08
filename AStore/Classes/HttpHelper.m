@@ -7,12 +7,13 @@
 //
 
 #import "HttpHelper.h"
-
+#import <objc/message.h>
+#import "Commodity.h"
+#import "Artical.h"
 @implementation HttpHelper
-+ (void *) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
++ (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
     NSString * urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL,@"youjian.php?getCategory=\""];
-
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
 
     [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -68,7 +69,6 @@
         }
     }];
     
-    return nil;
 }
 
 + (void *) getAllCatalogWithSuffix:(NSString * )suffixStr SuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
@@ -156,7 +156,163 @@
     CFStringRef cfString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)urlString, NULL, (CFStringRef)@"!*'();@&+$,%#[]", kCFStringEncodingUTF8);
     return (__bridge NSString *)cfString;
 }
+//取得热门推荐商品
++ (void)getHotCommodityWithCatalogTabID:(int)tab successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure
+{
+    [HttpHelper getCommodityWithCatalogTabID:tab withTagName:@"7-8折" withStart:0 withCount:5 withSuccessBlock:success withErrorBlock:failure];
+}
+
+//取得商品，根据cat_id & tagname
++ (void)getCommodityWithCatalogTabID:(int)tab withTagName:(NSString *)tagName withStart:(int)start withCount:(int)count withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString * route = @"youjian.php";
+    NSString * component_1 = [NSString stringWithFormat:@"cat_tab_getSales=%d",tab];
+    NSString * component_2 = [NSString stringWithFormat:@"tag_name=%@",tagName];
+    NSString * component_3 = [NSString stringWithFormat:@"start=%d",start];
+    NSString * compoment_4 = [NSString stringWithFormat:@"count=%d",count];
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3,compoment_4];
+
+    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
+}
+
+//根据标签获取商品（聚优惠，跳蚤市场页面 如：餐饮）
++ (void)getCommodityWithSaleTab:(NSString *)tab withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString * route = @"youjian.php";
+    NSString * component_1 = [NSString stringWithFormat:@"tag_getSales=%@",tab];
+    NSString * component_2 = [NSString stringWithFormat:@"start=%d",start];
+    NSString * component_3 = [NSString stringWithFormat:@"count=%d",count];
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3];
+    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
+}
+
+//获取首页兑换商品
++ (void)getGifCommodityWithSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString * route = @"youjian.php";
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?getGift=\"&start=0&count=5",SERVER_URL,route];
+    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
+}
+
+//搜索商品
++ (void)searchCommodityWithKeyworkd:(NSString *)keyword withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString * route = @"youjian.php";
+    NSString * component_1 = [NSString stringWithFormat:@"searchSales=%@",keyword];
+    NSString * component_2 = [NSString stringWithFormat:@"start=%d",start];
+    NSString * component_3 = [NSString stringWithFormat:@"count=%d",count];
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3];
+    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
+}
+
+//获取公告列表
++ (void)getArticalListWithSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString *urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL,@"youjian.php?getArticle=\""];
+    [HttpHelper requestWithString:urlString withClass:[Artical class] successBlock:success errorBlock:failure];
+}
 
 
+//根据url获取商品
++ (void)requestCommodityWithString:(NSString *)urlString successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure
+{
+    NSLog(@"URL:%@",urlString);
+    AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //        NSLog(@"%@",responseObject);
+        
+        if(success)
+        {
+            success([HttpHelper mapModelProcess:responseObject withClass:[Commodity class]]);
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+        
+        if(failure)
+        {
+            failure(error);
+        }
+        
+    }];
+}
+
+
++ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure
+{
+    NSLog(@"URL:%@",urlString);
+    AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //        NSLog(@"%@",responseObject);
+        
+        if(success)
+        {
+            success([HttpHelper mapModelProcess:responseObject withClass:class]);
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error);
+        
+        if(failure)
+        {
+            failure(error);
+        }
+        
+    }];
+}
+
+
+//将取得的内容转换为commodity模型
++ (NSArray *)mapCommodityProcess:(id)responseObject
+{
+    NSArray * results = (NSArray *)responseObject;
+    Class commodityClass = [Commodity class];
+    unsigned int outCount,i;
+    objc_property_t * properties = class_copyPropertyList(commodityClass, &outCount);
+    NSMutableArray * commoditys = [NSMutableArray arrayWithCapacity:results.count];
+    for(NSDictionary * commodityInfo in results)
+    {
+        //取得Commodity类的属性
+        Commodity * commodity = [[Commodity alloc] init];
+        
+        for(i = 0; i < outCount; i++)
+        {
+            objc_property_t property = properties[i];
+            NSString * propertyName = [NSString stringWithUTF8String:property_getName(property)];
+//                NSLog(@"%@",propertyName);
+//            NSLog(@"%@:%@",propertyName,[commodityInfo objectForKey:propertyName]);
+            
+            [commodity setValue:[commodityInfo objectForKey:propertyName] forKeyPath:propertyName];
+//            NSLog(@"%@:%@",propertyName,[commodity valueForKeyPath:propertyName]);
+        }
+        [commoditys addObject:commodity];
+    }
+    
+    return (NSArray *)commoditys;
+}
+
+//将取得的内容转换为模型
++ (NSArray *)mapModelProcess:(id)responseObject withClass:(Class)class
+{
+    NSArray * results = (NSArray *)responseObject;
+    unsigned int outCount,i;
+    objc_property_t * properties = class_copyPropertyList(class, &outCount);
+    NSMutableArray * models = [NSMutableArray arrayWithCapacity:results.count];
+    for(NSDictionary * info in results)
+    {
+        id model = [[class alloc] init];
+        for(i = 0; i < outCount; i++)
+        {
+            objc_property_t property = properties[i];
+            NSString * propertyName = [NSString stringWithUTF8String:property_getName(property)];
+            [model setValue:[info objectForKey:propertyName] forKeyPath:propertyName];
+             NSLog(@"%@:%@",propertyName,[model valueForKeyPath:propertyName]);
+        }
+        [models addObject:model];
+    }
+    return (NSArray *)models;
+}
 
 @end

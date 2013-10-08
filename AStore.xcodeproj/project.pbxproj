@@ -103,6 +103,8 @@
 		C38262E517F6CB5900C96A38 /* CommodityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C38262E417F6CB5900C96A38 /* CommodityCell.xib */; };
 		C38262E917F6D04000C96A38 /* NoticeContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */; };
 		C38262EA17F6D04100C96A38 /* NoticeContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */; };
+		C3827C061803E7010032AAE8 /* Commodity.m in Sources */ = {isa = PBXBuildFile; fileRef = C3827C051803E7000032AAE8 /* Commodity.m */; };
+		C3827C091804024D0032AAE8 /* Artical.m in Sources */ = {isa = PBXBuildFile; fileRef = C3827C081804024C0032AAE8 /* Artical.m */; };
 		C3845C9A17F3D8BD00DED3C5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9917F3D8BD00DED3C5 /* Security.framework */; };
 		C3845C9C17F3D8C900DED3C5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */; };
 		C3845C9E17F3D8D400DED3C5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */; };
@@ -346,6 +348,10 @@
 		C38262E617F6D03C00C96A38 /* NoticeContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeContentViewController.h; sourceTree = "<group>"; };
 		C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoticeContentViewController.m; sourceTree = "<group>"; };
 		C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoticeContentViewController.xib; sourceTree = "<group>"; };
+		C3827C041803E7000032AAE8 /* Commodity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commodity.h; sourceTree = "<group>"; };
+		C3827C051803E7000032AAE8 /* Commodity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commodity.m; sourceTree = "<group>"; };
+		C3827C071804024C0032AAE8 /* Artical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Artical.h; sourceTree = "<group>"; };
+		C3827C081804024C0032AAE8 /* Artical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Artical.m; sourceTree = "<group>"; };
 		C3845C9917F3D8BD00DED3C5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -896,6 +902,10 @@
 				4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */,
 				4EB788A11803D54C00DAF3E5 /* User.h */,
 				4EB788A21803D54C00DAF3E5 /* User.m */,
+				C3827C041803E7000032AAE8 /* Commodity.h */,
+				C3827C051803E7000032AAE8 /* Commodity.m */,
+				C3827C071804024C0032AAE8 /* Artical.h */,
+				C3827C081804024C0032AAE8 /* Artical.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1156,6 +1166,8 @@
 				C384FAF117FD699F00F18A49 /* AFURLSessionManager.m in Sources */,
 				4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */,
 				4EB788A31803D54C00DAF3E5 /* User.m in Sources */,
+				C3827C061803E7010032AAE8 /* Commodity.m in Sources */,
+				C3827C091804024D0032AAE8 /* Artical.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

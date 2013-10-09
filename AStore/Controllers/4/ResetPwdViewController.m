@@ -8,6 +8,9 @@
 
 #import "ResetPwdViewController.h"
 #import "UIViewController+LeftTitle.h"
+#import "LoginViewController.h"
+#import "User.h"
+#import "HttpHelper.h"
 @interface ResetPwdViewController () <UITextFieldDelegate>
 @property (nonatomic,retain) UITextField * oldPwdField;
 @property (nonatomic,retain) UITextField * nPwdField;
@@ -16,13 +19,14 @@
 @end
 
 @implementation ResetPwdViewController
-
+@synthesize userName;
+@synthesize pwd;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+               // Custom initialization
     }
     return self;
 }
@@ -32,6 +36,12 @@
     [super viewDidLoad];
     [self setLeftTitle:@"修改密码"];
     [self setBackItem:nil];
+    NSDictionary * dic = [User getUserInfo];
+    if ([dic count]) {
+        userName = [[NSString alloc]initWithString:[dic objectForKey:DUserName]];
+        pwd = [[NSString alloc]initWithString:[dic objectForKey:DPassword]];
+        NSLog(@"UserName: %@,   pwd:%@",userName,pwd);
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,6 +51,7 @@
 
 - (void)viewDidUnload {
     [self setTableView:nil];
+    [self setResetPassword:nil];
     [super viewDidUnload];
 }
 
@@ -173,8 +184,58 @@
     return YES;
 }
 
-- (IBAction)resetPwd:(id)sender
+
+
+- (IBAction)resetPasswordAction:(id)sender {
+    NSLog(@"%s",__func__);
+    if (![self.oldPwdField.text isEqualToString:pwd]) {
+        NSLog(@"输入旧密码不对");
+    }else if ((self.nPwdField.text.length == 0)||(self.confirmPwdField.text.length ==0)||![self.nPwdField.text isEqualToString:self.confirmPwdField.text]) {//密码不匹配或为空
+        [self showAlertViewWithTitle:@"提示" message:@"密码输入不一致"];
+    }else if (![User isPwdlegal:self.nPwdField.text]){
+        [self showAlertViewWithTitle:@"提示" message:@"密码长度不正确"];
+    }else if(![User isPwdNoSpecialCharacterStr:self.nPwdField.text])
+    {
+        [self showAlertViewWithTitle:@"提示" message:@"密码不能包括特殊字符"];
+    }else
+    {
+        NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&Uname=%@",self.nPwdField.text,userName];
+        [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+            NSLog(@"%@",resultInfo);
+            if ([resultInfo count]) {
+                NSDictionary * dic = [resultInfo objectAtIndex:0];
+                if ([[dic objectForKey:RequestStatusKey] isEqualToString:@"1"]) {
+                    NSLog(@"修改密码成功");
+                    [self pushToLoginViewcontroller];
+                }
+            }
+        } errorBlock:^(NSError *error) {
+            NSLog(@"%@",[error description]);
+        }];
+    }
+
+}
+
+-(void)pushToLoginViewcontroller
 {
+    NSLog(@"%s",__func__);
+    NSArray *ary = self.navigationController.viewControllers;
+    for (UIViewController * viewcontroller in ary) {
+        if ([viewcontroller isKindOfClass:[LoginViewController class]]) {
+            [self.navigationController popToViewController:viewcontroller animated:YES];
+            return;
+        }
+    }
+    LoginViewController * loginViewcontroller = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
+    [self.navigationController pushViewController:loginViewcontroller animated:YES];
+    loginViewcontroller = nil;
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [pAlert show];
+    pAlert = nil;
     
 }
 @end

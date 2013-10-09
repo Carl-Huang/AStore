@@ -175,8 +175,7 @@
         }
         else if(indexPath.row ==2)
         {
-            ResetPwdViewController * resetPwdViewController = [[ResetPwdViewController alloc] initWithNibName:nil bundle:nil];
-            [self.navigationController pushViewController:resetPwdViewController animated:YES];
+            [self pushResetPassworkViewcontroller];
         }
         else if(indexPath.row == 3)
         {
@@ -187,6 +186,13 @@
     {
         
     }
+}
+
+-(void)pushResetPassworkViewcontroller
+{
+    ResetPwdViewController * resetPwdViewController = [[ResetPwdViewController alloc] initWithNibName:@"ResetPwdViewController" bundle:nil];
+    [self.navigationController pushViewController:resetPwdViewController animated:YES];
+    resetPwdViewController = nil;
 }
 
 -(void)pushMyOrderViewController

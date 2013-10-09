@@ -157,9 +157,16 @@
     NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",_usernameField.text,_passwordField.text];
     NSLog(@"cmdStr :%@",cmdStr);
     [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+
         for (NSDictionary * dic in catInfo) {
-            self.userInfoDic = dic;
-            [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
+            if ([dic count]==1) {
+                [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];
+                NSLog(@"登陆失败");
+            }else
+            {
+                self.userInfoDic = dic;
+                [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
+            }
         }
     } errorBlock:^(NSError *error) {
         ;
@@ -185,5 +192,13 @@
 {
     RegisterViewController * registerViewController = [[RegisterViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:registerViewController animated:YES];
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [pAlert show];
+    pAlert = nil;
+    
 }
 @end

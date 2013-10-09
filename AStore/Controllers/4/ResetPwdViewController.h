@@ -10,6 +10,10 @@
 
 @interface ResetPwdViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-- (IBAction)resetPwd:(id)sender;
+@property (strong ,nonatomic) NSString * userName;
+@property (strong ,nonatomic) NSString * pwd;
+
+@property (weak, nonatomic) IBOutlet UIButton *resetPassword;
+- (IBAction)resetPasswordAction:(id)sender;
 
 @end

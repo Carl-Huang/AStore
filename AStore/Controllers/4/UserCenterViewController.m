@@ -37,7 +37,8 @@
     [super viewDidLoad];
     //查询本地是否有用户已经登录
     synDicInfo = [[NSDictionary alloc]init];
-    NSDictionary * localUserData = [User getUserInfo];
+//    NSDictionary * localUserData = [User getUserInfo];
+    NSDictionary * localUserData = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
     if (localUserData) {
         usernameLabel.text = [localUserData objectForKey:DUserName];
     }

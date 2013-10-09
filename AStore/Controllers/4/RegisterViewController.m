@@ -109,6 +109,7 @@
          if ([str isEqualToString:@"1"]) {
              NSLog(@"注册成功");
              //写入plish
+             
              [User saveUserInfo:self.usernameField.text password:self.passwordField.text];
          }else
          {

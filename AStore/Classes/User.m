@@ -61,6 +61,8 @@
     NSString * err;
     NSLog(@"保存用户信息路径：%@",filePath);
     NSDictionary *userInfoDic = @{DUserName: userName,DPassword:password};
+    [[NSUserDefaults standardUserDefaults]setObject:userInfoDic forKey:VUserInfo];
+    [[NSUserDefaults standardUserDefaults]synchronize];
     NSData *userData = [NSPropertyListSerialization dataFromPropertyList:userInfoDic format:NSPropertyListXMLFormat_v1_0 errorDescription:&err];
     if(!err){
         if ([userData writeToFile:filePath atomically:YES]) {

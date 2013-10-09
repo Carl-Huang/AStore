@@ -31,12 +31,25 @@ static NSString * cellIdentifier = @"addressCell";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+//        self.dataSource = [[NSArray alloc]init];
         self.dataSource = @[@{VUserName: @"carl",VTelePhone:@"1233423523",VAddress:@"广州市天河区收购领路是打飞机你是",VPhone:@"8886666"},@{VUserName: @"carl",VTelePhone:@"1233423523",VAddress:@"广州市天河区收购领路是打飞机你是",VPhone:@"8886666"}];
         // Custom initialization
     }
     return self;
 }
 
+-(void)setMyAddressDataSourece:(NSArray *)dataAry
+{
+//    if ([dataAry count]==0) {
+//        NSLog(@"dataAry is NULL");
+//        self.addressTable.dataSource = nil;
+//        self.addressTable.delegate = nil;
+//    }else
+//    {
+//        self.dataSource = dataAry;
+//    }
+//    NSLog(@"MyAddress: %@",self.dataSource);
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -63,11 +76,11 @@ static NSString * cellIdentifier = @"addressCell";
     newItem = nil;
     
     //网络请求
-    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
-        NSLog(@"%@",catInfo);
-    } errorBlock:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+//    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
+//        NSLog(@"%@",catInfo);
+//    } errorBlock:^(NSError *error) {
+//        NSLog(@"%@",error);
+//    }];
 
         // Do any additional setup after loading the view from its nib.
 }
@@ -78,6 +91,16 @@ static NSString * cellIdentifier = @"addressCell";
 -(void)newItem
 {
     NSLog(@"%s",__func__);
+    //TODO:增加一个地址数据
+    
+    //增加地址数据
+    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3486&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
+    
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        ;
+    } errorBlock:^(NSError *error) {
+        ;
+    }];
 }
 
 - (void)didReceiveMemoryWarning

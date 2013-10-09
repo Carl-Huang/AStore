@@ -8,8 +8,9 @@
 
 #import "ModifyAddressViewController.h"
 #import "UIViewController+LeftTitle.h"
+#import "HttpHelper.h"
 @interface ModifyAddressViewController ()
-
+@property (nonatomic ,strong) __block NSArray * regionInfoDic;
 @end
 
 @implementation ModifyAddressViewController
@@ -28,8 +29,19 @@
     [super viewDidLoad];
     [self setLeftTitle:@"修改地址"];
     [self setBackItem:nil];
+    
+    
+    //获取地区信息
+    NSString *cmdStr = [NSString stringWithFormat:@"getRegion=getregion"];
+    cmdStr = [cmdStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        self.regionInfoDic = resultInfo;
+    } errorBlock:^(NSError *error) {
+        NSLog(@"%@",[error description]);
+    }];
     // Do any additional setup after loading the view from its nib.
 }
+
 
 - (void)didReceiveMemoryWarning
 {

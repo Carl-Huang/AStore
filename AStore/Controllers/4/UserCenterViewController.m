@@ -17,10 +17,12 @@
 #import "HttpHelper.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
+@property (nonatomic, strong)__block NSDictionary * synDicInfo;
 @end
 
 @implementation UserCenterViewController
-
+@synthesize usernameLabel,userTypeLabel,pointLabel;
+@synthesize synDicInfo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -34,8 +36,12 @@
 {
     [super viewDidLoad];
     //查询本地是否有用户已经登录
-    NSDictionary * userInfoDic = [User getUserInfo];
-    [self synchronizationWithServer:userInfoDic];
+    synDicInfo = [[NSDictionary alloc]init];
+    NSDictionary * localUserData = [User getUserInfo];
+    if (localUserData) {
+        usernameLabel.text = [localUserData objectForKey:DUserName];
+    }
+    [self synchronizationWithServer:localUserData];
     [self setLeftTitle:@"个人中心"];
     _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"],@[@"检查版本"]];
 }
@@ -69,19 +75,27 @@
     [super viewDidUnload];
 }
 
--(NSDictionary *)synchronizationWithServer:(NSDictionary *)userInfo
+-(void)synchronizationWithServer:(NSDictionary *)userInfo
 {
     NSLog(@"%s",__func__);
-    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",[userInfo objectForKey:VUserName],[userInfo objectForKey:VPasswork]];
+    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",[userInfo objectForKey:DUserName],[userInfo objectForKey:DPassword]];
     NSLog(@"cmdStr :%@",cmdStr);
     [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
         for (NSDictionary * dic in catInfo) {
-            NSLog(@"%@",dic);
+            synDicInfo = dic;
+            [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
         }
     } errorBlock:^(NSError *error) {
         ;
     }];
-    return [NSDictionary dictionary];
+}
+
+-(void)updateInterface
+{
+    NSLog(@"%s",__func__);
+    NSLog(@"%@",synDicInfo);
+    self.pointLabel.text = [synDicInfo objectForKey:@"point"];
+    self.userTypeLabel.text = [synDicInfo objectForKey:@"lv_name"];
 }
 #pragma mark - UITableViewDateSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -162,6 +176,7 @@
 -(void)pushMyAddressViewController
 {
     MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
+    [viewController setMyAddressDataSourece:[synDicInfo objectForKey:@"area"]];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
     

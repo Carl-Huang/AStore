@@ -9,6 +9,18 @@
 #ifndef AStore_constants_h
 #define AStore_constants_h
 
+#define DUserName   @"uname"
+#define DPassword   @"VPassword"
+#define DMemberId   @"member_id"
+#define DArea       @"area"
+#define DLevelName  @"lv_name"
+#define DLevelId    @"member_lv_id"
+#define DMobile     @"mobile"
+#define DLoginName  @"name"
+#define DPoint      @"point"
+#define DEmail      @"email"
+
+
 #define chooseBtnTag   1001
 #define alterBtnTag    1002
 #define deleteBtnTag   1003
@@ -34,10 +46,5 @@
 
 //HTTP Request
 #define RequestStatusKey @"ret"
-
-
-#define DUserName @"VUserName"
-#define DPassword @"VPassword"
-#define DMemberId @"memberId"
 #define VUserInfo    @"vuserInfo"
 #endif

@@ -47,9 +47,14 @@
     NSDictionary * localUserData = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
     if (localUserData) {
         usernameLabel.text = [localUserData objectForKey:DUserName];
+        [self synchronizationWithServer:localUserData];
+    }else
+    {
+        LoginViewController *viewcontroller = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
+        [self.navigationController pushViewController:viewcontroller animated:YES];
+        viewcontroller  = nil;
     }
-    [self synchronizationWithServer:localUserData];
-
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -85,7 +90,8 @@
     [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
         for (NSDictionary * dic in catInfo) {
             synDicInfo = dic;
-            [User saveUserInfo:[userInfo objectForKey:DUserName] password:[userInfo objectForKey:DPassword] memberId:[synDicInfo objectForKey:@"member_id"]];
+            NSDictionary * userInfo = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
+            [User saveUserInfo:[userInfo objectForKey:DUserName] password:[userInfo objectForKey:DPassword] memberId:[synDicInfo objectForKey:DMemberId]];
             [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
         }
     } errorBlock:^(NSError *error) {
@@ -189,6 +195,13 @@
 
 - (IBAction)loginOutAction:(id)sender
 {
+    NSArray *ary = self.navigationController.viewControllers;
+    for (UIViewController *viewcontroller in ary) {
+        if ([ary isKindOfClass:[LoginViewController class]]) {
+            [self.navigationController popToViewController:viewcontroller animated:YES];
+            return;
+        }
+    }
     LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:loginViewController animated:YES];
 //    self.navigationController.viewControllers = @[loginViewController];

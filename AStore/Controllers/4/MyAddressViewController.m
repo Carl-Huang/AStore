@@ -18,38 +18,27 @@
 #import "constants.h"
 #import "ModifyAddressViewController.h"
 #import "HttpHelper.h"
-
+#import "AddressInfo.h"
 static NSString * cellIdentifier = @"addressCell";
 @interface MyAddressViewController ()
-@property (strong ,nonatomic)NSArray * dataSource;
+@property (strong ,nonatomic)NSMutableArray * dataSource;
+
 @end
 
 @implementation MyAddressViewController
 @synthesize dataSource;
-
+@synthesize memberId;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-//        self.dataSource = [[NSArray alloc]init];
-        self.dataSource = @[@{VUserName: @"carl",VTelePhone:@"1233423523",VAddress:@"广州市天河区收购领路是打飞机你是",VPhone:@"8886666"},@{VUserName: @"carl",VTelePhone:@"1233423523",VAddress:@"广州市天河区收购领路是打飞机你是",VPhone:@"8886666"}];
+        self.dataSource = [[NSMutableArray alloc]init];
+        memberId = nil;
         // Custom initialization
     }
     return self;
 }
 
--(void)setMyAddressDataSourece:(NSArray *)dataAry
-{
-//    if ([dataAry count]==0) {
-//        NSLog(@"dataAry is NULL");
-//        self.addressTable.dataSource = nil;
-//        self.addressTable.delegate = nil;
-//    }else
-//    {
-//        self.dataSource = dataAry;
-//    }
-//    NSLog(@"MyAddress: %@",self.dataSource);
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -74,16 +63,35 @@ static NSString * cellIdentifier = @"addressCell";
     self.navigationItem.rightBarButtonItems = @[backItem,newItem];
     backItem = nil;
     newItem = nil;
-    
-    //网络请求
-//    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
-//        NSLog(@"%@",catInfo);
-//    } errorBlock:^(NSError *error) {
-//        NSLog(@"%@",error);
-//    }];
 
-        // Do any additional setup after loading the view from its nib.
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    if (memberId) {
+        NSLog(@"Member ID :%@",memberId);
+        
+    }
+    NSString *cmdStr = [NSString stringWithFormat:@"getAddrs=%@",memberId];
+    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
+    [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
+        for (AddressInfo * address in items) {
+            [dataSource addObject:address];
+        }
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+    } errorBlock:^(NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"获取地址失败：%@",[error description]);
+        }
+    }];
+}
+-(void)reloadTableview
+{
+    NSLog(@"%s",__func__);
+    [self.addressTable reloadData];
+}
+
 - (void)pushBack:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -94,7 +102,7 @@ static NSString * cellIdentifier = @"addressCell";
     //TODO:增加一个地址数据
     
     //增加地址数据
-    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3486&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
+    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3496&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
     
     [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
         ;
@@ -142,11 +150,14 @@ static NSString * cellIdentifier = @"addressCell";
     
     AddressCell *cell = nil;
     cell = [self.addressTable dequeueReusableCellWithIdentifier:cellIdentifier];
+    AddressInfo * address = nil;
+    address = [dataSource objectAtIndex:indexPath.row];
     [self configureCellBlockWithCell:cell];
-    cell.userNameLabel.text = [[dataSource objectAtIndex:indexPath.row]objectForKey:VUserName];
-    cell.telephoneLabel.text = [[dataSource objectAtIndex:indexPath.row]objectForKey:VTelePhone];
-    cell.phoneLabel.text = [[dataSource objectAtIndex:indexPath.row]objectForKey:VPhone];
-    cell.addressInfoLabel.text = [[dataSource objectAtIndex:indexPath.row]objectForKey:VAddress];
+    cell.userNameLabel.text = address.name;
+    cell.telephoneLabel.text = address.tel;
+    cell.phoneLabel.text = address.mobile;
+    NSString * areaInfo = [address.area stringByAppendingString:address.addr];
+    cell.addressInfoLabel.text = areaInfo;
     
     
     cell.backgroundColor = [UIColor whiteColor];

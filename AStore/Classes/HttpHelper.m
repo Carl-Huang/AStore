@@ -10,6 +10,8 @@
 #import <objc/message.h>
 #import "Commodity.h"
 #import "Artical.h"
+#import "userInfo.h"
+#import "AddressInfo.h"
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
@@ -97,12 +99,12 @@
 
 +(void)postRequestWithCmdStr:(NSString *)cmd SuccessBlock:(void (^)(NSArray * resultInfo))success errorBlock:(void(^)(NSError * error))failure
 {
+    NSLog(@"%@",NSStringFromSelector(_cmd));
     NSString * urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL_Prefix,cmd];
-
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%@",urlString);
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"%@",NSStringFromSelector(_cmd));
-        
         NSArray * results = (NSArray *)responseObject;
         success(results);
     
@@ -201,19 +203,15 @@
 }
 
 
-+ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure
++ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure
 {
     NSLog(@"URL:%@",urlString);
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //        NSLog(@"%@",responseObject);
-        
         if(success)
         {
             success([HttpHelper mapModelProcess:responseObject withClass:class]);
         }
-        
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
         

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 #define SERVER_URL @"http://www.shyl8.net/"
-#define SERVER_URL_Prefix @"http://www.shyl8.net/youjian.php?"
+#import "constants.h"
 @interface HttpHelper : NSObject
 
 //获得所有分类
@@ -42,5 +42,5 @@
 + (void)requestCommodityWithString:(NSString *)urlString successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure;
 
 + (NSString *)escapeURLString:(NSString *)urlString;
-+ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure;
++ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
 @end

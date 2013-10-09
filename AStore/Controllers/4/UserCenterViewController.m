@@ -32,6 +32,16 @@
     }
     return self;
 }
+//-(void)awakeFromNib
+//{
+//    [super awakeFromNib];
+//    NSDictionary * localServerData = [User getServerUserInfoFL];
+//    if (localServerData) {
+//        self.pointLabel.text = [synDicInfo objectForKey:DPoint];
+//        self.userTypeLabel.text = [synDicInfo objectForKey:DLevelName];
+//        usernameLabel.text =  [localServerData objectForKey:DUserName];
+//    }
+//}
 
 - (void)viewDidLoad
 {
@@ -44,12 +54,19 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"%s",__func__);
-    NSDictionary * localUserData = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
+    NSDictionary * localUserData = [User getUserInfo];
     if (localUserData) {
-        usernameLabel.text = [localUserData objectForKey:DUserName];
+        NSDictionary * localServerData = [User getServerUserInfoFL];
+        if (localServerData) {
+            self.pointLabel.text = [localServerData objectForKey:DPoint];
+            self.userTypeLabel.text = [localServerData objectForKey:DLevelName];
+            usernameLabel.text =  [localServerData objectForKey:DUserName];
+        }
+
         [self synchronizationWithServer:localUserData];
     }else
     {
+        //本地没有用户数据，则调到登陆界面
         LoginViewController *viewcontroller = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
         [self.navigationController pushViewController:viewcontroller animated:YES];
         viewcontroller  = nil;
@@ -90,6 +107,7 @@
     [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
         for (NSDictionary * dic in catInfo) {
             synDicInfo = dic;
+            [User saveServerUserInfoTL:synDicInfo];
             NSDictionary * userInfo = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
             [User saveUserInfo:[userInfo objectForKey:DUserName] password:[userInfo objectForKey:DPassword] memberId:[synDicInfo objectForKey:DMemberId]];
             [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
@@ -104,8 +122,8 @@
 {
     NSLog(@"%s",__func__);
     NSLog(@"%@",synDicInfo);
-    self.pointLabel.text = [synDicInfo objectForKey:@"point"];
-    self.userTypeLabel.text = [synDicInfo objectForKey:@"lv_name"];
+    self.pointLabel.text = [synDicInfo objectForKey:DPoint];
+    self.userTypeLabel.text = [synDicInfo objectForKey:DLevelName];
 }
 #pragma mark - UITableViewDateSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -186,8 +204,13 @@
 
 -(void)pushMyAddressViewController
 {
+    NSLog(@"%s",__func__);
     MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
-    [viewController setMyAddressDataSourece:[synDicInfo objectForKey:@"area"]];
+    NSString * str = [NSString stringWithFormat:@"%@",[synDicInfo objectForKey:@"area"]];
+    if (![str isEqualToString:@"<null>"]) {
+        NSLog(@"%@",str);
+    }
+    [viewController setMemberId:[synDicInfo objectForKey:DMemberId]];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
     

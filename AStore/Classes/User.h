@@ -21,4 +21,7 @@ typedef enum _error_type{
 +(NSString *)userInfoFilePath;
 +(BOOL)saveUserInfo:(NSString *)userName password:(NSString *)password memberId:(NSString *)memberId;
 +(NSDictionary *)getUserInfo;
+
++(void)saveServerUserInfoTL:(NSDictionary *)userInfoDic;
++(NSDictionary *)getServerUserInfoFL;
 @end

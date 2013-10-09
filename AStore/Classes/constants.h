@@ -9,6 +9,9 @@
 #ifndef AStore_constants_h
 #define AStore_constants_h
 
+#define SERVER_URL_Prefix @"http://www.shyl8.net/youjian.php?"
+
+
 #define DUserName   @"uname"
 #define DPassword   @"VPassword"
 #define DMemberId   @"member_id"
@@ -38,13 +41,15 @@
 #define VPhone              @"vphone"
 #define VAddress            @"vaddress"
 //cartViewController
-#define ProductName     @"productName"
-#define ProductNumber   @"productNumebr"
-#define ProductPrice    @"productPrice"
-#define ProductImage    @"productimage"
-#define JiFen           @"jifen"
+#define ProductName         @"productName"
+#define ProductNumber       @"productNumebr"
+#define ProductPrice        @"productPrice"
+#define ProductImage        @"productimage"
+#define JiFen               @"jifen"
 
 //HTTP Request
-#define RequestStatusKey @"ret"
-#define VUserInfo    @"vuserInfo"
+#define RequestStatusKey    @"ret"
+
+#define VUserInfo           @"vuserInfo"
+#define VServerUserInfo     @"serverUserInfo"
 #endif

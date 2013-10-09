@@ -104,6 +104,38 @@
     if (userInfoDic) {
         return userInfoDic;
     }
-    return [NSDictionary dictionary];
+    return nil;
+}
+
++(void)saveServerUserInfoTL:(NSDictionary *)userInfoDic
+{
+    NSLog(@"%s",__func__);
+//    NSString * str1 = [userInfoDic objectForKey:DArea];
+    NSString * str2 = [userInfoDic objectForKey:DEmail];
+    NSString * str3 = [userInfoDic objectForKey:DLevelName];
+    NSString * str4 = [userInfoDic objectForKey:DMemberId];
+    NSString * str5 = [userInfoDic objectForKey:DLevelId];
+//    NSString * str6 = [userInfoDic objectForKey:DMobile];
+    NSString * str7 = [userInfoDic objectForKey:DPoint];
+    NSString * str8 = [userInfoDic objectForKey:DUserName];
+
+    NSDictionary * dic = @{DEmail:str2,DLevelName:str3,DMemberId:str4,DLevelId:str5,DPoint:str7,DUserName:str8};
+    NSLog(@"%@",dic);
+    [[NSUserDefaults standardUserDefaults]setObject:dic forKey:VServerUserInfo];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+
+}
++(NSDictionary *)getServerUserInfoFL
+{
+    NSLog(@"%s",__func__);
+    NSDictionary * dic = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VServerUserInfo];
+    NSLog(@"%@",dic);
+    if (dic) {
+        
+        return dic;
+    }else
+    {
+        return nil;
+    }
 }
 @end

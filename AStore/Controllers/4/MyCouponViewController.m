@@ -17,22 +17,22 @@
 #import "MyCouponViewController.h"
 #import "CouponCell.h"
 #import "UIViewController+LeftTitle.h"
+#import "CouponInfo.h"
+#import "HttpHelper.h"
 @interface MyCouponViewController ()
-@property (strong ,nonatomic)NSArray * commoditiesArray;
-@property (strong ,nonatomic)NSArray * giftArray;
+@property (strong ,nonatomic)NSMutableArray * commoditiesArray;
 @end
 
 @implementation MyCouponViewController
 @synthesize commoditiesArray;
-@synthesize giftArray;
-
+@synthesize memberId;
  static NSString * cellIdentifier = @"commodityInfoCell";
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        commoditiesArray = @[@{VCouponNum: @"201309111020342",VValidityTime:@"2013/10/11",VCouponName:@"10元优惠券",VCanUseTime:@"2/5",VCouponStatus:@"可用",VUseMethod:@"满20送10元"}];
+        commoditiesArray = [[NSMutableArray alloc]init];
         // Custom initialization
     }
     return self;
@@ -59,7 +59,28 @@
     [super viewDidUnload];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSString *cmdStr = [NSString stringWithFormat:@"getcpns=%@",memberId];
+    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
+    [HttpHelper requestWithString:cmdStr withClass:[CouponInfo class] successBlock:^(NSArray *items) {
+        for (CouponInfo * address in items) {
+            [commoditiesArray addObject:address];
+        }
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+    } errorBlock:^(NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"获取优惠券失败：%@",[error description]);
+        }
+    }];
 
+}
+
+-(void)reloadTableview
+{
+    [self.commodityTable reloadData];
+}
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -10,5 +10,5 @@
 
 @interface MyCouponViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *commodityTable;
-
+@property (strong ,nonatomic) NSString * memberId;
 @end

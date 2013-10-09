@@ -101,6 +101,7 @@
 
 -(void)synchronizationWithServer:(NSDictionary *)userInfo
 {
+    synDicInfo = userInfo;
     NSLog(@"%s",__func__);
     NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",[userInfo objectForKey:DUserName],[userInfo objectForKey:DPassword]];
     NSLog(@"cmdStr :%@",cmdStr);
@@ -198,6 +199,7 @@
 -(void)pushMyCouponViewController
 {
     MyCouponViewController * viewController = [[MyCouponViewController alloc]initWithNibName:@"MyCouponViewController" bundle:nil];
+    [viewController setMemberId:[synDicInfo objectForKey:DMemberId]];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
 }

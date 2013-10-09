@@ -27,6 +27,7 @@
 		4EAEE3FA17FE963E002857F1 /* CartCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3F917FE963D002857F1 /* CartCellHeader.m */; };
 		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
 		4EB025881805FE6A0038923A /* AddressInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB025871805FE6A0038923A /* AddressInfo.m */; };
+		4EB0258B180607260038923A /* CouponInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0258A180607260038923A /* CouponInfo.m */; };
 		4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */; };
 		4EB788A31803D54C00DAF3E5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB788A21803D54C00DAF3E5 /* User.m */; };
 		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
@@ -248,6 +249,8 @@
 		4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CartCellHeader.xib; sourceTree = "<group>"; };
 		4EB025861805FE6A0038923A /* AddressInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressInfo.h; sourceTree = "<group>"; };
 		4EB025871805FE6A0038923A /* AddressInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressInfo.m; sourceTree = "<group>"; };
+		4EB02589180607250038923A /* CouponInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CouponInfo.h; sourceTree = "<group>"; };
+		4EB0258A180607260038923A /* CouponInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CouponInfo.m; sourceTree = "<group>"; };
 		4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressions.h; sourceTree = "<group>"; };
 		4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressions.m; sourceTree = "<group>"; };
 		4EB788A11803D54C00DAF3E5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -916,6 +919,8 @@
 				4EA9637A18051D9B00E9B54B /* userInfo.m */,
 				4EB025861805FE6A0038923A /* AddressInfo.h */,
 				4EB025871805FE6A0038923A /* AddressInfo.m */,
+				4EB02589180607250038923A /* CouponInfo.h */,
+				4EB0258A180607260038923A /* CouponInfo.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1180,6 +1185,7 @@
 				C3827C091804024D0032AAE8 /* Artical.m in Sources */,
 				4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */,
 				4EB025881805FE6A0038923A /* AddressInfo.m in Sources */,
+				4EB0258B180607260038923A /* CouponInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

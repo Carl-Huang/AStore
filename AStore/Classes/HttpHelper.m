@@ -12,6 +12,9 @@
 #import "Artical.h"
 #import "userInfo.h"
 #import "AddressInfo.h"
+#import "CouponInfo.h"
+
+
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {

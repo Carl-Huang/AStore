@@ -38,5 +38,6 @@
 
 #define DUserName @"VUserName"
 #define DPassword @"VPassword"
+#define DMemberId @"memberId"
 #define VUserInfo    @"vuserInfo"
 #endif

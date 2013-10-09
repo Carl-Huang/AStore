@@ -42,4 +42,5 @@
 + (void)requestCommodityWithString:(NSString *)urlString successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure;
 
 + (NSString *)escapeURLString:(NSString *)urlString;
++ (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * commoditys))success errorBlock:(void (^)(NSError * error))failure;
 @end

@@ -9,9 +9,13 @@
 #import "LoginViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "RegisterViewController.h"
+#import "UserCenterViewController.h"
+#import "HttpHelper.h"
+#import "User.h"
 @interface LoginViewController () <UITextFieldDelegate>
 @property (nonatomic,retain) UITextField * usernameField;
 @property (nonatomic,retain) UITextField * passwordField;
+@property (nonatomic,strong) NSDictionary *userInfoDic;
 @end
 
 @implementation LoginViewController
@@ -34,7 +38,10 @@
     bgView.backgroundColor = [UIColor clearColor];
     [_tableView setBackgroundView:bgView];
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -147,10 +154,33 @@
 
 - (IBAction)loginAction:(id)sender {
     NSLog(@"%@",NSStringFromSelector(_cmd));
-    
+    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",_usernameField.text,_passwordField.text];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+        for (NSDictionary * dic in catInfo) {
+            self.userInfoDic = dic;
+            [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
+        }
+    } errorBlock:^(NSError *error) {
+        ;
+    }];
     
 }
 
+-(void)pushToUserCenterViewController
+{
+    [User saveUserInfo:_usernameField.text password:_passwordField.text memberId:[self.userInfoDic objectForKey:DMemberId]];
+    NSArray * ary = self.navigationController.viewControllers;
+    for (UIViewController * viewcontroller in ary) {
+        if ([viewcontroller isKindOfClass:[UserCenterViewController class]]) {
+            [self.navigationController popToViewController:viewcontroller animated:YES];
+            return;
+        }
+    }
+    UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+}
 - (IBAction)registerAction:(id)sender
 {
     RegisterViewController * registerViewController = [[RegisterViewController alloc] initWithNibName:nil bundle:nil];

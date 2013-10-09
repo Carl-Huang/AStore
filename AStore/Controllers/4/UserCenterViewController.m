@@ -15,6 +15,7 @@
 #import "LoginViewController.h"
 #import "User.h"
 #import "HttpHelper.h"
+#import "userInfo.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @property (nonatomic, strong)__block NSDictionary * synDicInfo;
@@ -37,18 +38,18 @@
     [super viewDidLoad];
     //查询本地是否有用户已经登录
     synDicInfo = [[NSDictionary alloc]init];
-//    NSDictionary * localUserData = [User getUserInfo];
-    NSDictionary * localUserData = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
-    if (localUserData) {
-        usernameLabel.text = [localUserData objectForKey:DUserName];
-    }
-    [self synchronizationWithServer:localUserData];
     [self setLeftTitle:@"个人中心"];
     _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"],@[@"检查版本"]];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    
+    NSLog(@"%s",__func__);
+    NSDictionary * localUserData = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
+    if (localUserData) {
+        usernameLabel.text = [localUserData objectForKey:DUserName];
+    }
+    [self synchronizationWithServer:localUserData];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -84,11 +85,13 @@
     [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
         for (NSDictionary * dic in catInfo) {
             synDicInfo = dic;
+            [User saveUserInfo:[userInfo objectForKey:DUserName] password:[userInfo objectForKey:DPassword] memberId:[synDicInfo objectForKey:@"member_id"]];
             [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
         }
     } errorBlock:^(NSError *error) {
         ;
     }];
+   
 }
 
 -(void)updateInterface
@@ -163,6 +166,7 @@
 
 -(void)pushMyOrderViewController
 {
+    NSLog(@"%s",__func__);
     MyOrderViewController * viewController = [[MyOrderViewController alloc]initWithNibName:@"MyOrderViewController" bundle:nil];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
@@ -186,7 +190,8 @@
 - (IBAction)loginOutAction:(id)sender
 {
     LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
-    self.navigationController.viewControllers = @[loginViewController];
+    [self.navigationController pushViewController:loginViewController animated:YES];
+//    self.navigationController.viewControllers = @[loginViewController];
     loginViewController = nil;
 }
 @end

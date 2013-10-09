@@ -19,6 +19,6 @@ typedef enum _error_type{
 +(BOOL)isPwdlegal:(NSString *)pwd;
 +(BOOL)isPwdNoSpecialCharacterStr:(NSString *)pwd;
 +(NSString *)userInfoFilePath;
-+(BOOL)saveUserInfo:(NSString *)userName password:(NSString *)password;
++(BOOL)saveUserInfo:(NSString *)userName password:(NSString *)password memberId:(NSString *)memberId;
 +(NSDictionary *)getUserInfo;
 @end

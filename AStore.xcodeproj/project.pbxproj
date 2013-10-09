@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA9637A18051D9B00E9B54B /* userInfo.m */; };
 		4EAEE3C617FDD804002857F1 /* MyCouponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3C417FDD804002857F1 /* MyCouponViewController.m */; };
 		4EAEE3C717FDD804002857F1 /* MyCouponViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3C517FDD804002857F1 /* MyCouponViewController.xib */; };
 		4EAEE3D017FDECEA002857F1 /* MyAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEE3CE17FDECE8002857F1 /* MyAddressViewController.m */; };
@@ -214,6 +215,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4EA9637918051D9B00E9B54B /* userInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userInfo.h; sourceTree = "<group>"; };
+		4EA9637A18051D9B00E9B54B /* userInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userInfo.m; sourceTree = "<group>"; };
 		4EAEE3C317FDD804002857F1 /* MyCouponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyCouponViewController.h; path = AStore/Controllers/4/MyCouponViewController.h; sourceTree = SOURCE_ROOT; };
 		4EAEE3C417FDD804002857F1 /* MyCouponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyCouponViewController.m; path = AStore/Controllers/4/MyCouponViewController.m; sourceTree = SOURCE_ROOT; };
 		4EAEE3C517FDD804002857F1 /* MyCouponViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyCouponViewController.xib; path = AStore/Controllers/4/MyCouponViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -906,6 +909,8 @@
 				C3827C051803E7000032AAE8 /* Commodity.m */,
 				C3827C071804024C0032AAE8 /* Artical.h */,
 				C3827C081804024C0032AAE8 /* Artical.m */,
+				4EA9637918051D9B00E9B54B /* userInfo.h */,
+				4EA9637A18051D9B00E9B54B /* userInfo.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1168,6 +1173,7 @@
 				4EB788A31803D54C00DAF3E5 /* User.m in Sources */,
 				C3827C061803E7010032AAE8 /* Commodity.m in Sources */,
 				C3827C091804024D0032AAE8 /* Artical.m in Sources */,
+				4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -5,17 +5,22 @@
 //  Created by Carl on 13-10-2.
 //  Copyright (c) 2013年 carl. All rights reserved.
 //
-
+#define UserNameTag         1002
+#define ConfirmPassWordTag  1004
+#define PasswordTag         1003
+#define EmailTag            1005
 
 #import "RegisterViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
 #import "User.h"
+#import "UserCenterViewController.h"
 @interface RegisterViewController () <UITextFieldDelegate>
 @property (nonatomic,retain) UITextField * usernameField;
 @property (nonatomic,retain) UITextField * passwordField;
 @property (nonatomic,retain) UITextField * confirmPwdField;
 @property (nonatomic,retain) UITextField * emailField;
+@property (nonatomic,assign) CGRect originTableSize;
 @end
 
 @implementation RegisterViewController
@@ -34,10 +39,7 @@
     [super viewDidLoad];
     [self setLeftTitle:@"免费注册"];
     [self setBackItem:nil];
-    self.passwordField.tag = 1001;
-    self.confirmPwdField.tag = 1002;
-    self.emailField.tag =1003;
-   
+    self.originTableSize = self.tableView.frame;
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,7 +49,7 @@
 }
 
 - (IBAction)registerAction:(id)sender {
-    
+
     if ((usernameField.text.length == 0))//用户名为空
     {
         [self showAlertViewWithTitle:@"提示" message:@"用户名不能为空"];
@@ -109,8 +111,17 @@
          if ([str isEqualToString:@"1"]) {
              NSLog(@"注册成功");
              //写入plish
-             
-             [User saveUserInfo:self.usernameField.text password:self.passwordField.text];
+             [User saveUserInfo:self.usernameField.text password:self.passwordField.text memberId:@"0000"];
+             NSArray * ary = self.navigationController.viewControllers;
+             for (UIViewController * viewcontroller in ary) {
+                 if ([viewcontroller isKindOfClass:[UserCenterViewController class]]) {
+                     [self.navigationController popToViewController:viewcontroller animated:YES];
+                     return;
+                 }
+             }
+             UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
+             [self.navigationController pushViewController:viewController animated:YES];
+             viewController = nil;
          }else
          {
              NSLog(@"注册失败");
@@ -160,6 +171,7 @@
             nameLabel.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:nameLabel];
             usernameField = [[UITextField alloc] initWithFrame:fieldFrame];
+            usernameField.tag = UserNameTag;
             usernameField.borderStyle = UITextBorderStyleNone;
             usernameField.returnKeyType = UIReturnKeyNext;
             usernameField.delegate = self;
@@ -180,6 +192,7 @@
             pwdLabel.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:pwdLabel];
             passwordField = [[UITextField alloc] initWithFrame:fieldFrame];
+            passwordField.tag = PasswordTag;
             passwordField.borderStyle = UITextBorderStyleNone;
             passwordField.returnKeyType = UIReturnKeyNext;
             passwordField.delegate = self;
@@ -202,6 +215,7 @@
             confirmLabel.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:confirmLabel];
             confirmPwdField = [[UITextField alloc] initWithFrame:fieldFrame];
+            confirmPwdField.tag = ConfirmPassWordTag;
             confirmPwdField.borderStyle = UITextBorderStyleNone;
             confirmPwdField.returnKeyType = UIReturnKeyNext;
             confirmPwdField.delegate = self;
@@ -224,6 +238,7 @@
             emalLabel.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:emalLabel];
             emailField = [[UITextField alloc] initWithFrame:fieldFrame];
+            emailField.tag = EmailTag;
             emailField.borderStyle = UITextBorderStyleNone;
             emailField.returnKeyType = UIReturnKeyDone;
             emailField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -235,6 +250,7 @@
     cell.backgroundColor = [UIColor colorWithRed:252.0/255.0 green:232.0/255.0 blue:234.0/255.0 alpha:1.0];
     return cell;
 }
+
 
 -(BOOL)CheckNum:(NSString*)nameStr
 {
@@ -297,6 +313,19 @@
 
 
 #pragma mark - UITextFieldDelegate Methods
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    NSLog(@"%d",textField.tag);
+    if (textField.tag == UserNameTag||textField.tag == PasswordTag) {
+        [self resizeTableViewDown];
+    }
+    if (textField.tag == EmailTag ||textField.tag == ConfirmPassWordTag) {
+        [self resizeTableViewUp];
+    }
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if(textField == usernameField)
@@ -314,15 +343,25 @@
     if(textField == confirmPwdField)
     {
         [emailField becomeFirstResponder];
-        [self resizeTableView];
         return NO;
     }
-    [self resizeTableView];
     [textField resignFirstResponder];
     return YES;
 }
 
--(void)resizeTableView
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField.tag == EmailTag) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.tableView.frame = self.originTableSize;
+        }];
+
+    }
+    
+    return YES;
+}
+
+-(void)resizeTableViewUp
 {
     CGRect rect = self.tableView.frame;
     
@@ -332,7 +371,13 @@
         [UIView animateWithDuration:0.3 animations:^{
             [self.tableView setFrame:rect];
         }];
-    }else if(rect.origin.y == -25)
+    }
+}
+
+-(void)resizeTableViewDown
+{
+    CGRect rect = self.tableView.frame;
+    if(rect.origin.y == -25)
     {
         rect.origin.y +=40;
         [UIView animateWithDuration:0.3 animations:^{

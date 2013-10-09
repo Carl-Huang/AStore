@@ -13,6 +13,8 @@
 #import "CommodityInfoCell.h"
 #import "UIViewController+LeftTitle.h"
 #import "constants.h"
+#import "HttpHelper.h"
+#import "User.h"
 @interface MyOrderViewController ()
 @property (strong ,nonatomic)NSArray * commoditiesArray;
 @property (strong ,nonatomic)NSArray * giftArray;
@@ -46,6 +48,22 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSDictionary * userInfoDic = [User getUserInfo];
+    NSLog(@"OrderView userInfo :%@",userInfoDic);
+    NSString * cmdStr = [NSString stringWithFormat:@"getOrders=%@",[userInfoDic objectForKey:DMemberId]];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+        for (NSDictionary * dic in catInfo) {
+            NSLog(@"Return info:%@",dic);
+            [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
+        }
+    } errorBlock:^(NSError *error) {
+        ;
+    }];
+
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

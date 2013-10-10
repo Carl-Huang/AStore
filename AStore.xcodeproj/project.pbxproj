@@ -108,6 +108,7 @@
 		C38262EA17F6D04100C96A38 /* NoticeContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */; };
 		C3827C061803E7010032AAE8 /* Commodity.m in Sources */ = {isa = PBXBuildFile; fileRef = C3827C051803E7000032AAE8 /* Commodity.m */; };
 		C3827C091804024D0032AAE8 /* Artical.m in Sources */ = {isa = PBXBuildFile; fileRef = C3827C081804024C0032AAE8 /* Artical.m */; };
+		C383C103180651440047AAD4 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C383C102180651440047AAD4 /* MBProgressHUD.m */; };
 		C3845C9A17F3D8BD00DED3C5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9917F3D8BD00DED3C5 /* Security.framework */; };
 		C3845C9C17F3D8C900DED3C5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */; };
 		C3845C9E17F3D8D400DED3C5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */; };
@@ -361,6 +362,8 @@
 		C3827C051803E7000032AAE8 /* Commodity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commodity.m; sourceTree = "<group>"; };
 		C3827C071804024C0032AAE8 /* Artical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Artical.h; sourceTree = "<group>"; };
 		C3827C081804024C0032AAE8 /* Artical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Artical.m; sourceTree = "<group>"; };
+		C383C101180651440047AAD4 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		C383C102180651440047AAD4 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		C3845C9917F3D8BD00DED3C5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -629,6 +632,8 @@
 		C3C9991317F2CDB900043727 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				C383C101180651440047AAD4 /* MBProgressHUD.h */,
+				C383C102180651440047AAD4 /* MBProgressHUD.m */,
 				C384FAD517FD699F00F18A49 /* AFNetworking */,
 				C3845CBC17F3E9FA00DED3C5 /* AKTabBarController */,
 			);
@@ -1186,6 +1191,7 @@
 				4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */,
 				4EB025881805FE6A0038923A /* AddressInfo.m in Sources */,
 				4EB0258B180607260038923A /* CouponInfo.m in Sources */,
+				C383C103180651440047AAD4 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,9 +15,11 @@
 #import "constants.h"
 #import "HttpHelper.h"
 #import "User.h"
+#import "GetOrderInfo.h"
+#import "GetGiftInfo.h"
 @interface MyOrderViewController ()
-@property (strong ,nonatomic)NSArray * commoditiesArray;
-@property (strong ,nonatomic)NSArray * giftArray;
+@property (strong ,nonatomic)NSMutableArray * commoditiesArray;
+@property (strong ,nonatomic)NSMutableArray * giftArray;
 @end
 
 @implementation MyOrderViewController
@@ -30,10 +32,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        commoditiesArray = @[@{VOrderNum: @"201309111020342",VOrderTime:@"2013-09-11 10:47",VCommodityName:@"carl绿茶1万毫升",VSumMoney:@"2",VOrderStatus:@"等待付款"}];
-        
-        giftArray = @[@{VOrderNum: @"201309111020342",VOrderTime:@"2013-09-11 10:47",VCommodityName:@"carl绿茶1万毫升",VTotalCredits:@"3000",VOrderStatus:@"等待付款"}];
-        // Custom initialization
+        commoditiesArray = [[NSMutableArray alloc]init];
+        giftArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -52,17 +52,33 @@
 {
     NSDictionary * userInfoDic = [User getUserInfo];
     NSLog(@"OrderView userInfo :%@",userInfoDic);
+    //获取订单
     NSString * cmdStr = [NSString stringWithFormat:@"getOrders=%@",[userInfoDic objectForKey:DMemberId]];
+    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     NSLog(@"cmdStr :%@",cmdStr);
-    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
-        for (NSDictionary * dic in catInfo) {
-            NSLog(@"Return info:%@",dic);
-            [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
-        }
+    [HttpHelper requestWithString:cmdStr withClass:[GetOrderInfo class] successBlock:^(NSArray *items) {
+        [commoditiesArray addObject:items];
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
         ;
     }];
+    
+    
+    //获取赠品
+//    NSString * giftStr = [NSString stringWithFormat:@"getGift&&start=0&&count=1"];
+//    giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
+//    [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
+//        [giftArray addObject:items];
+//        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+//    } errorBlock:^(NSError *error) {
+//        ;
+//    }];
 
+}
+
+-(void)reloadTableview
+{
+    [self.commodityTable reloadData];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -89,7 +105,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return  30.0;
+    return  40.0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -136,21 +152,22 @@
     CommodityInfoCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section == 0) {
-        
-        cell.orderNum.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VOrderNum];
-        cell.orderTime.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VOrderTime];
-        cell.orderStatus.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VOrderStatus];
-        cell.commodityName.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VCommodityName];
-        cell.commodityMoneySum.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VSumMoney];
+        GetOrderInfo * orderInfo = [commoditiesArray objectAtIndex:indexPath.row];
+        cell.orderNum.text          = orderInfo.order_id;
+        cell.orderTime.text         = orderInfo.acttime;
+        cell.orderStatus.text       = orderInfo.status;
+        cell.commodityName.text     = orderInfo.tostr;
+        cell.commodityMoneySum.text = orderInfo.cost_item;
         cell.sum.text = @"总金额:";
     }else if(indexPath.section == 1)
     {
-        cell.orderNum.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VOrderNum];
-        cell.orderTime.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VOrderTime];
-        cell.orderStatus.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VOrderStatus];
-        cell.commodityName.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VCommodityName];
-        cell.commodityMoneySum.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VTotalCredits];
-        cell.sum.text = @"所需积分:";
+//        GetGiftInfo * gitfInfo = [giftArray objectAtIndex:indexPath.row];
+//        cell.orderNum.text = gitfInfo.gift_id;
+//        cell.orderTime.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VOrderTime];
+//        cell.orderStatus.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VOrderStatus];
+//        cell.commodityName.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VCommodityName];
+//        cell.commodityMoneySum.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:VTotalCredits];
+//        cell.sum.text = @"所需积分:";
     }
     
     

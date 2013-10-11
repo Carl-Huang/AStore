@@ -36,6 +36,10 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"全部分类"];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
     [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary *catInfo) {
         _dictionary = (NSMutableDictionary *)catInfo;
         _firstSectionKey = [[_dictionary allKeys]objectAtIndex:0];
@@ -44,14 +48,7 @@
         secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
         [_tableView reloadData];
     } errorBlock:^(NSError *error) {
-        
     }];
-
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ChildCatalogViewContaollerViewController : UITableViewController
+@property (strong ,nonatomic) NSString * cat_id;
+@property (strong ,nonatomic) NSString * cat_name;
 
 @end

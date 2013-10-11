@@ -9,12 +9,19 @@
 #import "CatalogViewController.h"
 #import "ChildCatalogViewContaollerViewController.h"
 #import "UIViewController+LeftTitle.h"
+#import "HttpHelper.h"
+#import "CategoryInfo.h"
 @interface CatalogViewController ()
-
-
+@property (strong, nonatomic) NSArray *firstSectionData;
+@property (strong, nonatomic) NSArray *secondSectionData;
+@property (strong, nonatomic) NSString * firstSectionKey;
+@property (strong, nonatomic) NSString * secondSectionKey;
+@property (strong,nonatomic) NSMutableDictionary * dictionary;
 @end
 
 @implementation CatalogViewController
+@synthesize firstSectionData,secondSectionData;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,9 +36,23 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"全部分类"];
-    
+    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary *catInfo) {
+        _dictionary = (NSMutableDictionary *)catInfo;
+        _firstSectionKey = [[_dictionary allKeys]objectAtIndex:0];
+        _secondSectionKey = [[_dictionary allKeys]objectAtIndex:1];
+        firstSectionData = (NSArray *)[_dictionary objectForKey:_firstSectionKey];
+        secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
+        [_tableView reloadData];
+    } errorBlock:^(NSError *error) {
+        
+    }];
+
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -57,19 +78,39 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return [[_dictionary allKeys] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+  
+    NSString * key = [[_dictionary allKeys] objectAtIndex:section];
+    return ((NSArray *)[_dictionary objectForKey:key]).count;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSArray * views = [[NSBundle mainBundle] loadNibNamed:@"CatalogSectionHeader" owner:nil options:nil];
-    UIView * sectionHeader = [views objectAtIndex:0];
-    return sectionHeader;
+
+    UIImageView * imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"分类背景"]];
+    [imageView setContentMode:UIViewContentModeScaleToFill];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, 120, 35)];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [label setTextColor:[UIColor blackColor]];
+    [label setFont:[UIFont systemFontOfSize:20]];
+    UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
+    [headerView setBackgroundColor:[UIColor clearColor]];
+    
+    if (section == 0 ) {
+        label.text = _firstSectionKey;
+    } else if(section == 1){
+        label.text = _secondSectionKey;
+    }
+    [headerView addSubview:imageView];
+    [headerView addSubview:label];
+    imageView = nil;
+    label = nil;
+    return headerView;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -82,7 +123,12 @@
         cell.textLabel.textColor = [UIColor darkGrayColor];
         cell.textLabel.font = [UIFont systemFontOfSize:14];
     }
-    cell.textLabel.text = @"饮料";
+   
+    NSString * key = [[_dictionary allKeys] objectAtIndex:indexPath.section];
+    NSArray * array = (NSArray *)[_dictionary objectForKey:key];
+    ;
+    cell.textLabel.text = [[array objectAtIndex:indexPath.row]objectForKey:@"cat_name"];
+    
     return  cell;
 }
 
@@ -90,6 +136,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChildCatalogViewContaollerViewController * cCatList = [[ChildCatalogViewContaollerViewController alloc] initWithNibName:nil bundle:nil];
+   
+
+    //getCommodityWithSaleTab
+    if (indexPath.section == 0) {
+         [cCatList setCat_id:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
+        [cCatList setCat_name:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+    }else
+    {
+        [cCatList setCat_id:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
+        [cCatList setCat_name:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+    }
     [self.navigationController pushViewController:cCatList animated:YES];
 }
 

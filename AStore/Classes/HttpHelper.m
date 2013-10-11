@@ -13,6 +13,8 @@
 #import "userInfo.h"
 #import "AddressInfo.h"
 #import "CouponInfo.h"
+#import "CategoryInfo.h"
+#import "GetOrderInfo.h"
 
 
 @implementation HttpHelper
@@ -146,10 +148,10 @@
 + (void)getCommodityWithSaleTab:(NSString *)tab withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
 {
     NSString * route = @"youjian.php";
-    NSString * component_1 = [NSString stringWithFormat:@"tag_getSales=%@",tab];
+    NSString * component_1 = [NSString stringWithFormat:@"cat_getSales=%@",tab];
     NSString * component_2 = [NSString stringWithFormat:@"start=%d",start];
     NSString * component_3 = [NSString stringWithFormat:@"count=%d",count];
-    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3];
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&&%@&&%@",SERVER_URL,route,component_1,component_2,component_3];
     [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
 

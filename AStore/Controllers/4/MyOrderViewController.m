@@ -17,6 +17,7 @@
 #import "User.h"
 #import "GetOrderInfo.h"
 #import "GetGiftInfo.h"
+#import "AppDelegate.h"
 @interface MyOrderViewController ()
 @property (strong ,nonatomic)NSMutableArray * commoditiesArray;
 @property (strong ,nonatomic)NSMutableArray * giftArray;
@@ -45,6 +46,8 @@
     [self.commodityTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     [self setLeftTitle:@"我的订单"];
     [self setBackItem:nil];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  showLoginViewOnView:self.view];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -78,6 +81,9 @@
 
 -(void)reloadTableview
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
+
     [self.commodityTable reloadData];
 }
 - (void)didReceiveMemoryWarning

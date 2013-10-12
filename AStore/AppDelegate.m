@@ -14,6 +14,7 @@
 #import "UserCenterViewController.h"
 #import "LoginViewController.h"
 @implementation AppDelegate
+@synthesize loadingView;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -80,4 +81,22 @@
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"导航背景"] forBarMetrics:UIBarMetricsDefault];
 }
 
+-(void)showLoginViewOnView:(UIView *)view
+{
+    loadingView = [[MBProgressHUD alloc]initWithView:view];
+    loadingView.dimBackground = YES;
+    loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    loadingView.labelText = @"正在加载...";
+    [view addSubview:loadingView];
+    [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
+    loadingView.taskInProgress = YES;
+
+    [loadingView show:YES];
+}
+
+-(void)removeLoadingViewWithView:(UIView *)view
+{
+    [loadingView hide:YES];
+    loadingView = nil;
+}
 @end

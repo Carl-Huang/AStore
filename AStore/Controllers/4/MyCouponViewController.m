@@ -19,6 +19,7 @@
 #import "UIViewController+LeftTitle.h"
 #import "CouponInfo.h"
 #import "HttpHelper.h"
+#import "AppDelegate.h"
 @interface MyCouponViewController ()
 @property (strong ,nonatomic)NSMutableArray * commoditiesArray;
 @end
@@ -45,6 +46,10 @@
     [self.commodityTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     [self setLeftTitle:@"我的优惠券"];
     [self setBackItem:nil];
+    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  showLoginViewOnView:self.view];
+
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -79,6 +84,8 @@
 
 -(void)reloadTableview
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
     [self.commodityTable reloadData];
 }
 #pragma mark - UITableViewDelegate

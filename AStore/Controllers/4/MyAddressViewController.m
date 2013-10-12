@@ -19,6 +19,7 @@
 #import "ModifyAddressViewController.h"
 #import "HttpHelper.h"
 #import "AddressInfo.h"
+#import "AppDelegate.h"
 static NSString * cellIdentifier = @"addressCell";
 @interface MyAddressViewController ()
 @property (strong ,nonatomic)NSMutableArray * dataSource;
@@ -63,6 +64,8 @@ static NSString * cellIdentifier = @"addressCell";
     self.navigationItem.rightBarButtonItems = @[backItem,newItem];
     backItem = nil;
     newItem = nil;
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  showLoginViewOnView:self.view];
 
 }
 
@@ -89,6 +92,8 @@ static NSString * cellIdentifier = @"addressCell";
 -(void)reloadTableview
 {
     NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
     [self.addressTable reloadData];
 }
 

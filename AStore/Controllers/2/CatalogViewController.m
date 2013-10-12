@@ -11,6 +11,7 @@
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
 #import "CategoryInfo.h"
+#import "AppDelegate.h"
 @interface CatalogViewController ()
 @property (strong, nonatomic) NSArray *firstSectionData;
 @property (strong, nonatomic) NSArray *secondSectionData;
@@ -36,6 +37,8 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"全部分类"];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  showLoginViewOnView:self.view];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -46,9 +49,16 @@
         _secondSectionKey = [[_dictionary allKeys]objectAtIndex:1];
         firstSectionData = (NSArray *)[_dictionary objectForKey:_firstSectionKey];
         secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
-        [_tableView reloadData];
+        [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
     } errorBlock:^(NSError *error) {
     }];
+}
+
+-(void)refreshTableview
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
+    [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -125,7 +135,7 @@
     NSArray * array = (NSArray *)[_dictionary objectForKey:key];
     ;
     cell.textLabel.text = [[array objectAtIndex:indexPath.row]objectForKey:@"cat_name"];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
 }
 

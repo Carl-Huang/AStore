@@ -43,7 +43,7 @@
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUIImageView" id="632992579">
 								<reference key="NSNextResponder" ref="525721447"/>
-								<int key="NSvFlags">274</int>
+								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{20, 18}, {66, 67}}</string>
 								<reference key="NSSuperview" ref="525721447"/>
 								<reference key="NSWindow"/>
@@ -199,6 +199,7 @@
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="525721447"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
+				<int key="IBUIContentMode">1</int>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="525721447"/>
 				<real value="104" key="IBUIRowHeight"/>
@@ -262,11 +263,11 @@
 						<int key="objectID">3</int>
 						<reference key="object" ref="534450337"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="632992579"/>
 							<reference ref="630302030"/>
 							<reference ref="1052400109"/>
 							<reference ref="402601805"/>
 							<reference ref="81059077"/>
+							<reference ref="632992579"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

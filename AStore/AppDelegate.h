@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MBProgressHUD.h"
 
 @class AKTabBarController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) AKTabBarController * akTabBarController;
-
+@property (strong ,nonatomic) MBProgressHUD * loadingView;
+-(void)showLoginViewOnView:(UIView *)view;
+-(void)removeLoadingViewWithView:(UIView *)view;
 @end

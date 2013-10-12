@@ -13,17 +13,22 @@
 #import "Commodity.h"
 #import "ChildCatalogInfoCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "MBProgressHUD.h"
+#import "AppDelegate.h"
 
 static NSString * cellIdentifier = @"cellIdentifier";
 
-@interface ChildCatalogViewContaollerViewController ()
+@interface ChildCatalogViewContaollerViewController ()<UIAlertViewDelegate>
 @property (strong ,nonatomic) NSArray  * dataSource;
+@property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end
 
 @implementation ChildCatalogViewContaollerViewController
 @synthesize cat_id;
 @synthesize cat_name;
 @synthesize dataSource;
+@synthesize loadingView;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -51,30 +56,46 @@ static NSString * cellIdentifier = @"cellIdentifier";
 //根据相应的cat_id从服务器获取资料
 -(void)fetchDataFromServer
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  showLoginViewOnView:self.view];
+
     [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
         dataSource = commoditys;
         [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
         NSLog(@"%@",commoditys);
     } withErrorBlock:^(NSError *error) {
-        ;
+        [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
     }];
 }
 
 
 -(void)refreshTableview
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
     [self.tableView reloadData];
 }
 
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+    pAlert.delegate = self;
+    [pAlert show];
+    pAlert = nil;
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)extractImageURLWithStr:(NSString *)str
+-(NSString *)extractImageURLWithStr:(NSString *)str
 {
-    
+    NSString * tempStr = [NSString stringWithFormat:@"%@",str];
+    NSRange range = [tempStr rangeOfString:@"|" options:NSCaseInsensitiveSearch];
+    NSRange strRange = NSMakeRange(0, range.location);
+    return [Resource_URL_Prefix stringByAppendingString:[str substringWithRange:strRange]];
 }
 
 #pragma mark - Table view data source
@@ -95,11 +116,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     Commodity * info = [dataSource objectAtIndex:indexPath.row];
     
     //取出图片的url
-    NSString * str = [NSString stringWithFormat:@"%@",info.small_pic];
-    NSRange range = [str rangeOfString:@"|" options:NSCaseInsensitiveSearch];
-    NSRange strRange = NSMakeRange(0, range.location);
-    NSString * imageUrlStr = [str substringWithRange:strRange];
-    imageUrlStr =  [Resource_URL_Prefix stringByAppendingString:imageUrlStr];
+    NSString * imageUrlStr = [self extractImageURLWithStr:info.small_pic];
     
     //异步获取图片
     __weak ChildCatalogInfoCell *weakCell = cell;
@@ -109,16 +126,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
                   [weakCell.imageView setImageWithURLRequest:request placeholderImage:nil
                                             success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                                 [weakCell.imageView setImage:image];
+                                                [weakCell setNeedsLayout];
                                             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                                 NSLog(@"下载图片失败");
                                             }];
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.pruductName.text = info.name;
     cell.productPrice.text = info.price;
     return cell;
 }
-
-
 
 #pragma mark - Table view delegate
 
@@ -132,4 +148,17 @@ static NSString * cellIdentifier = @"cellIdentifier";
     
 }
 
+
+#pragma mark - AlertViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+            [self fetchDataFromServer];
+            break;
+            
+        default:
+            break;
+    }
+}
 @end

@@ -31,6 +31,14 @@
 		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
 		4EB025881805FE6A0038923A /* AddressInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB025871805FE6A0038923A /* AddressInfo.m */; };
 		4EB0258B180607260038923A /* CouponInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0258A180607260038923A /* CouponInfo.m */; };
+		4EB4CB3818090F9B0059DA10 /* ChildCatalogInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */; };
+		4EB4CB3A18090FAF0059DA10 /* ChildCatalogInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */; };
+		4EB4CB4B18091C430059DA10 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3D18091C430059DA10 /* AFNetworkActivityIndicatorManager.m */; };
+		4EB4CB4C18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3F18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.m */; };
+		4EB4CB4D18091C430059DA10 /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4118091C430059DA10 /* UIAlertView+AFNetworking.m */; };
+		4EB4CB4E18091C430059DA10 /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4318091C430059DA10 /* UIButton+AFNetworking.m */; };
+		4EB4CB4F18091C430059DA10 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4518091C430059DA10 /* UIImageView+AFNetworking.m */; };
+		4EB4CB5118091C430059DA10 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */; };
 		4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */; };
 		4EB788A31803D54C00DAF3E5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB788A21803D54C00DAF3E5 /* User.m */; };
 		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
@@ -261,6 +269,22 @@
 		4EB025871805FE6A0038923A /* AddressInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressInfo.m; sourceTree = "<group>"; };
 		4EB02589180607250038923A /* CouponInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CouponInfo.h; sourceTree = "<group>"; };
 		4EB0258A180607260038923A /* CouponInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CouponInfo.m; sourceTree = "<group>"; };
+		4EB4CB3618090F9B0059DA10 /* ChildCatalogInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCatalogInfoCell.h; sourceTree = "<group>"; };
+		4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCatalogInfoCell.m; sourceTree = "<group>"; };
+		4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChildCatalogInfoCell.xib; sourceTree = "<group>"; };
+		4EB4CB3C18091C430059DA10 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		4EB4CB3D18091C430059DA10 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		4EB4CB3E18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB3F18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityIndicatorView+AFNetworking.m"; sourceTree = "<group>"; };
+		4EB4CB4018091C430059DA10 /* UIAlertView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB4118091C430059DA10 /* UIAlertView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+AFNetworking.m"; sourceTree = "<group>"; };
+		4EB4CB4218091C430059DA10 /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB4318091C430059DA10 /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AFNetworking.m"; sourceTree = "<group>"; };
+		4EB4CB4418091C430059DA10 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB4518091C430059DA10 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		4EB4CB4618091C430059DA10 /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKit+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB4918091C430059DA10 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
+		4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressions.h; sourceTree = "<group>"; };
 		4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressions.m; sourceTree = "<group>"; };
 		4EB788A11803D54C00DAF3E5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -555,6 +579,26 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		4EB4CB3B18091C430059DA10 /* UIKit+AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				4EB4CB3C18091C430059DA10 /* AFNetworkActivityIndicatorManager.h */,
+				4EB4CB3D18091C430059DA10 /* AFNetworkActivityIndicatorManager.m */,
+				4EB4CB3E18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.h */,
+				4EB4CB3F18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.m */,
+				4EB4CB4018091C430059DA10 /* UIAlertView+AFNetworking.h */,
+				4EB4CB4118091C430059DA10 /* UIAlertView+AFNetworking.m */,
+				4EB4CB4218091C430059DA10 /* UIButton+AFNetworking.h */,
+				4EB4CB4318091C430059DA10 /* UIButton+AFNetworking.m */,
+				4EB4CB4418091C430059DA10 /* UIImageView+AFNetworking.h */,
+				4EB4CB4518091C430059DA10 /* UIImageView+AFNetworking.m */,
+				4EB4CB4618091C430059DA10 /* UIKit+AFNetworking.h */,
+				4EB4CB4918091C430059DA10 /* UIWebView+AFNetworking.h */,
+				4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */,
+			);
+			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
 		C342179D17F1E1F500B42F5E = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +720,7 @@
 		C3C9991317F2CDB900043727 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4EB4CB3B18091C430059DA10 /* UIKit+AFNetworking */,
 				C383C101180651440047AAD4 /* MBProgressHUD.h */,
 				C383C102180651440047AAD4 /* MBProgressHUD.m */,
 				C384FAD517FD699F00F18A49 /* AFNetworking */,
@@ -868,6 +913,9 @@
 				C35059F917F6622C00D590A7 /* ChildCatalogViewContaollerViewController.h */,
 				C35059FA17F6622C00D590A7 /* ChildCatalogViewContaollerViewController.m */,
 				C35059FB17F6622C00D590A7 /* ChildCatalogViewContaollerViewController.xib */,
+				4EB4CB3618090F9B0059DA10 /* ChildCatalogInfoCell.h */,
+				4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */,
+				4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */,
 			);
 			path = 2;
 			sourceTree = "<group>";
@@ -1151,6 +1199,7 @@
 				C37E1D6917FEA968000E1100 /* 单选btn-s.png in Resources */,
 				C37E1D6C17FEA97E000E1100 /* 单选btn-n@2x.png in Resources */,
 				C37E1D6D17FEA97E000E1100 /* 单选btn-s@2x.png in Resources */,
+				4EB4CB3A18090FAF0059DA10 /* ChildCatalogInfoCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1227,6 +1276,13 @@
 				4EAD6C831807C7AB00B3F887 /* GetOrderInfo.m in Sources */,
 				4EAD6C861807CD0A00B3F887 /* GetGiftInfo.m in Sources */,
 				4EAD6C891807DD7900B3F887 /* CategoryInfo.m in Sources */,
+				4EB4CB3818090F9B0059DA10 /* ChildCatalogInfoCell.m in Sources */,
+				4EB4CB4B18091C430059DA10 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				4EB4CB4C18091C430059DA10 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				4EB4CB4D18091C430059DA10 /* UIAlertView+AFNetworking.m in Sources */,
+				4EB4CB4E18091C430059DA10 /* UIButton+AFNetworking.m in Sources */,
+				4EB4CB4F18091C430059DA10 /* UIImageView+AFNetworking.m in Sources */,
+				4EB4CB5118091C430059DA10 /* UIWebView+AFNetworking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1309,7 +1365,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1323,7 +1379,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C6BDE67B-336C-41BD-A253-255A10F2C54E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6BDE67B-336C-41BD-A253-255A10F2C54E";

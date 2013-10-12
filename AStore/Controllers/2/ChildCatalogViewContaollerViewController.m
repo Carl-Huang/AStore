@@ -6,10 +6,16 @@
 //  Copyright (c) 2013年 carl. All rights reserved.
 //
 
+
 #import "ChildCatalogViewContaollerViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
 #import "Commodity.h"
+#import "ChildCatalogInfoCell.h"
+#import "UIImageView+AFNetworking.h"
+
+static NSString * cellIdentifier = @"cellIdentifier";
+
 @interface ChildCatalogViewContaollerViewController ()
 @property (strong ,nonatomic) NSArray  * dataSource;
 @end
@@ -35,9 +41,14 @@
     self.clearsSelectionOnViewWillAppear = YES;
     [self setLeftTitle:cat_name];
     [self setBackItem:nil];
+    UINib *cellNib = [UINib nibWithNibName:@"ChildCatalogInfoCell" bundle:[NSBundle bundleForClass:[ChildCatalogInfoCell class]]];
+    [self.tableView registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
+    
     [self fetchDataFromServer];
 }
 
+
+//根据相应的cat_id从服务器获取资料
 -(void)fetchDataFromServer
 {
     [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
@@ -49,12 +60,8 @@
     }];
 }
 
--(void)refreshTableview
-{
-    [self.tableView reloadData];
-}
 
--(void)viewWillAppear:(BOOL)animated
+-(void)refreshTableview
 {
     [self.tableView reloadData];
 }
@@ -63,6 +70,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)extractImageURLWithStr:(NSString *)str
+{
+    
 }
 
 #pragma mark - Table view data source
@@ -77,22 +89,32 @@
     return [dataSource count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 3;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.textLabel.textColor = [UIColor darkGrayColor];
-        cell.textLabel.font = [UIFont systemFontOfSize:14];
-    }
+    ChildCatalogInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     Commodity * info = [dataSource objectAtIndex:indexPath.row];
-    [cell.textLabel setText:info.name];
+    
+    //取出图片的url
+    NSString * str = [NSString stringWithFormat:@"%@",info.small_pic];
+    NSRange range = [str rangeOfString:@"|" options:NSCaseInsensitiveSearch];
+    NSRange strRange = NSMakeRange(0, range.location);
+    NSString * imageUrlStr = [str substringWithRange:strRange];
+    imageUrlStr =  [Resource_URL_Prefix stringByAppendingString:imageUrlStr];
+    
+    //异步获取图片
+    __weak ChildCatalogInfoCell *weakCell = cell;
+    [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+    NSURL *url = [NSURL URLWithString:imageUrlStr];
+                  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+                  [weakCell.imageView setImageWithURLRequest:request placeholderImage:nil
+                                            success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                [weakCell.imageView setImage:image];
+                                            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                NSLog(@"下载图片失败");
+                                            }];
+    
+    cell.pruductName.text = info.name;
+    cell.productPrice.text = info.price;
     return cell;
 }
 
@@ -100,6 +122,11 @@
 
 #pragma mark - Table view delegate
 
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 108.0f;
+}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

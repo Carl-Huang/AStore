@@ -90,12 +90,19 @@
     [view addSubview:loadingView];
     [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
     loadingView.taskInProgress = YES;
-
+    UITapGestureRecognizer *HUDSingleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTap:)];
+    [loadingView addGestureRecognizer:HUDSingleTap];
+    HUDSingleTap = nil;
     [loadingView show:YES];
 }
 
+-(void)singleTap:(UIGestureRecognizer *)gest
+{
+    [self removeLoadingViewWithView:nil];
+}
 -(void)removeLoadingViewWithView:(UIView *)view
 {
+    NSLog(@"%s",__func__);
     [loadingView hide:YES];
     loadingView = nil;
 }

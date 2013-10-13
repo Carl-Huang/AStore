@@ -11,5 +11,7 @@
 @interface HeaderView : UIView
 @property (weak, nonatomic) IBOutlet UIButton *onlinePayBtn;
 @property (weak, nonatomic) IBOutlet UIButton *offlinePayBtn;
+@property (weak, nonatomic) IBOutlet UILabel *onLineTextLabel;
+@property (weak, nonatomic) IBOutlet UILabel *offLineTextLabel;
 
 @end

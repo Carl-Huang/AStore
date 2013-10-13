@@ -11,4 +11,6 @@
 @interface CommodityDesViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIWebView *webViewDes;
 @property (strong ,nonatomic) Commodity * comodityInfo;
+@property (weak, nonatomic) IBOutlet UILabel *goods_id;
+@property (weak, nonatomic) IBOutlet UILabel *price;
 @end

@@ -8,8 +8,8 @@
 
 #import "CommodityDesViewController.h"
 #import "UIViewController+LeftTitle.h"
-
-@interface CommodityDesViewController ()
+#import "MBProgressHUD.h"
+@interface CommodityDesViewController ()<UIWebViewDelegate>
 
 @end
 
@@ -30,12 +30,24 @@
     [super viewDidLoad];
     [self setLeftTitle:comodityInfo.name];
     [self setBackItem:nil];
-    NSString *htmlContent = @"<img src=\"http://www.youjianpuzi.com/images//20120915/e5023b85ae2efb8a.gif\"><br/><img src=\"http://www.youjianpuzi.com/images//20120915/3d1f3b269988863a.jpg\"><br/><img src=\"http://www.youjianpuzi.com/images//20120915/505a44d252ca7594.gif\"><br/><img src=\"http://www.youjianpuzi.com/images//20120915/03a6ffba482ef055.jpg\"><br/><img src=\"http://www.youjianpuzi.com/images//20120915/71f96d308e61b8c1.jpg\"><br/><br/><br/>";
-    NSMutableString *htmlPage = [NSMutableString new];
-    [htmlPage appendString:htmlContent];
-    [self.webViewDes loadHTMLString:htmlPage baseURL:nil];
+    NSString * priceStr = [comodityInfo.price substringToIndex:[comodityInfo.price length]-2];
+    self.price.text = priceStr;
+    self.goods_id.text = comodityInfo.goods_id;
+    
+    //webView
+    NSString *htmlContent = [self analysisStr:comodityInfo.intro];
+    [self.webViewDes loadHTMLString:htmlContent baseURL:nil];
     self.webViewDes.scalesPageToFit = YES;
+
+    
     // Do any additional setup after loading the view from its nib.
+}
+
+-(NSString *)analysisStr:(NSString *)webStr
+{
+    NSString * replcaedStr = @"\"";
+    webStr = [webStr stringByReplacingOccurrencesOfString:@"\"" withString:[NSString stringWithFormat:@"\%@",replcaedStr] options:NSCaseInsensitiveSearch range:NSMakeRange(0, [webStr length])];
+    return webStr;
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,6 +58,29 @@
 
 - (void)viewDidUnload {
     [self setWebViewDes:nil];
+    [self setGoods_id:nil];
+    [self setPrice:nil];
     [super viewDidUnload];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    //重新载入一个新的string,防止内存泄露?
+    [self.webViewDes loadHTMLString:@"" baseURL:nil];
+}
+
+-(void)dealloc
+{
+    self.webViewDes.delegate = nil;
+}
+#pragma mark - UIWebView Delegate
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [MBProgressHUD HUDForView:self.view];
+    
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 @end

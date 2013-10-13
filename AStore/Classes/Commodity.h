@@ -27,5 +27,6 @@
 @property (nonatomic,retain) NSString * bn;
 @property (nonatomic,retain) NSString * count;
 @property (nonatomic,retain) NSString * cat_id;
-
+@property (nonatomic,retain) NSString * mktprice;
+@property (nonatomic,retain) NSString * pdt_desc;
 @end

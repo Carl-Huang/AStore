@@ -27,5 +27,6 @@
 @synthesize count;
 @synthesize spec;
 @synthesize bn;
-
+@synthesize mktprice;
+@synthesize pdt_desc;
 @end

@@ -206,12 +206,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
         }
         
     }
-    else
-    {
-        
-        cell.textLabel.text = @"hell";
-
-    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
     cell.textLabel.font = [UIFont systemFontOfSize:14];

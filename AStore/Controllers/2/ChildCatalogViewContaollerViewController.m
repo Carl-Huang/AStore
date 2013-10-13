@@ -178,7 +178,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
         case 1:
             [self fetchDataFromServer];
             break;
-            
+        case 0:
+            [self.navigationController popViewControllerAnimated:YES];
         default:
             break;
     }

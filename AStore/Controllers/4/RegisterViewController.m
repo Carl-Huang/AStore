@@ -9,13 +9,17 @@
 #define ConfirmPassWordTag  1004
 #define PasswordTag         1003
 #define EmailTag            1005
-
+#define TableViewOff        60
 #import "RegisterViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
 #import "User.h"
 #import "UserCenterViewController.h"
 @interface RegisterViewController () <UITextFieldDelegate>
+{
+    NSInteger tableViewOriY;
+    NSInteger tableViewAlteredY;
+}
 @property (nonatomic,retain) UITextField * usernameField;
 @property (nonatomic,retain) UITextField * passwordField;
 @property (nonatomic,retain) UITextField * confirmPwdField;
@@ -40,6 +44,8 @@
     [self setLeftTitle:@"免费注册"];
     [self setBackItem:nil];
     self.originTableSize = self.tableView.frame;
+    tableViewOriY = self.tableView.frame.origin.y;
+    tableViewAlteredY = self.tableView.frame.origin.y-TableViewOff;
 }
 
 - (void)didReceiveMemoryWarning
@@ -364,27 +370,28 @@
 -(void)resizeTableViewUp
 {
     CGRect rect = self.tableView.frame;
-    
-    if (rect.origin.y == 15) {
-        rect.origin.y -=40;
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.tableView setFrame:rect];
-        }];
+    if (!IS_SCREEN_4_INCH) {
+        if (rect.origin.y == tableViewOriY) {
+            rect.origin.y -=TableViewOff;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.tableView setFrame:rect];
+            }];
+        }
     }
 }
 
 -(void)resizeTableViewDown
 {
     CGRect rect = self.tableView.frame;
-    if(rect.origin.y == -25)
-    {
-        rect.origin.y +=40;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.tableView setFrame:rect];
-        }];
+    if (!IS_SCREEN_4_INCH) {
+        if(rect.origin.y == tableViewAlteredY)
+        {
+            rect.origin.y +=TableViewOff;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.tableView setFrame:rect];
+            }];
+        }
     }
-
 }
 
 @end

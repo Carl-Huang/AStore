@@ -226,6 +226,8 @@
 
 - (IBAction)loginOutAction:(id)sender
 {
+    [User deleteUserInfo];
+    
     NSArray *ary = self.navigationController.viewControllers;
     for (UIViewController *viewcontroller in ary) {
         if ([ary isKindOfClass:[LoginViewController class]]) {
@@ -235,7 +237,6 @@
     }
     LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:loginViewController animated:YES];
-//    self.navigationController.viewControllers = @[loginViewController];
     loginViewController = nil;
 }
 @end

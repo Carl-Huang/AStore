@@ -9,6 +9,8 @@
 #ifndef AStore_constants_h
 #define AStore_constants_h
 
+#define IS_SCREEN_4_INCH (([[UIScreen mainScreen] bounds].size.height == 568)?YES:NO)
+
 #define SERVER_URL_Prefix   @"http://www.shyl8.net/youjian.php?"
 #define Resource_URL_Prefix @"http://www.youjianpuzi.com/"
 

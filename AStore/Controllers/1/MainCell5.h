@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface MainCell5 : UITableViewCell
+#import "ACPScrollMenu.h"
+@interface MainCell5 : UITableViewCell<ACPScrollDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (weak, nonatomic) IBOutlet ACPScrollMenu *customiseScrollView;
 
 @end

@@ -41,6 +41,11 @@
 		4EB4CB5118091C430059DA10 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */; };
 		4EB6C1CF180C50F80098E6F1 /* MainCommodityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */; };
 		4EB6C1D0180C50F80098E6F1 /* MainCommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */; };
+		4EB6C1D8180C65CA0098E6F1 /* ACPItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6C1D4180C65CA0098E6F1 /* ACPItem.m */; };
+		4EB6C1D9180C65CA0098E6F1 /* ACPItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB6C1D5180C65CA0098E6F1 /* ACPItem.xib */; };
+		4EB6C1DA180C65CA0098E6F1 /* ACPScrollMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6C1D7180C65CA0098E6F1 /* ACPScrollMenu.m */; };
+		4EB6C1DD180C6FC10098E6F1 /* MainCell6.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6C1DC180C6FC00098E6F1 /* MainCell6.m */; };
+		4EB6C1DF180C6FCF0098E6F1 /* MainCell6.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB6C1DE180C6FCE0098E6F1 /* MainCell6.xib */; };
 		4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */; };
 		4EB788A31803D54C00DAF3E5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB788A21803D54C00DAF3E5 /* User.m */; };
 		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
@@ -294,6 +299,14 @@
 		4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainCommodityViewController.h; sourceTree = "<group>"; };
 		4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCommodityViewController.m; sourceTree = "<group>"; };
 		4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainCommodityViewController.xib; sourceTree = "<group>"; };
+		4EB6C1D3180C65CA0098E6F1 /* ACPItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPItem.h; sourceTree = "<group>"; };
+		4EB6C1D4180C65CA0098E6F1 /* ACPItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPItem.m; sourceTree = "<group>"; };
+		4EB6C1D5180C65CA0098E6F1 /* ACPItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ACPItem.xib; sourceTree = "<group>"; };
+		4EB6C1D6180C65CA0098E6F1 /* ACPScrollMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPScrollMenu.h; sourceTree = "<group>"; };
+		4EB6C1D7180C65CA0098E6F1 /* ACPScrollMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPScrollMenu.m; sourceTree = "<group>"; };
+		4EB6C1DB180C6FC00098E6F1 /* MainCell6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainCell6.h; sourceTree = "<group>"; };
+		4EB6C1DC180C6FC00098E6F1 /* MainCell6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCell6.m; sourceTree = "<group>"; };
+		4EB6C1DE180C6FCE0098E6F1 /* MainCell6.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainCell6.xib; sourceTree = "<group>"; };
 		4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressions.h; sourceTree = "<group>"; };
 		4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressions.m; sourceTree = "<group>"; };
 		4EB788A11803D54C00DAF3E5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -588,6 +601,7 @@
 		4EAD6C801807C77000B3F887 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4EB6C1D2180C65CA0098E6F1 /* ACPScrollMenu */,
 				C3419D5517F5320D00FF0A05 /* CustomScrollView.h */,
 				C3419D5617F5320D00FF0A05 /* CustomScrollView.m */,
 			);
@@ -612,6 +626,47 @@
 				4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
+		4EB6C1D1180C5A970098E6F1 /* cellGroup */ = {
+			isa = PBXGroup;
+			children = (
+				C3419D5817F538EA00FF0A05 /* MainCell2.xib */,
+				C3419D5A17F53B1B00FF0A05 /* MainCell2.h */,
+				C3419D5B17F53B1B00FF0A05 /* MainCell2.m */,
+				C3419D5D17F53FCF00FF0A05 /* MainCell3.h */,
+				C3419D5E17F53FCF00FF0A05 /* MainCell3.m */,
+				C3419D6017F53FF500FF0A05 /* MainCell3.xib */,
+				C3419D6217F5401200FF0A05 /* MainCell4.h */,
+				C3419D6317F5401200FF0A05 /* MainCell4.m */,
+				C3419D6517F5402E00FF0A05 /* MainCell4.xib */,
+				C3857F9617F59ACC0012F8AC /* MainCell5.h */,
+				C3857F9717F59ACC0012F8AC /* MainCell5.m */,
+				C3857F9917F59AE50012F8AC /* MainCell5.xib */,
+				4EB6C1DB180C6FC00098E6F1 /* MainCell6.h */,
+				4EB6C1DC180C6FC00098E6F1 /* MainCell6.m */,
+				4EB6C1DE180C6FCE0098E6F1 /* MainCell6.xib */,
+				C38262E117F6CAF500C96A38 /* CommodityCell.h */,
+				C38262E217F6CAF600C96A38 /* CommodityCell.m */,
+				C38262E417F6CB5900C96A38 /* CommodityCell.xib */,
+				C3505A1017F69D2E00D590A7 /* CommodityEXCell.h */,
+				C3505A1117F69D2F00D590A7 /* CommodityEXCell.m */,
+				C3505A1317F69D4D00D590A7 /* CommodityEXCell.xib */,
+			);
+			name = cellGroup;
+			sourceTree = "<group>";
+		};
+		4EB6C1D2180C65CA0098E6F1 /* ACPScrollMenu */ = {
+			isa = PBXGroup;
+			children = (
+				4EB6C1D3180C65CA0098E6F1 /* ACPItem.h */,
+				4EB6C1D4180C65CA0098E6F1 /* ACPItem.m */,
+				4EB6C1D5180C65CA0098E6F1 /* ACPItem.xib */,
+				4EB6C1D6180C65CA0098E6F1 /* ACPScrollMenu.h */,
+				4EB6C1D7180C65CA0098E6F1 /* ACPScrollMenu.m */,
+			);
+			name = ACPScrollMenu;
+			path = Lib/ACPScrollMenu;
 			sourceTree = "<group>";
 		};
 		C342179D17F1E1F500B42F5E = {
@@ -875,21 +930,10 @@
 		C3C999C217F2CDCE00043727 /* 1 */ = {
 			isa = PBXGroup;
 			children = (
+				4EB6C1D1180C5A970098E6F1 /* cellGroup */,
 				C3845CD117F3F03000DED3C5 /* MainViewController.h */,
 				C3845CD217F3F03000DED3C5 /* MainViewController.m */,
 				C3845CD317F3F03000DED3C5 /* MainViewController.xib */,
-				C3419D5817F538EA00FF0A05 /* MainCell2.xib */,
-				C3419D5A17F53B1B00FF0A05 /* MainCell2.h */,
-				C3419D5B17F53B1B00FF0A05 /* MainCell2.m */,
-				C3419D5D17F53FCF00FF0A05 /* MainCell3.h */,
-				C3419D5E17F53FCF00FF0A05 /* MainCell3.m */,
-				C3419D6017F53FF500FF0A05 /* MainCell3.xib */,
-				C3419D6217F5401200FF0A05 /* MainCell4.h */,
-				C3419D6317F5401200FF0A05 /* MainCell4.m */,
-				C3419D6517F5402E00FF0A05 /* MainCell4.xib */,
-				C3857F9617F59ACC0012F8AC /* MainCell5.h */,
-				C3857F9717F59ACC0012F8AC /* MainCell5.m */,
-				C3857F9917F59AE50012F8AC /* MainCell5.xib */,
 				C35059FE17F6647C00D590A7 /* NoticeListViewController.h */,
 				C35059FF17F6647C00D590A7 /* NoticeListViewController.m */,
 				C3505A0017F6647C00D590A7 /* NoticeListViewController.xib */,
@@ -899,18 +943,12 @@
 				C3505A0B17F6935800D590A7 /* CommodityChangeViewController.h */,
 				C3505A0C17F6935800D590A7 /* CommodityChangeViewController.m */,
 				C3505A0D17F6935900D590A7 /* CommodityChangeViewController.xib */,
-				C3505A1017F69D2E00D590A7 /* CommodityEXCell.h */,
-				C3505A1117F69D2F00D590A7 /* CommodityEXCell.m */,
-				C3505A1317F69D4D00D590A7 /* CommodityEXCell.xib */,
 				C3505A1517F6A80D00D590A7 /* TZMarketViewController.h */,
 				C3505A1617F6A80F00D590A7 /* TZMarketViewController.m */,
 				C3505A1717F6A81000D590A7 /* TZMarketViewController.xib */,
 				C38262DC17F6C9C600C96A38 /* SearchResultViewController.h */,
 				C38262DD17F6C9C700C96A38 /* SearchResultViewController.m */,
 				C38262DE17F6C9C800C96A38 /* SearchResultViewController.xib */,
-				C38262E117F6CAF500C96A38 /* CommodityCell.h */,
-				C38262E217F6CAF600C96A38 /* CommodityCell.m */,
-				C38262E417F6CB5900C96A38 /* CommodityCell.xib */,
 				C38262E617F6D03C00C96A38 /* NoticeContentViewController.h */,
 				C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */,
 				C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */,
@@ -1227,6 +1265,8 @@
 				4EC02AE4180A60D9009C5AFD /* CommodityDesViewController.xib in Resources */,
 				4EC02AE9180A6BB1009C5AFD /* CommodityViewController.xib in Resources */,
 				4EB6C1D0180C50F80098E6F1 /* MainCommodityViewController.xib in Resources */,
+				4EB6C1D9180C65CA0098E6F1 /* ACPItem.xib in Resources */,
+				4EB6C1DF180C6FCF0098E6F1 /* MainCell6.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,6 +1353,9 @@
 				4EC02AE3180A60D9009C5AFD /* CommodityDesViewController.m in Sources */,
 				4EC02AE8180A6BB1009C5AFD /* CommodityViewController.m in Sources */,
 				4EB6C1CF180C50F80098E6F1 /* MainCommodityViewController.m in Sources */,
+				4EB6C1D8180C65CA0098E6F1 /* ACPItem.m in Sources */,
+				4EB6C1DA180C65CA0098E6F1 /* ACPScrollMenu.m in Sources */,
+				4EB6C1DD180C6FC10098E6F1 /* MainCell6.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

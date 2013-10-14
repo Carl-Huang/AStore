@@ -24,6 +24,7 @@
 #import "MainCell3.h"
 #import "MainCell4.h"
 #import "MainCell5.h"
+#import "MainCell6.h"
 #import "HttpHelper.h"
 #import "MainCommodityViewController.h"
 
@@ -121,6 +122,8 @@
     UINib * cell5Nib = [UINib nibWithNibName:@"MainCell5" bundle:[NSBundle bundleForClass:[MainCell5 class]]];
     [_tableView registerNib:cell5Nib forCellReuseIdentifier:@"MainCell5"];
     
+    UINib * cell6Nib = [UINib nibWithNibName:@"MainCell6" bundle:[NSBundle bundleForClass:[MainCell6 class]]];
+    [_tableView registerNib:cell6Nib forCellReuseIdentifier:@"MainCell6"];
    
 }
 
@@ -228,19 +231,16 @@
         [cell_4 setBlock:[self configureCell4Block]];
         return cell_4;
     }
-    else 
+    else if(indexPath.row == 4)
     {
         MainCell5 * cell_5 = (MainCell5 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell5"];
-        if(indexPath.row == 4)
-        {
-            [cell_5.titleLabel setText:@"热卖食品推荐"];
-        }
-        else if(indexPath.row == 5)
-        {
-            [cell_5.titleLabel setText:@"热卖日用品推荐"];
-        }
+        //http://www.shyl8.net/youjian.php?cat_tab_getSales=15&&tag_name=热门商品&&start=0&&count=10
         return cell_5;
 
+    }else
+    {
+         MainCell6 * cell_6 = (MainCell6 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell6"];
+        return cell_6;
     }
     
     return nil;

@@ -11,6 +11,8 @@
 #import "CommodityCell.h"
 #import "HttpHelper.h"
 #import "Commodity.h"
+#import "UIImageView+AFNetworking.h"
+#import "AppDelegate.h"
 @interface SearchResultViewController ()
 @property (strong ,nonatomic) NSArray * dataSource;
 @end
@@ -21,7 +23,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
+        dataSource = [[NSArray alloc]init];
     }
     return self;
 }
@@ -34,6 +36,8 @@
     
     UINib * cellNib = [UINib nibWithNibName:@"CommodityCell" bundle:[NSBundle bundleForClass:[CommodityCell class]]];
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityCell"];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate showLoginViewOnView:self.view];
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,11 +59,19 @@
         for (Commodity * info in dataSource) {
             [Commodity printCommodityInfo:info];
         }
+        [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
     } withErrorBlock:^(NSError *error) {
-        ;
+        [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        NSLog(@"%@",[error description]);
     }];
 }
 
+-(void)refreshTableView
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+    [self.tableView reloadData];
+}
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,14 +88,26 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    return 20;
+    return [dataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"CommodityCell";
     CommodityCell *cell = (CommodityCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    Commodity * info = [dataSource objectAtIndex:indexPath.row];
     
+    NSString * imageUrl = [HttpHelper extractImageURLWithStr:info.small_pic];
+    NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:imageUrl] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+    CommodityCell *weakCell = cell;
+    [cell.productImageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [weakCell.productImageView setImage:image];
+        [weakCell setNeedsLayout];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        ;
+    }];
+    cell.priceLabel.text = info.price;
+    cell.titleLabel.text = info.name;
     return cell;
 }
 

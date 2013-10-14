@@ -7,7 +7,6 @@
 //
 
 #import "MainCell3.h"
-
 @implementation MainCell3
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -26,4 +25,11 @@
     // Configure the view for the selected state
 }
 
+
+- (IBAction)btnAction:(id)sender {
+    UIButton * btn = (UIButton *)sender;
+    
+    //根据相应的title，获取相应的商品
+    self.block(btn.titleLabel.text);
+}
 @end

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Artical.h"
 @interface NoticeContentViewController : UIViewController
-
+@property (weak, nonatomic) IBOutlet UIWebView *contentWebView;
+@property (strong ,nonatomic) Artical * articalContent;
 @end

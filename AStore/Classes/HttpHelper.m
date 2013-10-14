@@ -280,4 +280,11 @@
     return (NSArray *)models;
 }
 
++(NSString *)extractImageURLWithStr:(NSString *)str
+{
+    NSString * tempStr = [NSString stringWithFormat:@"%@",str];
+    NSRange range = [tempStr rangeOfString:@"|" options:NSCaseInsensitiveSearch];
+    NSRange strRange = NSMakeRange(0, range.location);
+    return [Resource_URL_Prefix stringByAppendingString:[str substringWithRange:strRange]];
+}
 @end

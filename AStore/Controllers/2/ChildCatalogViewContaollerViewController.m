@@ -15,7 +15,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-#import <objc/message.h>
+
 #import "CommodityViewController.h"
 
 static NSString * cellIdentifier = @"cellIdentifier";
@@ -96,18 +96,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
         pAlert = nil;
     }
 }
--(void)printCommodityInfo:(Commodity *)info
-{
-    unsigned int varCount;
-    Ivar *vars = class_copyIvarList([Commodity class], &varCount);
-    for (int i = 0; i < varCount; i++) {
-        Ivar var = vars[i];
-        const char* name = ivar_getName(var);
-        NSString *valueKey = [NSString stringWithUTF8String:name];
-        NSLog(@"%@:%@",valueKey,[info valueForKey:valueKey]);
-    }
-    free(vars);
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -172,7 +160,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Commodity * info = [dataSource objectAtIndex:indexPath.row];
-    [self printCommodityInfo:info];
+    [Commodity printCommodityInfo:info];
     CommodityViewController *viewController = [[CommodityViewController alloc]initWithNibName:@"CommodityViewController" bundle:nil];
     [viewController setComodityInfo:info];
     [self.navigationController pushViewController:viewController animated:YES];

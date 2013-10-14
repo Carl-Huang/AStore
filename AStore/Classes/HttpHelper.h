@@ -43,4 +43,7 @@
 
 + (NSString *)escapeURLString:(NSString *)urlString;
 + (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
+
+//提取图片的url
++(NSString *)extractImageURLWithStr:(NSString *)str;
 @end

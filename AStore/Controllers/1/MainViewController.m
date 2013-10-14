@@ -72,11 +72,11 @@
     }];
     
     
-    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
-        
-    } withErrorBlock:^(NSError *error) {
-        
-    }];
+//    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
+//        
+//    } withErrorBlock:^(NSError *error) {
+//        
+//    }];
     
     
     [HttpHelper searchCommodityWithKeyworkd:@"A" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {

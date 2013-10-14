@@ -7,7 +7,7 @@
 //
 
 #import "Commodity.h"
-
+#import <objc/message.h>
 @implementation Commodity
 @synthesize pdt_des;
 @synthesize cost;
@@ -29,4 +29,17 @@
 @synthesize bn;
 @synthesize mktprice;
 @synthesize pdt_desc;
+
++(void)printCommodityInfo:(Commodity *)info
+{
+    unsigned int varCount;
+    Ivar *vars = class_copyIvarList([Commodity class], &varCount);
+    for (int i = 0; i < varCount; i++) {
+        Ivar var = vars[i];
+        const char* name = ivar_getName(var);
+        NSString *valueKey = [NSString stringWithUTF8String:name];
+        NSLog(@"%@:%@",valueKey,[info valueForKey:valueKey]);
+    }
+    free(vars);
+}
 @end

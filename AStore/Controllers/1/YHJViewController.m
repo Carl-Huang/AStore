@@ -28,7 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:@"优惠聚"];
+    [self setLeftTitle:@"聚优惠"];
     [self setBackItem:nil];
 }
 

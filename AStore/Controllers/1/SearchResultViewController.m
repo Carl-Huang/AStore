@@ -9,12 +9,14 @@
 #import "SearchResultViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "CommodityCell.h"
+#import "HttpHelper.h"
+#import "Commodity.h"
 @interface SearchResultViewController ()
-
+@property (strong ,nonatomic) NSArray * dataSource;
 @end
 
 @implementation SearchResultViewController
-
+@synthesize dataSource;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,6 +45,19 @@
 - (void)viewDidUnload {
     [self setTableView:nil];
     [super viewDidUnload];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    //根据title获取相关内容
+    [HttpHelper getCommodityWithSaleTab:self.title withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        dataSource = commoditys;
+        for (Commodity * info in dataSource) {
+            [Commodity printCommodityInfo:info];
+        }
+    } withErrorBlock:^(NSError *error) {
+        ;
+    }];
 }
 
 #pragma mark - Table view data source

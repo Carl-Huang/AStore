@@ -8,11 +8,17 @@
 
 #import "CommodityChangeViewController.h"
 #import "CommodityEXCell.h"
+#import "Commodity.h"
+#import "HttpHelper.h"
+#import "UIImageView+AFNetworking.h"
+#import "AppDelegate.h"
 @interface CommodityChangeViewController ()
-
+@property (strong ,nonatomic) NSArray * dataSource;
 @end
 
 @implementation CommodityChangeViewController
+@synthesize dataSource;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,6 +39,26 @@
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityEXCell"];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate showLoginViewOnView:self.view];
+    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
+        if ([commoditys count]) {
+            dataSource = commoditys;
+            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        }
+    } withErrorBlock:^(NSError *error) {
+            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+    }];
+}
+
+-(void)refreshTableView
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+    [self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -62,15 +88,29 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    return 20;
+    return [dataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"CommodityEXCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    CommodityEXCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    Commodity * info = [dataSource objectAtIndex:indexPath.row];
+    NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+    __weak CommodityEXCell *weakCell = cell;
+    NSURL *url = [NSURL URLWithString:imageUrlStr];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+    [cell.imageView setContentMode:UIViewContentModeScaleToFill];
+    [cell.imageView setImageWithURLRequest:request placeholderImage:nil
+                                       success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                           [weakCell.imageView setImage:image];
+                                           [weakCell setNeedsLayout];
+                                       } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                           NSLog(@"下载图片失败");
+                                       }];
 
-
+    cell.titleLabel.text = info.name;
+    cell.pointLabel.text = info.score;
     return cell;
 }
 

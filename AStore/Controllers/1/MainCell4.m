@@ -26,4 +26,8 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)btnAction:(id)sender {
+    UIButton * btn =(UIButton *)sender;
+    self.block(btn.titleLabel.text);
+}
 @end

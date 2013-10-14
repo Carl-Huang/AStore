@@ -39,6 +39,8 @@
 		4EB4CB4E18091C430059DA10 /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4318091C430059DA10 /* UIButton+AFNetworking.m */; };
 		4EB4CB4F18091C430059DA10 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4518091C430059DA10 /* UIImageView+AFNetworking.m */; };
 		4EB4CB5118091C430059DA10 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */; };
+		4EB6C1CF180C50F80098E6F1 /* MainCommodityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */; };
+		4EB6C1D0180C50F80098E6F1 /* MainCommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */; };
 		4EB788A01803D4E300DAF3E5 /* RegularExpressions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */; };
 		4EB788A31803D54C00DAF3E5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB788A21803D54C00DAF3E5 /* User.m */; };
 		4EB7B21617FF393D0018AC58 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B21517FF393C0018AC58 /* HeaderView.xib */; };
@@ -289,6 +291,9 @@
 		4EB4CB4618091C430059DA10 /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIKit+AFNetworking.h"; sourceTree = "<group>"; };
 		4EB4CB4918091C430059DA10 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		4EB4CB4A18091C430059DA10 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainCommodityViewController.h; sourceTree = "<group>"; };
+		4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCommodityViewController.m; sourceTree = "<group>"; };
+		4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainCommodityViewController.xib; sourceTree = "<group>"; };
 		4EB7889E1803D4E300DAF3E5 /* RegularExpressions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressions.h; sourceTree = "<group>"; };
 		4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressions.m; sourceTree = "<group>"; };
 		4EB788A11803D54C00DAF3E5 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -909,6 +914,9 @@
 				C38262E617F6D03C00C96A38 /* NoticeContentViewController.h */,
 				C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */,
 				C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */,
+				4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */,
+				4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */,
+				4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */,
 			);
 			path = 1;
 			sourceTree = "<group>";
@@ -929,8 +937,8 @@
 				4EC02AE1180A60D9009C5AFD /* CommodityDesViewController.m */,
 				4EC02AE2180A60D9009C5AFD /* CommodityDesViewController.xib */,
 				4EB4CB3618090F9B0059DA10 /* ChildCatalogInfoCell.h */,
-				4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */,
 				4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */,
+				4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */,
 				C35059F717F661A900D590A7 /* CatalogSectionHeader.xib */,
 			);
 			path = 2;
@@ -1218,6 +1226,7 @@
 				4EB4CB3A18090FAF0059DA10 /* ChildCatalogInfoCell.xib in Resources */,
 				4EC02AE4180A60D9009C5AFD /* CommodityDesViewController.xib in Resources */,
 				4EC02AE9180A6BB1009C5AFD /* CommodityViewController.xib in Resources */,
+				4EB6C1D0180C50F80098E6F1 /* MainCommodityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1303,6 +1312,7 @@
 				4EB4CB5118091C430059DA10 /* UIWebView+AFNetworking.m in Sources */,
 				4EC02AE3180A60D9009C5AFD /* CommodityDesViewController.m in Sources */,
 				4EC02AE8180A6BB1009C5AFD /* CommodityViewController.m in Sources */,
+				4EB6C1CF180C50F80098E6F1 /* MainCommodityViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

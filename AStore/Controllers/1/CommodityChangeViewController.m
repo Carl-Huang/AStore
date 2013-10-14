@@ -100,10 +100,9 @@
     __weak CommodityEXCell *weakCell = cell;
     NSURL *url = [NSURL URLWithString:imageUrlStr];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-    [cell.imageView setContentMode:UIViewContentModeScaleToFill];
-    [cell.imageView setImageWithURLRequest:request placeholderImage:nil
+    [cell.commodityImageView setImageWithURLRequest:request placeholderImage:nil
                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                           [weakCell.imageView setImage:image];
+                                           [weakCell.commodityImageView setImage:image];
                                            [weakCell setNeedsLayout];
                                        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                            NSLog(@"下载图片失败");

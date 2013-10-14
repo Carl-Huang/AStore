@@ -6,6 +6,13 @@
 //  Copyright (c) 2013年 carl. All rights reserved.
 //
 
+#define TABLE_CELL_HEIGHT_1 124
+#define TABLE_CELL_HEIGHT_2 122
+#define TABLE_CELL_HEIGHT_3 94
+#define TABLE_CELL_HEIGHT_4 94
+#define TABLE_CELL_HEIGHT_5 145
+#define TABLE_CELL_HEIGHT_6 145
+
 #import "MainViewController.h"
 #import "NoticeListViewController.h"
 #import "YHJViewController.h"
@@ -18,12 +25,8 @@
 #import "MainCell4.h"
 #import "MainCell5.h"
 #import "HttpHelper.h"
-#define TABLE_CELL_HEIGHT_1 124
-#define TABLE_CELL_HEIGHT_2 122
-#define TABLE_CELL_HEIGHT_3 94
-#define TABLE_CELL_HEIGHT_4 94
-#define TABLE_CELL_HEIGHT_5 145
-#define TABLE_CELL_HEIGHT_6 145
+#import "MainCommodityViewController.h"
+
 @interface MainViewController ()<UITextFieldDelegate>
 {
     UITextField * searchField;
@@ -117,6 +120,8 @@
     
     UINib * cell5Nib = [UINib nibWithNibName:@"MainCell5" bundle:[NSBundle bundleForClass:[MainCell5 class]]];
     [_tableView registerNib:cell5Nib forCellReuseIdentifier:@"MainCell5"];
+    
+   
 }
 
 - (void)didReceiveMemoryWarning
@@ -134,9 +139,6 @@
     [self setTableView:nil];
     [super viewDidUnload];
 }
-
-
-
 
 - (void)search:(id)sender
 {
@@ -217,11 +219,13 @@
     else if (indexPath.row == 2)
     {
         MainCell3 * cell_3 = (MainCell3 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell3"];
+        [cell_3 setBlock:[self configureCell3Block]];
         return cell_3;
     }
     else if(indexPath.row == 3)
     {
         MainCell4 * cell_4 = (MainCell4 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell4"];
+        [cell_4 setBlock:[self configureCell4Block]];
         return cell_4;
     }
     else 
@@ -242,7 +246,38 @@
     return nil;
 }
 
+-(MainCell3ConfigureBlock )configureCell3Block
+{
+    MainCell3ConfigureBlock block = ^(id item)
+    {
+        NSString * titleStr = (NSString * )item;
+        NSLog(@"%@",titleStr);
+        MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
+        [viewController setTitleStr:titleStr];
+        //15 表示食品
+        [viewController setTabId:@"15"];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
 
+    };
+    return block;
+}
+-(MainCell4ConfigureBlock )configureCell4Block
+{
+    MainCell3ConfigureBlock block = ^(id item)
+    {
+        NSString * titleStr = (NSString * )item;
+        NSLog(@"%@",titleStr);
+        MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
+        [viewController setTitleStr:titleStr];
+        //15 表示食品
+        [viewController setTabId:@"57"];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
+        
+    };
+    return block;
+}
 
 #pragma mark - UITextFieldDelegate Methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

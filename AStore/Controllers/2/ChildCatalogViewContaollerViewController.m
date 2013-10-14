@@ -25,7 +25,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     BOOL isAlertViewCanShow;
 }
 
-@property (strong ,nonatomic) NSArray  * dataSource;
+
 @property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end
 
@@ -129,16 +129,16 @@ static NSString * cellIdentifier = @"cellIdentifier";
     Commodity * info = [dataSource objectAtIndex:indexPath.row];
     
     //取出图片的url
-    NSString * imageUrlStr = [self extractImageURLWithStr:info.small_pic];
+    NSString * imageUrlStr =[HttpHelper extractImageURLWithStr:info.small_pic];
     
     //异步获取图片
     __weak ChildCatalogInfoCell *weakCell = cell;
-    [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+    [cell.productImage setContentMode:UIViewContentModeScaleAspectFit];
     NSURL *url = [NSURL URLWithString:imageUrlStr];
                   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-                  [weakCell.imageView setImageWithURLRequest:request placeholderImage:nil
+                  [cell.productImage setImageWithURLRequest:request placeholderImage:nil
                                             success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                [weakCell.imageView setImage:image];
+                                                [weakCell.productImage setImage:image];
                                                 [weakCell setNeedsLayout];
                                             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                                 NSLog(@"下载图片失败");

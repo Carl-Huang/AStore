@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+typedef void (^MainCell4ConfigureBlock) (id item);
 @interface MainCell4 : UITableViewCell
+@property (strong ,nonatomic)MainCell4ConfigureBlock block;
+- (IBAction)btnAction:(id)sender;
 
 @end

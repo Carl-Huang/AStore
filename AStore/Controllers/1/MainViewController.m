@@ -219,12 +219,13 @@
     else if (indexPath.row == 2)
     {
         MainCell3 * cell_3 = (MainCell3 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell3"];
-        [cell_3 setBlock:[self configureCellBlock]];
+        [cell_3 setBlock:[self configureCell3Block]];
         return cell_3;
     }
     else if(indexPath.row == 3)
     {
         MainCell4 * cell_4 = (MainCell4 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell4"];
+        [cell_4 setBlock:[self configureCell4Block]];
         return cell_4;
     }
     else 
@@ -245,7 +246,7 @@
     return nil;
 }
 
--(MainCell3ConfigureBlock )configureCellBlock
+-(MainCell3ConfigureBlock )configureCell3Block
 {
     MainCell3ConfigureBlock block = ^(id item)
     {
@@ -258,6 +259,22 @@
         [self.navigationController pushViewController:viewController animated:YES];
         viewController = nil;
 
+    };
+    return block;
+}
+-(MainCell4ConfigureBlock )configureCell4Block
+{
+    MainCell3ConfigureBlock block = ^(id item)
+    {
+        NSString * titleStr = (NSString * )item;
+        NSLog(@"%@",titleStr);
+        MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
+        [viewController setTitleStr:titleStr];
+        //15 表示食品
+        [viewController setTabId:@"57"];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
+        
     };
     return block;
 }

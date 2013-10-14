@@ -5,6 +5,7 @@
 //  Created by vedon on 10/2/13.
 //  Copyright (c) 2013 carl. All rights reserved.
 //
+#define CouponAlerMessage @"获取优惠券失败,是否重新获取"
 
 #define VCouponNum          @"couponNumber"
 #define VValidityTime       @"validityTime"
@@ -20,7 +21,10 @@
 #import "CouponInfo.h"
 #import "HttpHelper.h"
 #import "AppDelegate.h"
-@interface MyCouponViewController ()
+@interface MyCouponViewController ()<UIAlertViewDelegate>
+{
+    BOOL isAlertViewCanShow;
+}
 @property (strong ,nonatomic)NSMutableArray * commoditiesArray;
 @end
 
@@ -49,7 +53,7 @@
     
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
-
+    isAlertViewCanShow = YES;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -66,6 +70,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self fetchDataFromServer];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    isAlertViewCanShow = NO;
+}
+
+-(void)fetchDataFromServer
+{
     NSString *cmdStr = [NSString stringWithFormat:@"getcpns=%@",memberId];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[CouponInfo class] successBlock:^(NSArray *items) {
@@ -74,19 +88,28 @@
         }
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
-        ;
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+        [self showAlertViewWithTitle:@"提示" message:CouponAlerMessage];
         if (error) {
             NSLog(@"获取优惠券失败：%@",[error description]);
         }
     }];
-
 }
-
 -(void)reloadTableview
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  removeLoadingViewWithView:nil];
     [self.commodityTable reloadData];
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    if (isAlertViewCanShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+    }
 }
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -151,5 +174,16 @@
     return cell;
 }
 
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+            [self fetchDataFromServer];
+            break;
+        case 0:
+//            [self.navigationController popViewControllerAnimated:YES];
+        default:
+            break;
+    }
+}
 @end

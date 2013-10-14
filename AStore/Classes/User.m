@@ -76,7 +76,7 @@
 {
     NSLog(@"%s",__func__);
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:VUserInfo];
-     [[NSUserDefaults standardUserDefaults]synchronize];
+    [[NSUserDefaults standardUserDefaults]synchronize];
 }
 
 +(void)saveServerUserInfoTL:(NSDictionary *)userInfoDic

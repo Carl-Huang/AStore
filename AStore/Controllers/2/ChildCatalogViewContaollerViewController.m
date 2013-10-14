@@ -21,6 +21,10 @@
 static NSString * cellIdentifier = @"cellIdentifier";
 
 @interface ChildCatalogViewContaollerViewController ()<UIAlertViewDelegate>
+{
+    BOOL isAlertViewCanShow;
+}
+
 @property (strong ,nonatomic) NSArray  * dataSource;
 @property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end
@@ -52,8 +56,13 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self.tableView registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     
     [self fetchDataFromServer];
+    isAlertViewCanShow = YES;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    isAlertViewCanShow = NO;
+}
 
 //根据相应的cat_id从服务器获取资料
 -(void)fetchDataFromServer
@@ -80,11 +89,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
 {
-    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
-    pAlert.delegate = self;
-    [pAlert show];
-    pAlert = nil;
-    
+    if (isAlertViewCanShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+    }
 }
 -(void)printCommodityInfo:(Commodity *)info
 {

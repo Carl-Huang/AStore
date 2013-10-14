@@ -41,18 +41,6 @@
     [myDelegate  showLoginViewOnView:self.view];
 }
 
--(void)load
-{
-    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary *catInfo) {
-        _dictionary = (NSMutableDictionary *)catInfo;
-        _firstSectionKey = [[_dictionary allKeys]objectAtIndex:0];
-        _secondSectionKey = [[_dictionary allKeys]objectAtIndex:1];
-        firstSectionData = (NSArray *)[_dictionary objectForKey:_firstSectionKey];
-        secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
-        [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
-    } errorBlock:^(NSError *error) {
-    }];
-}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -64,6 +52,7 @@
         secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
         [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
     } errorBlock:^(NSError *error) {
+         NSLog(@"%@",[error description]);
     }];
 }
 

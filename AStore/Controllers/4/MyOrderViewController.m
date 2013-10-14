@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
-
+#define OrderAlerMessage @"获取订单失败,是否重新获取"
 
 
 #import "MyOrderViewController.h"
@@ -18,7 +18,10 @@
 #import "GetOrderInfo.h"
 #import "GetGiftInfo.h"
 #import "AppDelegate.h"
-@interface MyOrderViewController ()
+@interface MyOrderViewController ()<UIAlertViewDelegate>
+{
+    BOOL isAlertViewCanShow;
+}
 @property (strong ,nonatomic)NSMutableArray * commoditiesArray;
 @property (strong ,nonatomic)NSMutableArray * giftArray;
 @end
@@ -48,10 +51,16 @@
     [self setBackItem:nil];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
+    isAlertViewCanShow = YES;
     // Do any additional setup after loading the view from its nib.
 }
 
 -(void)viewWillAppear:(BOOL)animated
+{
+    [self fetchDataFromServer];
+}
+
+-(void)fetchDataFromServer
 {
     NSDictionary * userInfoDic = [User getUserInfo];
     NSLog(@"OrderView userInfo :%@",userInfoDic);
@@ -63,20 +72,21 @@
         [commoditiesArray addObject:items];
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
-        ;
+        NSLog(@"获取订单失败");
+        [self showAlertViewWithTitle:@"提示" message:OrderAlerMessage];
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     }];
     
     
     //获取赠品
-//    NSString * giftStr = [NSString stringWithFormat:@"getGift&&start=0&&count=1"];
-//    giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
-//    [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
-//        [giftArray addObject:items];
-//        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
-//    } errorBlock:^(NSError *error) {
-//        ;
-//    }];
+    NSString * giftStr = [NSString stringWithFormat:@"getGift&&start=0&&count=1"];
+    giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
+    [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
+        [giftArray addObject:items];
+        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+    } errorBlock:^(NSError *error) {
 
+    }];
 }
 
 -(void)reloadTableview
@@ -97,7 +107,20 @@
     [super viewDidUnload];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    isAlertViewCanShow = NO;
+}
 
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    if (isAlertViewCanShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+    }
+}
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -182,5 +205,16 @@
     return cell;
 }
 
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+            [self fetchDataFromServer];
+            break;
+        case 0:
+//            [self.navigationController popViewControllerAnimated:YES];
+        default:
+            break;
+    }
+}
 @end

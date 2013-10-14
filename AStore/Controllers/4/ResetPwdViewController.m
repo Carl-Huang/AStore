@@ -5,13 +5,18 @@
 //  Created by Carl on 13-10-3.
 //  Copyright (c) 2013年 carl. All rights reserved.
 //
-
+#define ResetPwdAlerMessage @"修改密码失败"
 #import "ResetPwdViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "LoginViewController.h"
 #import "User.h"
 #import "HttpHelper.h"
+#import "AppDelegate.h"
 @interface ResetPwdViewController () <UITextFieldDelegate>
+{
+    BOOL isAlertViewCanShow;
+}
+
 @property (nonatomic,retain) UITextField * oldPwdField;
 @property (nonatomic,retain) UITextField * nPwdField;
 @property (nonatomic,retain) UITextField * confirmPwdField;
@@ -42,6 +47,7 @@
         pwd = [[NSString alloc]initWithString:[dic objectForKey:DPassword]];
         NSLog(@"UserName: %@,   pwd:%@",userName,pwd);
     }
+    isAlertViewCanShow = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -200,6 +206,8 @@
     }else
     {
         NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&Uname=%@",self.nPwdField.text,userName];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate  showLoginViewOnView:self.view];
         [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
             NSLog(@"%@",resultInfo);
             if ([resultInfo count]) {
@@ -207,6 +215,12 @@
                 if ([[dic objectForKey:RequestStatusKey] isEqualToString:@"1"]) {
                     NSLog(@"修改密码成功");
                     [self pushToLoginViewcontroller];
+                }else
+                {
+                    NSLog(@"修改密码失败");
+                    [self showAlertViewWithTitle:@"提示" message:ResetPwdAlerMessage];
+                    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                    [myDelegate  removeLoadingViewWithView:nil];
                 }
             }
         } errorBlock:^(NSError *error) {
@@ -218,6 +232,8 @@
 
 -(void)pushToLoginViewcontroller
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate  removeLoadingViewWithView:nil];
     NSLog(@"%s",__func__);
     NSArray *ary = self.navigationController.viewControllers;
     for (UIViewController * viewcontroller in ary) {
@@ -233,9 +249,11 @@
 
 -(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
 {
-    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [pAlert show];
-    pAlert = nil;
+    if (isAlertViewCanShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [pAlert show];
+        pAlert = nil;
+    }
     
 }
 @end

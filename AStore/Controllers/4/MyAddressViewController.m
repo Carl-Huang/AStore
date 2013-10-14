@@ -9,7 +9,7 @@
 #define VTelePhone          @"vtelephone"
 #define VPhone              @"vphone"
 #define VAddress            @"vaddress"
-
+#define AddressAlerMessage @"获取地址失败，是否重新获取"
 
 
 #import "MyAddressViewController.h"
@@ -22,6 +22,9 @@
 #import "AppDelegate.h"
 static NSString * cellIdentifier = @"addressCell";
 @interface MyAddressViewController ()
+{
+    BOOL isAlertViewCanShow;
+}
 @property (strong ,nonatomic)NSMutableArray * dataSource;
 
 @end
@@ -66,10 +69,16 @@ static NSString * cellIdentifier = @"addressCell";
     newItem = nil;
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
+    isAlertViewCanShow = YES;
 
 }
 
 -(void)viewWillAppear:(BOOL)animated
+{
+    [self fetchDataFromServer];
+}
+
+-(void)fetchDataFromServer
 {
     if (memberId) {
         NSLog(@"Member ID :%@",memberId);
@@ -85,10 +94,14 @@ static NSString * cellIdentifier = @"addressCell";
     } errorBlock:^(NSError *error) {
         ;
         if (error) {
+            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+            [self showAlertViewWithTitle:@"提示" message:AddressAlerMessage];
             NSLog(@"获取地址失败：%@",[error description]);
         }
     }];
+
 }
+
 -(void)reloadTableview
 {
     NSLog(@"%s",__func__);
@@ -100,6 +113,16 @@ static NSString * cellIdentifier = @"addressCell";
 - (void)pushBack:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    if (isAlertViewCanShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+    }
 }
 -(void)newItem
 {
@@ -198,5 +221,18 @@ static NSString * cellIdentifier = @"addressCell";
         NSLog(@"%d",btn.tag);
     };
     [cell setConfigureBlock:block];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+            [self fetchDataFromServer];
+            break;
+        case 0:
+//            [self.navigationController popViewControllerAnimated:YES];
+        default:
+            break;
+    }
 }
 @end

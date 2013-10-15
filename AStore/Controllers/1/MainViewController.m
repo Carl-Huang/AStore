@@ -242,7 +242,7 @@
          MainCell6 * cell_6 = (MainCell6 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell6"];
         return cell_6;
     }
-    
+
     return nil;
 }
 
@@ -310,6 +310,17 @@
         NoticeListViewController * noticeList = [[NoticeListViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:noticeList animated:YES];
     }
+}
+
+
+- (void)cell5BtnClick:(id)sender
+{
+    NSLog(@"click");
+}
+
+- (void)cell6BtnClick:(id)sender
+{
+    NSLog(@"6");
 }
 
 @end

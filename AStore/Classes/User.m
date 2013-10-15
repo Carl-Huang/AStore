@@ -72,6 +72,19 @@
     return nil;
 }
 
+
++(BOOL)isLogin
+{
+    if([User getUserInfo])
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
+
+
 +(void)deleteUserInfo
 {
     NSLog(@"%s",__func__);

@@ -12,6 +12,8 @@
 #import "CartCell.h"
 #import "CartCellHeader.h"
 #import "ConfirmOrderViewController.h"
+#import "User.h"
+#import "LoginViewController.h"
 static NSString * cellIdentifier = @"cartCellIdentifier";
 static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @interface CartViewController ()
@@ -57,6 +59,21 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [self.cartTable setEditing:YES];
     // Do any additional setup after loading the view from its nib.
 }
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if(![User isLogin])
+    {
+        LoginViewController * loginView = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
+        loginView.view.tag = 1;
+        self.navigationItem.rightBarButtonItem.customView.hidden = YES;
+        [self.navigationController.view addSubview:loginView.view];
+        [self.navigationController addChildViewController:loginView];
+    }
+}
+
 
 -(void)deleteItem
 {

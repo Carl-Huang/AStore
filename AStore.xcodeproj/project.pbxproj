@@ -118,6 +118,7 @@
 		C376B95C17FB370D003BC777 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C376B95A17FB370D003BC777 /* LoginViewController.xib */; };
 		C376B96017FB4649003BC777 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C376B95E17FB4648003BC777 /* RegisterViewController.m */; };
 		C376B96117FB4649003BC777 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C376B95F17FB4648003BC777 /* RegisterViewController.xib */; };
+		C37DA8A2180C535400F08B92 /* CommodityButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = C37DA8A1180C535400F08B92 /* CommodityButton.xib */; };
 		C37E1D6817FEA968000E1100 /* 单选btn-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6617FEA968000E1100 /* 单选btn-n.png */; };
 		C37E1D6917FEA968000E1100 /* 单选btn-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6717FEA968000E1100 /* 单选btn-s.png */; };
 		C37E1D6C17FEA97E000E1100 /* 单选btn-n@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6A17FEA97E000E1100 /* 单选btn-n@2x.png */; };
@@ -406,6 +407,7 @@
 		C376B95D17FB4648003BC777 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		C376B95E17FB4648003BC777 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		C376B95F17FB4648003BC777 /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
+		C37DA8A1180C535400F08B92 /* CommodityButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommodityButton.xib; sourceTree = "<group>"; };
 		C37E1D6617FEA968000E1100 /* 单选btn-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "单选btn-n.png"; sourceTree = "<group>"; };
 		C37E1D6717FEA968000E1100 /* 单选btn-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "单选btn-s.png"; sourceTree = "<group>"; };
 		C37E1D6A17FEA97E000E1100 /* 单选btn-n@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "单选btn-n@2x.png"; sourceTree = "<group>"; };
@@ -955,6 +957,7 @@
 				4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */,
 				4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */,
 				4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */,
+				C37DA8A1180C535400F08B92 /* CommodityButton.xib */,
 			);
 			path = 1;
 			sourceTree = "<group>";

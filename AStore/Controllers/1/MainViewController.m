@@ -234,13 +234,35 @@
     else if(indexPath.row == 4)
     {
         MainCell5 * cell_5 = (MainCell5 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell5"];
-        //http://www.shyl8.net/youjian.php?cat_tab_getSales=15&&tag_name=热门商品&&start=0&&count=10
+        MainCell5 *weakCell = cell_5;
+        if (!cell_5.dataSource) {
+            [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                [weakCell setDataSource:commoditys];
+                [weakCell updateScrollView];
+                [weakCell setNeedsLayout];
+            } withErrorBlock:^(NSError *error) {
+                NSLog(@"获取热门商品失败 %@", [error description]);
+            }];
+
+        }
         return cell_5;
 
     }else
     {
          MainCell6 * cell_6 = (MainCell6 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell6"];
-        return cell_6;
+        MainCell6 *weakCell = cell_6;
+        if (!cell_6.dataSource) {
+            [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                [weakCell setDataSource:commoditys];
+                [weakCell updateScrollView];
+                [weakCell setNeedsLayout];
+            } withErrorBlock:^(NSError *error) {
+                NSLog(@"获取热门商品失败 %@", [error description]);
+            }];
+            
+        }
+       return cell_6;
+
     }
 
     return nil;

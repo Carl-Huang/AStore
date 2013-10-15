@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat const kScrollViewFirstWidth = 12.0f;
-static CGFloat const kScrollViewItemMarginWidth = 35.0f;
+static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 
 @implementation ACPScrollMenu
 

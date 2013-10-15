@@ -10,5 +10,5 @@
 #import "UIViewController+AKTabBarController.h"
 @interface MainViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong, nonatomic) NSArray * array;
 @end

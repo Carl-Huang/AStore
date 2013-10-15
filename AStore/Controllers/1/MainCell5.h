@@ -12,5 +12,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @property (weak, nonatomic) IBOutlet ACPScrollMenu *customiseScrollView;
-
+@property (strong ,nonatomic) NSArray * dataSource;
+@property (strong ,nonatomic) NSMutableArray * array;
+-(void)updateScrollView;
 @end

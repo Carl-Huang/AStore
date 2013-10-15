@@ -25,4 +25,5 @@ typedef enum _error_type{
 
 +(void)saveServerUserInfoTL:(NSDictionary *)userInfoDic;
 +(NSDictionary *)getServerUserInfoFL;
++(BOOL)isLogin;
 @end

@@ -234,15 +234,63 @@
         if(indexPath.row == 4)
         {
             [cell_5.titleLabel setText:@"热卖食品推荐"];
+            
+
+            
+            int paddingTop = 2;
+            int hSpace = 5;
+            int widthSum = 0;
+            for(int i = 0; i < 5; i++)
+            {
+                NSArray * views = [[NSBundle mainBundle] loadNibNamed:@"CommodityButton" owner:nil options:nil];
+                UIView * commodityButton = (UIView *)[views objectAtIndex:0];
+                CGRect rect = commodityButton.frame;
+                rect.origin.y = paddingTop;
+                rect.origin.x = i * hSpace + hSpace + i * commodityButton.frame.size.width;
+                commodityButton.frame = rect;
+                UIButton * imageBtn = (UIButton *)[commodityButton viewWithTag:1];
+                imageBtn.tag = i;
+                [imageBtn addTarget:self action:@selector(cell5BtnClick:) forControlEvents:UIControlEventTouchUpInside];
+                [imageBtn setImage:[UIImage imageNamed:@"1.jpg"] forState:UIControlStateNormal];
+                UILabel * priceLabel = (UILabel *)[commodityButton viewWithTag:100];
+                priceLabel.text = @"$200";
+                widthSum += 5 + commodityButton.frame.size.width;
+                [cell_5.scrollView addSubview:commodityButton];
+            }
+            cell_5.scrollView.contentSize = CGSizeMake(widthSum, 108);
+            
         }
         else if(indexPath.row == 5)
         {
             [cell_5.titleLabel setText:@"热卖日用品推荐"];
+            int paddingTop = 2;
+            int hSpace = 5;
+            int widthSum = 0;
+            for(int i = 0; i < 5; i++)
+            {
+                NSArray * views = [[NSBundle mainBundle] loadNibNamed:@"CommodityButton" owner:nil options:nil];
+                UIView * commodityButton = (UIView *)[views objectAtIndex:0];
+                CGRect rect = commodityButton.frame;
+                rect.origin.y = paddingTop;
+                rect.origin.x = i * hSpace + hSpace + i * commodityButton.frame.size.width;
+                commodityButton.frame = rect;
+                UIButton * imageBtn = (UIButton *)[commodityButton viewWithTag:1];
+                imageBtn.tag = i;
+                [imageBtn addTarget:self action:@selector(cell6BtnClick:) forControlEvents:UIControlEventTouchUpInside];
+                [imageBtn setImage:[UIImage imageNamed:@"1.jpg"] forState:UIControlStateNormal];
+                UILabel * priceLabel = (UILabel *)[commodityButton viewWithTag:100];
+                priceLabel.text = @"$200";
+                widthSum += 5 + commodityButton.frame.size.width;
+                [cell_5.scrollView addSubview:commodityButton];
+            }
+            cell_5.scrollView.contentSize = CGSizeMake(widthSum, 108);
+            
+        
         }
         return cell_5;
 
     }
-    
+
     return nil;
 }
 
@@ -310,6 +358,17 @@
         NoticeListViewController * noticeList = [[NoticeListViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:noticeList animated:YES];
     }
+}
+
+
+- (void)cell5BtnClick:(id)sender
+{
+    NSLog(@"click");
+}
+
+- (void)cell6BtnClick:(id)sender
+{
+    NSLog(@"6");
 }
 
 @end

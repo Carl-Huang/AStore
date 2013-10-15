@@ -21,7 +21,6 @@
         dataSource = nil;
         dataSource = [[NSArray alloc]initWithArray:_dataSource];
     }
-    //更新滚动的界面
 }
 
 -(void)updateScrollView
@@ -70,26 +69,6 @@
     // Configure the view for the selected state
 }
 
-//- (void)setUpACPScroll {
-//	NSMutableArray *array = [[NSMutableArray alloc] init];
-//	for (int i = 1; i < 5; i++) {
-//		NSString *imgName = [NSString stringWithFormat:@"%d.png", i];
-//		NSString *imgSelectedName = [NSString stringWithFormat:@"%ds.png", i];
-//
-//		//Set the items
-//		ACPItem *item = [[ACPItem alloc] initACPItem:[UIImage imageNamed:@"bg.png"] iconImage:[UIImage imageNamed:imgName] andLabel:@"Test"];
-//
-//		//Set highlighted behaviour
-//		[item setHighlightedBackground:nil iconHighlighted:[UIImage imageNamed:imgSelectedName] textColorHighlighted:[UIColor redColor]];
-//
-//		[array addObject:item];
-//	}
-//
-//	[customiseScrollView setUpACPScrollMenu:array];
-//	[customiseScrollView setAnimationType:ACPZoomOut];
-//
-//	customiseScrollView.delegate = self;
-//}
 
 - (void)scrollMenu:(ACPItem *)menu didSelectIndex:(NSInteger)selectedIndex {
 	NSLog(@"Item %d", selectedIndex);

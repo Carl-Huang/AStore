@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ACPScrollMenu.h"
+typedef void (^MainCell6Block) (id item);
 @interface MainCell6 : UITableViewCell<ACPScrollDelegate>
 @property (weak, nonatomic) IBOutlet ACPScrollMenu *customiseScrollView;
 @property (strong ,nonatomic) NSArray * dataSource;
 @property (strong ,nonatomic) NSMutableArray * array;
+@property (strong ,nonatomic) MainCell6Block block;
+@property (strong ,nonatomic) NSMutableDictionary * itemDic;
 -(void)updateScrollView;
 @end

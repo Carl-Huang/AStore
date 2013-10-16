@@ -85,6 +85,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)initializeContentview
 {
+    NSLog(@"pdt_desc :%@" ,comodityInfo.pdt_desc);
+    NSLog(@"spec: %@" ,comodityInfo.spec);
     headerView = [[[NSBundle mainBundle]loadNibNamed:@"HeaderView" owner:self options:nil]objectAtIndex:0];
     //TODO:读取商品分类
     headerView.onLineTextLabel.text = @"原味";

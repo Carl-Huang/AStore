@@ -27,10 +27,17 @@
 #import "MainCell6.h"
 #import "HttpHelper.h"
 #import "MainCommodityViewController.h"
+#import "Commodity.h"
+#import "CommodityViewController.h"
 
 @interface MainViewController ()<UITextFieldDelegate>
 {
     UITextField * searchField;
+    NSArray * recommandFootData;
+    NSArray * recommandCommodityData;
+    NSThread * fetchDataThread;
+    BOOL isFetchFoodDataSuccess;
+    BOOL isFetchStuffDataSuccess;
 }
 @end
 
@@ -54,54 +61,11 @@
     logoView.image = logo;
     UIBarButtonItem * logoItem = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = logoItem;
-    
-//    [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary * catInfo) {
-//        NSLog(@"%@",catInfo);
-//    } errorBlock:^(NSError *error) {
-//        NSLog(@"%@",error);
-//    }];
-    
-    
-    [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"7-8折" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        
-    } withErrorBlock:^(NSError *error) {
-        
-    }];
-    
-    
-    [HttpHelper getCommodityWithSaleTab:@"餐饮" withStart:0 withCount:5 withSuccessBlock:^(NSArray *commoditys) {
-        
-    } withErrorBlock:^(NSError *error) {
-        
-    }];
-    
-    
-//    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
-//        
-//    } withErrorBlock:^(NSError *error) {
-//        
-//    }];
-    
-    
-    [HttpHelper searchCommodityWithKeyworkd:@"A" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        
-    } withErrorBlock:^(NSError *error) {
-        
-    }];
-    
-    [HttpHelper getArticalListWithSuccessBlock:^(NSArray *commoditys) {
-        
-    } withErrorBlock:^(NSError *error) {
-        
-    }];
-    
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 165, 35)];
     searchField.delegate = self;
     [searchField setBackground:[UIImage imageNamed:@"search背景"]];
     searchField.returnKeyType = UIReturnKeySearch;
     self.navigationItem.titleView = searchField;
-    
-    
     UIButton * searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [searchBtn setFrame:CGRectMake(0, 0, 54, 53)];
     [searchBtn setImage:[UIImage imageNamed:@"搜索btn"] forState:UIControlStateNormal];
@@ -124,9 +88,37 @@
     
     UINib * cell6Nib = [UINib nibWithNibName:@"MainCell6" bundle:[NSBundle bundleForClass:[MainCell6 class]]];
     [_tableView registerNib:cell6Nib forCellReuseIdentifier:@"MainCell6"];
-   
+    
+    isFetchFoodDataSuccess = NO;
+    isFetchStuffDataSuccess = NO;
+    fetchDataThread = [[NSThread alloc]initWithTarget:self selector:@selector(fetchDataThreadMethod) object:nil];
+    [fetchDataThread start];
 }
 
+-(void)fetchDataThreadMethod
+{
+    while (!isFetchFoodDataSuccess||!isFetchStuffDataSuccess) {
+        NSLog(@"%s",__func__);
+        if (!isFetchFoodDataSuccess) {
+            [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                recommandFootData = commoditys;
+                isFetchFoodDataSuccess = YES;
+            } withErrorBlock:^(NSError *error) {
+                NSLog(@"获取热门食品失败 %@", [error description]);
+            }];
+        }
+        if (!isFetchStuffDataSuccess) {
+            [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                recommandCommodityData = commoditys;
+                isFetchStuffDataSuccess = YES;
+            } withErrorBlock:^(NSError *error) {
+                NSLog(@"获取热门日用品失败 %@", [error description]);
+            }];
+        }
+    [NSThread sleepForTimeInterval:5.0];
+    }
+    [self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -234,37 +226,36 @@
     else if(indexPath.row == 4)
     {
         MainCell5 * cell_5 = (MainCell5 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell5"];
-        MainCell5 *weakCell = cell_5;
-        if (!cell_5.dataSource) {
-            [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                [weakCell setDataSource:commoditys];
-                [weakCell updateScrollView];
-                [weakCell setNeedsLayout];
-            } withErrorBlock:^(NSError *error) {
-                NSLog(@"获取热门商品失败 %@", [error description]);
-            }];
-
+        if (recommandFootData) {
+            [cell_5 setDataSource:recommandFootData];
+            [cell_5 updateScrollView];
+            [cell_5 setNeedsLayout];
+//            recommandFootData = nil;
+            [cell_5 setBlock:[self configureCell5Block]];
         }
+        
         return cell_5;
 
     }else
     {
-         MainCell6 * cell_6 = (MainCell6 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell6"];
-        MainCell6 *weakCell = cell_6;
-        if (!cell_6.dataSource) {
-            [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                [weakCell setDataSource:commoditys];
-                [weakCell updateScrollView];
-                [weakCell setNeedsLayout];
-            } withErrorBlock:^(NSError *error) {
-                NSLog(@"获取热门商品失败 %@", [error description]);
-            }];
-            
+        MainCell6 * cell_6 = (MainCell6 *)[_tableView dequeueReusableCellWithIdentifier:@"MainCell6"];
+        if (recommandCommodityData) {
+            [cell_6 setDataSource:recommandCommodityData];
+            [cell_6 updateScrollView];
+            [cell_6 setNeedsLayout];
+//            recommandCommodityData = nil;
+             [cell_6 setBlock:[self configureCell6Block]];
         }
+       
        return cell_6;
 
     }
-
+    if (!recommandFootData&&!recommandCommodityData) {
+        if (![fetchDataThread isCancelled]) {
+            NSLog(@"Canceled FetchDataThread");
+            [fetchDataThread cancel];
+        }
+    }
     return nil;
 }
 
@@ -300,7 +291,33 @@
     };
     return block;
 }
+-(MainCell5Block )configureCell5Block
+{
+    MainCell5Block block = ^(id item1)
+    {
+        Commodity * info = (Commodity *)item1;
+        [Commodity printCommodityInfo:info];
+        CommodityViewController *viewController = [[CommodityViewController alloc]initWithNibName:@"CommodityViewController" bundle:nil];
+        [viewController setComodityInfo:info];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
+    };
+    return block;
+}
 
+-(MainCell6Block )configureCell6Block
+{
+    MainCell5Block block = ^(id item)
+    {
+        Commodity * info = (Commodity *)item;
+        [Commodity printCommodityInfo:info];
+        CommodityViewController *viewController = [[CommodityViewController alloc]initWithNibName:@"CommodityViewController" bundle:nil];
+        [viewController setComodityInfo:info];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
+    };
+    return block;
+}
 #pragma mark - UITextFieldDelegate Methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -335,14 +352,6 @@
 }
 
 
-- (void)cell5BtnClick:(id)sender
-{
-    NSLog(@"click");
-}
 
-- (void)cell6BtnClick:(id)sender
-{
-    NSLog(@"6");
-}
 
 @end

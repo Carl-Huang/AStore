@@ -230,7 +230,7 @@
             [cell_5 setDataSource:recommandFootData];
             [cell_5 updateScrollView];
             [cell_5 setNeedsLayout];
-//            recommandFootData = nil;
+            recommandFootData = nil;
             [cell_5 setBlock:[self configureCell5Block]];
         }
         
@@ -243,7 +243,7 @@
             [cell_6 setDataSource:recommandCommodityData];
             [cell_6 updateScrollView];
             [cell_6 setNeedsLayout];
-//            recommandCommodityData = nil;
+            recommandCommodityData = nil;
              [cell_6 setBlock:[self configureCell6Block]];
         }
        

@@ -62,6 +62,7 @@
     UIBarButtonItem * logoItem = [[UIBarButtonItem alloc] initWithCustomView:logoView];
     self.navigationItem.leftBarButtonItem = logoItem;
     searchField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 165, 35)];
+    searchField.textAlignment = NSTextAlignmentLeft;
     searchField.delegate = self;
     [searchField setBackground:[UIImage imageNamed:@"search背景"]];
     searchField.returnKeyType = UIReturnKeySearch;
@@ -92,11 +93,12 @@
     isFetchFoodDataSuccess = NO;
     isFetchStuffDataSuccess = NO;
     fetchDataThread = [[NSThread alloc]initWithTarget:self selector:@selector(fetchDataThreadMethod) object:nil];
-    [fetchDataThread start];
+//    [fetchDataThread start];
 }
 
 -(void)fetchDataThreadMethod
 {
+    
     while (!isFetchFoodDataSuccess||!isFetchStuffDataSuccess) {
         NSLog(@"%s",__func__);
         if (!isFetchFoodDataSuccess) {
@@ -104,6 +106,13 @@
                 recommandFootData = commoditys;
                 isFetchFoodDataSuccess = YES;
             } withErrorBlock:^(NSError *error) {
+                if (error.code == -1001) {
+                    if (![fetchDataThread isCancelled]) {
+                        
+                        [fetchDataThread cancel];
+                        fetchDataThread = nil;
+                    }
+                }
                 NSLog(@"获取热门食品失败 %@", [error description]);
             }];
         }
@@ -112,10 +121,15 @@
                 recommandCommodityData = commoditys;
                 isFetchStuffDataSuccess = YES;
             } withErrorBlock:^(NSError *error) {
+                if (error.code == -1001) {
+                    if (![fetchDataThread isCancelled]) {
+                        [fetchDataThread cancel];
+                    }
+                }
                 NSLog(@"获取热门日用品失败 %@", [error description]);
             }];
         }
-    [NSThread sleepForTimeInterval:5.0];
+    [NSThread sleepForTimeInterval:8.0];
     }
     [self.tableView reloadData];
 }
@@ -141,6 +155,7 @@
     SearchResultViewController * searchResultController = [[SearchResultViewController alloc] initWithNibName:nil bundle:nil];
     searchResultController.lTitle = @"搜索结果";
     [self.navigationController pushViewController:searchResultController animated:YES];
+    searchResultController = nil;
 }
 
 

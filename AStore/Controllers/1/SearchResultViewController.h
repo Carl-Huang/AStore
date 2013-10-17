@@ -10,5 +10,7 @@
 
 @interface SearchResultViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSString * lTitle;
+@property (strong , nonatomic) NSString * lTitle;
+@property (strong , nonatomic) NSString * searchStr;
+@property (weak, nonatomic) IBOutlet UIView *noResultView;
 @end

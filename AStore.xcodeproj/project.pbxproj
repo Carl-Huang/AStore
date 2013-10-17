@@ -60,6 +60,8 @@
 		4EB7B22D17FF72580018AC58 /* CommodityListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB7B22C17FF72570018AC58 /* CommodityListCell.xib */; };
 		4EBB3EF717FD4CFC00BF1B47 /* MyOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */; };
 		4EBB3EF817FD4CFC00BF1B47 /* MyOrderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */; };
+		4EBDD078180F72FE00CB4CC5 /* YHJDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDD076180F72FE00CB4CC5 /* YHJDetailViewController.m */; };
+		4EBDD079180F72FE00CB4CC5 /* YHJDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EBDD077180F72FE00CB4CC5 /* YHJDetailViewController.xib */; };
 		4EC02AE3180A60D9009C5AFD /* CommodityDesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC02AE1180A60D9009C5AFD /* CommodityDesViewController.m */; };
 		4EC02AE4180A60D9009C5AFD /* CommodityDesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EC02AE2180A60D9009C5AFD /* CommodityDesViewController.xib */; };
 		4EC02AE8180A6BB1009C5AFD /* CommodityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC02AE6180A6BB1009C5AFD /* CommodityViewController.m */; };
@@ -118,7 +120,6 @@
 		C376B95C17FB370D003BC777 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C376B95A17FB370D003BC777 /* LoginViewController.xib */; };
 		C376B96017FB4649003BC777 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C376B95E17FB4648003BC777 /* RegisterViewController.m */; };
 		C376B96117FB4649003BC777 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C376B95F17FB4648003BC777 /* RegisterViewController.xib */; };
-		C37DA8A2180C535400F08B92 /* CommodityButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = C37DA8A1180C535400F08B92 /* CommodityButton.xib */; };
 		C37E1D6817FEA968000E1100 /* 单选btn-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6617FEA968000E1100 /* 单选btn-n.png */; };
 		C37E1D6917FEA968000E1100 /* 单选btn-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6717FEA968000E1100 /* 单选btn-s.png */; };
 		C37E1D6C17FEA97E000E1100 /* 单选btn-n@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C37E1D6A17FEA97E000E1100 /* 单选btn-n@2x.png */; };
@@ -330,6 +331,9 @@
 		4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOrderViewController.h; sourceTree = "<group>"; };
 		4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrderViewController.m; sourceTree = "<group>"; };
 		4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyOrderViewController.xib; sourceTree = "<group>"; };
+		4EBDD075180F72FE00CB4CC5 /* YHJDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHJDetailViewController.h; sourceTree = "<group>"; };
+		4EBDD076180F72FE00CB4CC5 /* YHJDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHJDetailViewController.m; sourceTree = "<group>"; };
+		4EBDD077180F72FE00CB4CC5 /* YHJDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YHJDetailViewController.xib; sourceTree = "<group>"; };
 		4EC02AE0180A60D8009C5AFD /* CommodityDesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommodityDesViewController.h; sourceTree = "<group>"; };
 		4EC02AE1180A60D9009C5AFD /* CommodityDesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommodityDesViewController.m; sourceTree = "<group>"; };
 		4EC02AE2180A60D9009C5AFD /* CommodityDesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommodityDesViewController.xib; sourceTree = "<group>"; };
@@ -942,6 +946,9 @@
 				C3505A0317F66D2B00D590A7 /* YHJViewController.h */,
 				C3505A0417F66D2B00D590A7 /* YHJViewController.m */,
 				C3505A0517F66D2C00D590A7 /* YHJViewController.xib */,
+				4EBDD075180F72FE00CB4CC5 /* YHJDetailViewController.h */,
+				4EBDD076180F72FE00CB4CC5 /* YHJDetailViewController.m */,
+				4EBDD077180F72FE00CB4CC5 /* YHJDetailViewController.xib */,
 				C3505A0B17F6935800D590A7 /* CommodityChangeViewController.h */,
 				C3505A0C17F6935800D590A7 /* CommodityChangeViewController.m */,
 				C3505A0D17F6935900D590A7 /* CommodityChangeViewController.xib */,
@@ -1270,6 +1277,7 @@
 				4EB6C1D0180C50F80098E6F1 /* MainCommodityViewController.xib in Resources */,
 				4EB6C1D9180C65CA0098E6F1 /* ACPItem.xib in Resources */,
 				4EB6C1DF180C6FCF0098E6F1 /* MainCell6.xib in Resources */,
+				4EBDD079180F72FE00CB4CC5 /* YHJDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1359,6 +1367,7 @@
 				4EB6C1D8180C65CA0098E6F1 /* ACPItem.m in Sources */,
 				4EB6C1DA180C65CA0098E6F1 /* ACPScrollMenu.m in Sources */,
 				4EB6C1DD180C6FC10098E6F1 /* MainCell6.m in Sources */,
+				4EBDD078180F72FE00CB4CC5 /* YHJDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

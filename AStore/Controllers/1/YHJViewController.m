@@ -8,7 +8,7 @@
 
 #import "YHJViewController.h"
 #import "UIViewController+LeftTitle.h"
-#import "SearchResultViewController.h"
+#import "YHJDetailViewController.h"
 @interface YHJViewController ()
 @property (nonatomic,retain) NSArray * catalogArr;
 @end
@@ -49,8 +49,9 @@
     UIButton * btn = (UIButton *)sender;
     int index = btn.tag - 1;
     NSString * title = [_catalogArr objectAtIndex:index];
-    SearchResultViewController * searchResult = [[SearchResultViewController alloc] init];
+    YHJDetailViewController * searchResult = [[YHJDetailViewController alloc] init];
     searchResult.lTitle = title;
     [self.navigationController pushViewController:searchResult animated:YES];
+    searchResult = nil;
 }
 @end

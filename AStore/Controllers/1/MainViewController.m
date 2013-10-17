@@ -93,12 +93,12 @@
     isFetchFoodDataSuccess = NO;
     isFetchStuffDataSuccess = NO;
     fetchDataThread = [[NSThread alloc]initWithTarget:self selector:@selector(fetchDataThreadMethod) object:nil];
-//    [fetchDataThread start];
+    [fetchDataThread start];
 }
 
 -(void)fetchDataThreadMethod
 {
-    
+    MainViewController * weakContrller = self;
     while (!isFetchFoodDataSuccess||!isFetchStuffDataSuccess) {
         NSLog(@"%s",__func__);
         if (!isFetchFoodDataSuccess) {
@@ -106,13 +106,6 @@
                 recommandFootData = commoditys;
                 isFetchFoodDataSuccess = YES;
             } withErrorBlock:^(NSError *error) {
-                if (error.code == -1001) {
-                    if (![fetchDataThread isCancelled]) {
-                        
-                        [fetchDataThread cancel];
-                        fetchDataThread = nil;
-                    }
-                }
                 NSLog(@"获取热门食品失败 %@", [error description]);
             }];
         }
@@ -121,11 +114,6 @@
                 recommandCommodityData = commoditys;
                 isFetchStuffDataSuccess = YES;
             } withErrorBlock:^(NSError *error) {
-                if (error.code == -1001) {
-                    if (![fetchDataThread isCancelled]) {
-                        [fetchDataThread cancel];
-                    }
-                }
                 NSLog(@"获取热门日用品失败 %@", [error description]);
             }];
         }
@@ -133,6 +121,15 @@
     }
     [self.tableView reloadData];
 }
+
+-(void)stopFetchDataThread
+{
+    [fetchDataThread cancel];
+    [NSThread exit];
+    fetchDataThread = nil;
+
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

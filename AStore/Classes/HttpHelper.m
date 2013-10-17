@@ -15,7 +15,7 @@
 #import "CouponInfo.h"
 #import "CategoryInfo.h"
 #import "GetOrderInfo.h"
-
+#import "User.h"
 
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
@@ -286,5 +286,39 @@
     NSRange range = [tempStr rangeOfString:@"|" options:NSCaseInsensitiveSearch];
     NSRange strRange = NSMakeRange(0, range.location);
     return [Resource_URL_Prefix stringByAppendingString:[str substringWithRange:strRange]];
+}
+
++(void)userLoginWithName:(NSString *)name pwd:(NSString *)pwd completedBlock:(void (^)(id items)) completedBlock failedBlock:(void (^) (NSError * error))faliedBlock
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",name,pwd];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+        completedBlock(catInfo);
+    } errorBlock:^(NSError *error) {
+        faliedBlock(error);
+    }];
+
+}
+
++(void)userRegisterWithName:(NSString * )name pwd:(NSString *)pwd email:(NSString *)email completedBlock:(void (^)(id items))successBlock failedBlock:(void (^)(NSError * error))failedBlock
+{
+    NSString *cmdStr = [NSString stringWithFormat:@"addUser=adduser&&name=%@&&pwd=%@&&email=%@",name,pwd,email];
+    NSLog(@"CmdStr : %@",cmdStr);
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray * resultInfo)
+     {
+         NSString * str = [[resultInfo objectAtIndex:0]objectForKey:RequestStatusKey];
+         successBlock(str);
+
+         if ([str isEqualToString:@"1"]) {
+             NSLog(@"注册成功");
+             //写入plish
+             [User deleteUserInfo];
+             [User saveUserInfo:name password:pwd memberId:@"0000"];
+         }
+     } errorBlock:^(NSError * error)
+     {
+         failedBlock(error);
+     }];
+
 }
 @end

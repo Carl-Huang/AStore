@@ -109,8 +109,6 @@
         for (NSDictionary * dic in catInfo) {
             synDicInfo = dic;
             [User saveServerUserInfoTL:synDicInfo];
-            NSDictionary * userInfo = [[NSUserDefaults standardUserDefaults]dictionaryForKey:VUserInfo];
-            [User saveUserInfo:[userInfo objectForKey:DUserName] password:[userInfo objectForKey:DPassword] memberId:[synDicInfo objectForKey:DMemberId]];
             [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
         }
     } errorBlock:^(NSError *error) {
@@ -125,6 +123,7 @@
     NSLog(@"%@",synDicInfo);
     self.pointLabel.text = [synDicInfo objectForKey:DPoint];
     self.userTypeLabel.text = [synDicInfo objectForKey:DLevelName];
+    [self.view setNeedsLayout];
 }
 #pragma mark - UITableViewDateSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

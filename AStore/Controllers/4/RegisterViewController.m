@@ -15,6 +15,7 @@
 #import "HttpHelper.h"
 #import "User.h"
 #import "UserCenterViewController.h"
+#import "AppDelegate.h"
 @interface RegisterViewController () <UITextFieldDelegate>
 {
     NSInteger tableViewOriY;
@@ -109,33 +110,34 @@
 
 -(void)regist
 {
-    NSString *cmdStr = [NSString stringWithFormat:@"addUser=adduser&&name=%@&&pwd=%@&&email=%@",self.usernameField.text,self.passwordField.text,self.emailField.text];
-    NSLog(@"CmdStr : %@",cmdStr);
-    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray * resultInfo)
-     {
-         NSString * str = [[resultInfo objectAtIndex:0]objectForKey:RequestStatusKey];
-         if ([str isEqualToString:@"1"]) {
-             NSLog(@"注册成功");
-             //写入plish
-             [User saveUserInfo:self.usernameField.text password:self.passwordField.text memberId:@"0000"];
-             NSArray * ary = self.navigationController.viewControllers;
-             for (UIViewController * viewcontroller in ary) {
-                 if ([viewcontroller isKindOfClass:[UserCenterViewController class]]) {
-                     [self.navigationController popToViewController:viewcontroller animated:YES];
-                     return;
-                 }
-             }
-             UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
-             [self.navigationController pushViewController:viewController animated:YES];
-             viewController = nil;
-         }else
-         {
-             NSLog(@"注册失败");
-         }
-     } errorBlock:^(NSError * error)
-     {
-         NSLog(@"%@",error.description);
-     }];
+    [self.passwordField resignFirstResponder];
+    [self.usernameField resignFirstResponder];
+    [self.emailField resignFirstResponder];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate showLoginViewOnView:self.view];
+    [HttpHelper userRegisterWithName:self.usernameField.text pwd:self.passwordField.text email:self.emailField.text completedBlock:^(id items) {
+        NSString * str = (NSString * )items;
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate removeLoadingViewWithView:nil];
+        if ([str isEqualToString:@"1"]) {
+            NSLog(@"注册成功");
+            UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
+            [self.navigationController pushViewController:viewController animated:YES];
+            viewController = nil;
+        }else
+        {
+            NSLog(@"注册失败");
+            [self showAlertViewWithTitle:@"提示" message:@"注册失败"];
+        }
+    } failedBlock:^(NSError *error) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate removeLoadingViewWithView:nil];
+        [self showAlertViewWithTitle:@"提示" message:@"服务器错误"];
+
+        NSLog(@"%@",[error description]);
+    }];
+    
+    
 }
 
 -(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr

@@ -13,6 +13,7 @@
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
+#import "CommodityViewController.h"
 static NSString * cellIdentifier = @"cellidentifier";
 @interface MainCommodityViewController ()
 {
@@ -129,6 +130,11 @@ static NSString * cellIdentifier = @"cellidentifier";
 {
     Commodity * info = [dataSource objectAtIndex:indexPath.row];
     [Commodity printCommodityInfo:info];
+    CommodityViewController *viewController = [[CommodityViewController alloc]initWithNibName:@"CommodityViewController" bundle:nil];
+    [viewController setComodityInfo:info];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+
 }
 
 @end

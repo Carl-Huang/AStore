@@ -71,6 +71,16 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         self.navigationItem.rightBarButtonItem.customView.hidden = YES;
         [self.navigationController.view addSubview:loginView.view];
         [self.navigationController addChildViewController:loginView];
+    }else
+    {
+        NSArray * viewcontrollerArrar = self.navigationController.viewControllers;
+        for (UIViewController * controlller  in viewcontrollerArrar) {
+            if ([controlller isKindOfClass:[LoginViewController class]]) {
+                NSLog(@"LoginViewController removeFormParentView");
+                [controlller.view removeFromSuperview];
+                [controlller removeFromParentViewController];
+            }
+        }
     }
 }
 

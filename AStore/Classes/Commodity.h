@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Commodity : NSObject
+@interface Commodity : NSObject<NSCoding>
 @property (nonatomic,retain) NSString * goods_id;
 @property (nonatomic,retain) NSString * brief;
 @property (nonatomic,retain) NSString * intro;
@@ -31,4 +31,9 @@
 @property (nonatomic,retain) NSString * pdt_desc;
 
 +(void)printCommodityInfo:(Commodity *)info;
++(void)archivingCommodityObj:(Commodity *)item;
++(Commodity *)unarchivingCommodityObj;
++(void)archivingCommodityArray:(NSArray * )array;
++(NSArray *)unarchivingCommodityArray;
++(void)removeCommodityArray;
 @end

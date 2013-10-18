@@ -940,6 +940,9 @@
 				C3845CD117F3F03000DED3C5 /* MainViewController.h */,
 				C3845CD217F3F03000DED3C5 /* MainViewController.m */,
 				C3845CD317F3F03000DED3C5 /* MainViewController.xib */,
+				4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */,
+				4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */,
+				4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */,
 				C35059FE17F6647C00D590A7 /* NoticeListViewController.h */,
 				C35059FF17F6647C00D590A7 /* NoticeListViewController.m */,
 				C3505A0017F6647C00D590A7 /* NoticeListViewController.xib */,
@@ -961,9 +964,6 @@
 				C38262E617F6D03C00C96A38 /* NoticeContentViewController.h */,
 				C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */,
 				C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */,
-				4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */,
-				4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */,
-				4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */,
 				C37DA8A1180C535400F08B92 /* CommodityButton.xib */,
 			);
 			path = 1;

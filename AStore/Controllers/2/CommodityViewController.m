@@ -11,13 +11,22 @@
 #import "HeaderView.h"
 #import "UIImageView+AFNetworking.h"
 #import "CommodityDesViewController.h"
+#import "AppDelegate.h"
+#import "User.h"
+#import "LoginViewController.h"
+#import "HttpHelper.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
     OfflinePaymentType,
 };
 static NSString * cellIdentifier = @"cellIdentifier";
-@interface CommodityViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface CommodityViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+{
+    UITextField *textField;
+    UITextField *textField2;
+    UIAlertView *prompt;
+}
 @property (assign ,nonatomic)  PaymentType payType;
 @property (strong ,nonatomic)  HeaderView * headerView;
 @end
@@ -224,4 +233,85 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }
 }
 
+- (IBAction)putInCartAction:(id)sender {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate.commodityArray addObject:self.comodityInfo];
+    NSLog(@"购物车里物品数量：%d",[myDelegate.commodityArray count]);
+}
+
+- (IBAction)buyImmediatelyAction:(id)sender {
+    //提交订单
+    if ([User isLogin]) {
+        //清空购物车信息
+        [Commodity removeCommodityArray];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate.commodityArray removeAllObjects];
+    }else
+    {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.loadingView.labelText = @"正在登陆";
+        [myDelegate showLoginViewOnView:self.view];
+        prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
+                                                         message:@"\n\n\n"
+                                                        delegate:nil
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"Enter", nil];
+        textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+        [textField setBackgroundColor:[UIColor whiteColor]];
+        [textField setPlaceholder:@"username"];
+        [prompt addSubview:textField];
+        textField2 = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+        [textField2 setBackgroundColor:[UIColor whiteColor]];
+        [textField2 setPlaceholder:@"password"];
+        [textField2 setSecureTextEntry:YES];
+        [prompt addSubview:textField2];
+        prompt.delegate = self;
+        [prompt show];
+    }
+}
+
+#pragma mark - UIAlertView Delegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            NSLog(@"取消登陆");
+            [self hideProcessingView];
+            break;
+        case 1:
+            NSLog(@"正在登陆");
+            [self loginAction];
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)hideProcessingView
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+}
+
+-(void)loginAction
+{
+    [HttpHelper userLoginWithName:textField.text pwd:textField2.text completedBlock:^(id items) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate removeLoadingViewWithView:nil];
+        for (NSDictionary * dic in items) {
+            if ([dic count]==1) {
+                NSLog(@"登陆失败");
+                [prompt show];
+            }else
+            {
+                NSLog(@"登陆成功");
+                //TODO:去到订单页面
+                
+            }
+        }
+    } failedBlock:^(NSError *error) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate removeLoadingViewWithView:nil];
+    }];
+}
 @end

@@ -123,5 +123,9 @@
         return nil;
     }
 }
-
++(void)deleteServerUserInfo
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:VServerUserInfo];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
 @end

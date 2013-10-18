@@ -98,28 +98,33 @@
 
 -(void)fetchDataThreadMethod
 {
-    MainViewController * weakContrller = self;
     while (!isFetchFoodDataSuccess||!isFetchStuffDataSuccess) {
-        NSLog(@"%s",__func__);
-        if (!isFetchFoodDataSuccess) {
-            [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                recommandFootData = commoditys;
-                isFetchFoodDataSuccess = YES;
-            } withErrorBlock:^(NSError *error) {
-                NSLog(@"获取热门食品失败 %@", [error description]);
-            }];
+        if ([fetchDataThread isCancelled]) {
+            isFetchFoodDataSuccess = YES;
+            isFetchStuffDataSuccess = YES;
+        }else
+        {
+                NSLog(@"%s",__func__);
+                if (!isFetchFoodDataSuccess) {
+                    [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                        recommandFootData = commoditys;
+                        isFetchFoodDataSuccess = YES;
+                    } withErrorBlock:^(NSError *error) {
+                        NSLog(@"获取热门食品失败 %@", [error description]);
+                    }];
+                }
+                if (!isFetchStuffDataSuccess) {
+                    [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+                        recommandCommodityData = commoditys;
+                        isFetchStuffDataSuccess = YES;
+                    } withErrorBlock:^(NSError *error) {
+                        NSLog(@"获取热门日用品失败 %@", [error description]);
+                    }];
+                }
+                [NSThread sleepForTimeInterval:8.0];
+            }
         }
-        if (!isFetchStuffDataSuccess) {
-            [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                recommandCommodityData = commoditys;
-                isFetchStuffDataSuccess = YES;
-            } withErrorBlock:^(NSError *error) {
-                NSLog(@"获取热门日用品失败 %@", [error description]);
-            }];
-        }
-    [NSThread sleepForTimeInterval:8.0];
-    }
-    [self.tableView reloadData];
+        
 }
 
 -(void)stopFetchDataThread

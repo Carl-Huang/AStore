@@ -41,7 +41,16 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    
+    if ([User isLogin]) {
+        NSArray * viewcontrollerArrar = self.navigationController.viewControllers;
+        for (UIViewController * controlller  in viewcontrollerArrar) {
+            if ([controlller isKindOfClass:[LoginViewController class]]) {
+                NSLog(@"LoginViewController removeFormParentView");
+                [controlller.view removeFromSuperview];
+                [controlller removeFromParentViewController];
+            }
+        }
+    }
 }
 - (void)didReceiveMemoryWarning
 {

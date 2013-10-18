@@ -226,7 +226,7 @@
 - (IBAction)loginOutAction:(id)sender
 {
     [User deleteUserInfo];
-    
+    [User deleteServerUserInfo];
     NSArray *ary = self.navigationController.viewControllers;
     for (UIViewController *viewcontroller in ary) {
         if ([ary isKindOfClass:[LoginViewController class]]) {

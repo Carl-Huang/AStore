@@ -14,22 +14,26 @@
 #import "ConfirmOrderViewController.h"
 #import "User.h"
 #import "LoginViewController.h"
+#import "AppDelegate.h"
+#import "Commodity.h"
+#import "HttpHelper.h"
+#import "UIImageView+AFNetworking.h"
 static NSString * cellIdentifier = @"cartCellIdentifier";
 static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @interface CartViewController ()
-@property (strong ,nonatomic)NSArray * commoditiesArray;
+@property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
 @end
 
 @implementation CartViewController
-@synthesize commoditiesArray;
+@synthesize dataSource;
 @synthesize giftArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        commoditiesArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"5"}];
+        dataSource = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"5"}];
         
         giftArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"限量:20",JiFen:@"1000"}];
     }
@@ -72,6 +76,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         [self.navigationController.view addSubview:loginView.view];
         [self.navigationController addChildViewController:loginView];
     }
+    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+    self.dataSource  = myDelegate.commodityArray;
+    [self.cartTable reloadData];
+
 }
 
 
@@ -152,8 +160,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        NSLog(@"section0 have %d rows",[commoditiesArray count]+1);
-        return [commoditiesArray count]+1;
+        NSLog(@"section0 have %d rows",[dataSource count]+1);
+        return [dataSource count]+1;
     }else if(section == 1)
         NSLog(@"section1 have %d rows",[giftArray count]+1);
         return [giftArray count]+1;
@@ -174,17 +182,33 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if (indexPath.row == 0) {
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
-            headerCell.moneyValue.text = @"1000";
+            float sum = 0;
+            for (Commodity * info in dataSource) {
+                sum += [info.price integerValue];
+            }
+            headerCell.moneyValue.text = [NSString stringWithFormat:@"%f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
             return headerCell;
             
         }else
         {
             NSInteger row = indexPath.row -1;
-            cell.productImage.image = [UIImage imageNamed:[[commoditiesArray objectAtIndex:row]objectForKey:ProductImage]];
-            cell.productName.text = [[commoditiesArray objectAtIndex:row]objectForKey:ProductName];
-            cell.productNumber.text = [[commoditiesArray objectAtIndex:row]objectForKey:ProductNumber];
-            cell.MoneySum.text = [[commoditiesArray objectAtIndex:row]objectForKey:ProductPrice];
+            Commodity * info = [dataSource objectAtIndex:row];
+            NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+            __weak CartCell *weakCell = cell;
+            NSURL *url = [NSURL URLWithString:imageUrlStr];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+            [cell.productImage setImageWithURLRequest:request placeholderImage:nil
+                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                        [weakCell.productImage setImage:image];
+                                                        [weakCell setNeedsLayout];
+                                                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                        NSLog(@"下载图片失败");
+                                                    }];
+
+            cell.productName.text = info.name;
+            cell.productNumber.text = info.product_id;
+            cell.MoneySum.text = info.price;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
             

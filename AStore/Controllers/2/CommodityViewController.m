@@ -248,9 +248,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [myDelegate.commodityArray removeAllObjects];
     }else
     {
-        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        myDelegate.loadingView.labelText = @"正在登陆";
-        [myDelegate showLoginViewOnView:self.view];
         prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
                                                          message:@"\n\n\n"
                                                         delegate:nil
@@ -267,6 +264,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [prompt addSubview:textField2];
         prompt.delegate = self;
         [prompt show];
+      
     }
 }
 
@@ -295,6 +293,9 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)loginAction
 {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    myDelegate.loadingView.labelText = @"正在登陆";
+    [myDelegate showLoginViewOnView:self.view];
     [HttpHelper userLoginWithName:textField.text pwd:textField2.text completedBlock:^(id items) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
@@ -305,6 +306,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             }else
             {
                 NSLog(@"登陆成功");
+                [User saveUserInfo:textField.text password:textField2.text memberId:@"0000"];
                 //TODO:去到订单页面
                 
             }

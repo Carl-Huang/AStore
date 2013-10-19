@@ -250,9 +250,10 @@ static NSString * cellIdentifier = @"cellIdentifier";
     if ([myDelegate.commodityArray count] != 0) {
         for (int i = 0; i<[myDelegate.commodityArray count] ;i++) {
             NSMutableDictionary * infoDic = [[myDelegate.commodityArray objectAtIndex:i]mutableCopy];
-            count = [[infoDic objectForKey:@"count"]integerValue];
+
             Commodity * info = [infoDic objectForKey:@"commodity"];
             if ([info.product_id isEqualToString:self.comodityInfo.product_id]) {
+                count = [[infoDic objectForKey:@"count"]integerValue];
                 count ++;
                 infoDic[@"count"] = [NSNumber numberWithInteger:count];
                 [myDelegate.commodityArray replaceObjectAtIndex:i withObject:infoDic];

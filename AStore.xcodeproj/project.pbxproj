@@ -66,6 +66,8 @@
 		4EC02AE4180A60D9009C5AFD /* CommodityDesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EC02AE2180A60D9009C5AFD /* CommodityDesViewController.xib */; };
 		4EC02AE8180A6BB1009C5AFD /* CommodityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC02AE6180A6BB1009C5AFD /* CommodityViewController.m */; };
 		4EC02AE9180A6BB1009C5AFD /* CommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EC02AE7180A6BB1009C5AFD /* CommodityViewController.xib */; };
+		4EE31C1E181263E700384992 /* AddAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE31C1D181263E700384992 /* AddAddressCell.m */; };
+		4EE31C20181263FB00384992 /* AddAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EE31C1F181263FB00384992 /* AddAddressCell.xib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
 		C32B1BC317F405F50089D6CC /* 个人中心icon-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */; };
 		C32B1BC417F405F50089D6CC /* 分类icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BBA17F405F50089D6CC /* 分类icon-n.png */; };
@@ -340,6 +342,9 @@
 		4EC02AE5180A6BB1009C5AFD /* CommodityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommodityViewController.h; sourceTree = "<group>"; };
 		4EC02AE6180A6BB1009C5AFD /* CommodityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommodityViewController.m; sourceTree = "<group>"; };
 		4EC02AE7180A6BB1009C5AFD /* CommodityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommodityViewController.xib; sourceTree = "<group>"; };
+		4EE31C1C181263E700384992 /* AddAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressCell.h; sourceTree = "<group>"; };
+		4EE31C1D181263E700384992 /* AddAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressCell.m; sourceTree = "<group>"; };
+		4EE31C1F181263FB00384992 /* AddAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddAddressCell.xib; sourceTree = "<group>"; };
 		C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-n.png"; sourceTree = "<group>"; };
 		C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-s.png"; sourceTree = "<group>"; };
 		C32B1BBA17F405F50089D6CC /* 分类icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "分类icon-n.png"; sourceTree = "<group>"; };
@@ -1062,6 +1067,9 @@
 				4EAEE3E717FE3118002857F1 /* ModifyAddressViewController.h */,
 				4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */,
 				4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */,
+				4EE31C1C181263E700384992 /* AddAddressCell.h */,
+				4EE31C1D181263E700384992 /* AddAddressCell.m */,
+				4EE31C1F181263FB00384992 /* AddAddressCell.xib */,
 			);
 			path = 4;
 			sourceTree = "<group>";
@@ -1278,6 +1286,7 @@
 				4EB6C1D9180C65CA0098E6F1 /* ACPItem.xib in Resources */,
 				4EB6C1DF180C6FCF0098E6F1 /* MainCell6.xib in Resources */,
 				4EBDD079180F72FE00CB4CC5 /* YHJDetailViewController.xib in Resources */,
+				4EE31C20181263FB00384992 /* AddAddressCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1368,6 +1377,7 @@
 				4EB6C1DA180C65CA0098E6F1 /* ACPScrollMenu.m in Sources */,
 				4EB6C1DD180C6FC10098E6F1 /* MainCell6.m in Sources */,
 				4EBDD078180F72FE00CB4CC5 /* YHJDetailViewController.m in Sources */,
+				4EE31C1E181263E700384992 /* AddAddressCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

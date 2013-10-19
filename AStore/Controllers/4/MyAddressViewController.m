@@ -129,14 +129,17 @@ static NSString * cellIdentifier = @"addressCell";
     NSLog(@"%s",__func__);
     //TODO:增加一个地址数据
     
+    ModifyAddressViewController * viewcontroller = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
+    [self.navigationController pushViewController:viewcontroller animated:YES];
+    viewcontroller  = nil;
     //增加地址数据
-    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3496&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
-    
-    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
-        ;
-    } errorBlock:^(NSError *error) {
-        ;
-    }];
+//    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3496&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
+//    
+//    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+//        ;
+//    } errorBlock:^(NSError *error) {
+//        ;
+//    }];
 }
 
 - (void)didReceiveMemoryWarning

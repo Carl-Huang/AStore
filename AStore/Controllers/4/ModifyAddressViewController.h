@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ModifyAddressViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UITableView *addressTable;
+- (IBAction)saveBtnAction:(id)sender;
 
 @end

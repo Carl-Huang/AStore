@@ -19,6 +19,13 @@
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
 #import <objc/runtime.h>
+
+typedef NS_ENUM(NSInteger, ActionType)
+{
+    PlusAction = 1,
+    MinusAction = 2,
+};
+
 static NSString * cellIdentifier = @"cartCellIdentifier";
 static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @interface CartViewController ()
@@ -178,7 +185,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CartCell * cell = [self.cartTable dequeueReusableCellWithIdentifier:cellIdentifier];
-
+    [cell setMunisBlock:[self cellMinusBlock]];
+    [cell setPlusBlock:[self cellPlusBlock]];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
@@ -211,7 +219,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                                         NSLog(@"下载图片失败");
                                                     }];
-
+            cell.commodityId = info.product_id;
             cell.productName.text = info.name;
             cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
             float floatString = [info.price floatValue];
@@ -219,8 +227,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             cell.MoneySum.text = priceStr;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
-            NSNumber * number = objc_getAssociatedObject(info, (__bridge const void *)(info.product_id));
-            NSLog(@"%d",[number intValue]);
+//            NSNumber * number = objc_getAssociatedObject(info, (__bridge const void *)(info.product_id));
+//            NSLog(@"%d",[number intValue]);
             
         }
 
@@ -247,6 +255,52 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     return  cell;
 }
 
+-(CarCellMinusBlock)cellMinusBlock
+{
+    CarCellMinusBlock block = ^(id item)
+    {
+        NSLog(@"%s",__func__);
+        [self alterCommodityNumWithId:(NSString *)item withAction:MinusAction];
+        [self.cartTable reloadData];
+    };
+    return block;
+}
+
+-(CarCellPlusBlock)cellPlusBlock
+{
+    CarCellPlusBlock block = ^(id item)
+    {
+        NSLog(@"%s",__func__);
+        [self alterCommodityNumWithId:(NSString *)item withAction:PlusAction];
+        [self.cartTable reloadData];
+    };
+    return block;
+}
+
+-(void)alterCommodityNumWithId:(NSString * )productId withAction:(NSInteger)action
+{
+    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+    for (int i = 0;i<[myDelegate.commodityArray count];i++) {
+        NSMutableDictionary * dic = [[myDelegate.commodityArray objectAtIndex:i]mutableCopy];
+        Commodity * info = [dic objectForKey:@"commodity"];
+        if ([productId isEqualToString:info.product_id] ) {
+            if (action == MinusAction) {
+                NSInteger  num = [[dic objectForKey:@"count"]integerValue];
+                num -= 1;
+                dic[@"count"] = [NSNumber numberWithInteger:num];
+                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+            }else
+            {
+                NSInteger  num = [[dic objectForKey:@"count"]integerValue];
+                num += 1;
+                dic[@"count"] = [NSNumber numberWithInteger:num];
+                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+
+            }
+            
+        }
+    }
+}
 
 -(void)closeAccount
 {

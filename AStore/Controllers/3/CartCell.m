@@ -9,7 +9,7 @@
 #import "CartCell.h"
 
 @implementation CartCell
-
+@synthesize commodityId;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -27,8 +27,10 @@
 }
 
 - (IBAction)minusAction:(id)sender {
+    self.munisBlock(commodityId);
 }
 
 - (IBAction)plusAction:(id)sender {
+    self.plusBlock(commodityId);
 }
 @end

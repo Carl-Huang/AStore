@@ -44,12 +44,17 @@
 + (NSString *)escapeURLString:(NSString *)urlString;
 + (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
 
+
+
 //提取图片的url
 +(NSString *)extractImageURLWithStr:(NSString *)str;
 
-
 //登陆
 +(void)userLoginWithName:(NSString *)name pwd:(NSString *)pwd completedBlock:(void (^)(id items)) completedBlock failedBlock:(void (^) (NSError * error))faliedBlock;
+
 //用户注册
 +(void)userRegisterWithName:(NSString * )name pwd:(NSString *)pwd email:(NSString *)email completedBlock:(void (^)(id items))successBlock failedBlock:(void (^)(NSError * error))failedBlock;
+
+//获取地区信息
++(void)getRegionWithSuccessBlock:(void(^)(NSArray * array))successBlock failedBlock:(void(^)(NSError *error))failedBlock;
 @end

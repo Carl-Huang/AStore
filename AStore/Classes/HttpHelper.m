@@ -16,7 +16,7 @@
 #import "CategoryInfo.h"
 #import "GetOrderInfo.h"
 #import "User.h"
-
+#import "Region.h"
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
@@ -320,5 +320,15 @@
          failedBlock(error);
      }];
 
+}
+
++(void)getRegionWithSuccessBlock:(void(^)(NSArray *array))successBlock failedBlock:(void(^)(NSError *error))failedBlock
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"http://www.shyl8.net/youjian.php?getRegion=1"];
+    [HttpHelper requestWithString:cmdStr withClass:[Region class] successBlock:^(NSArray *items) {
+        successBlock(items);
+    } errorBlock:^(NSError *error) {
+        failedBlock(error);
+    }];
 }
 @end

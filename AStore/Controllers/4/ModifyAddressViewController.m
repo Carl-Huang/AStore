@@ -5,27 +5,54 @@
 //  Created by vedon on 10/3/13.
 //  Copyright (c) 2013 carl. All rights reserved.
 //
+#define FirstPickerViewTag      101
+#define SecondPickerViewTag     102
+#define ThirdPickerViewTag      103
+#define PickerViewOffsetY       -140
 
 #import "ModifyAddressViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HttpHelper.h"
 #import "AddAddressCell.h"
+#import "Region.h"
+#import "constants.h"
+#import <objc/runtime.h>
 static NSString * const cellIdentifier = @"cellIdentifier";
-@interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
 {
     UITextField * nameField;
     UITextField * phoneField;
     UITextField * fixedTelField;
+    NSMutableSet * set;
+    NSString * firstPickerViewSelectedStr;
+    NSString * secondPickerViewSelectedStr;
+    NSString * thirdPickerViewSelectedStr;
+    UIView * viewforPickerView;
 }
+@property (strong ,nonatomic)UIPickerView * pickerViewOne;
+@property (strong ,nonatomic)UIPickerView * pickerViewTwo;
+@property (strong ,nonatomic)UIPickerView * pickerViewThree;
+@property (strong ,nonatomic)NSMutableArray * dataSourceOne;
+@property (strong ,nonatomic)NSMutableArray * dataSourceTwo;
+@property (strong ,nonatomic)NSMutableArray * dataSourceThree;
+
+
 @property (nonatomic ,strong) __block NSArray * regionInfoDic;
 @end
 
 @implementation ModifyAddressViewController
-
+@synthesize pickerViewOne,pickerViewTwo,pickerViewThree;
+@synthesize dataSourceOne,dataSourceTwo,dataSourceThree;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        dataSourceOne   = [NSMutableArray array];
+        dataSourceTwo   = [NSMutableArray array];
+        dataSourceThree = [NSMutableArray array];
+        firstPickerViewSelectedStr  = @"";
+        secondPickerViewSelectedStr = @"";
+        thirdPickerViewSelectedStr  = @"";
         // Custom initialization
     }
     return self;
@@ -42,17 +69,132 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     UIView * bgView = [UIView new];
     bgView.backgroundColor = [UIColor clearColor];
     [self.addressTable setBackgroundView:bgView];
-    //获取地区信息
-    NSString *cmdStr = [NSString stringWithFormat:@"getRegion=getregion"];
-    cmdStr = [cmdStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
-        self.regionInfoDic = resultInfo;
-    } errorBlock:^(NSError *error) {
-        NSLog(@"%@",[error description]);
-    }];
-    // Do any additional setup after loading the view from its nib.
+    
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    ModifyAddressViewController * weakSelf = self;
+    [HttpHelper getRegionWithSuccessBlock:^(NSArray * array) {
+        [weakSelf getRegionTyepWithDataArray:array];
+    } failedBlock:^(NSError *error) {
+        ;
+    }];
+}
+
+-(void)resetTableviewFrame
+{
+    self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, -PickerViewOffsetY);
+}
+
+-(void)getRegionTyepWithDataArray:(NSArray *)array
+{
+    set = [NSMutableSet set];
+    for (Region * region in array) {
+        [set addObject:region.region_grade];
+    }
+    [set enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        NSString * str = (NSString * )obj;
+        for (Region * region in array) {
+            if ([region.region_grade isEqualToString:str]) {
+                switch ([str integerValue]) {
+                    case 1:
+                        [dataSourceOne addObject:region];
+                        break;
+                    case 2:
+                        [dataSourceTwo addObject:region];
+                        break;
+                    case 3:
+                        [dataSourceThree addObject:region];
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        NSInteger sumCount = [dataSourceOne count]+[dataSourceTwo count]+ [dataSourceThree count];
+        if (sumCount == [array count]) {
+            
+            //默认选中数据中的第一项
+            Region * region1 = [dataSourceOne objectAtIndex:0];
+            firstPickerViewSelectedStr = region1.local_name;
+            Region * region2 = [dataSourceTwo objectAtIndex:0];
+            secondPickerViewSelectedStr = region2.local_name;
+            Region * region3 = [dataSourceThree objectAtIndex:0];
+            thirdPickerViewSelectedStr = region3.local_name;
+            [self.addressTable reloadData];
+            
+            //初始化pickerView
+            [self setupPicketView];
+        }
+    }];
+    
+}
+
+-(void)setupPicketView
+{
+    CGRect rect;
+    CGRect rectViewForPickerView;
+    if (!IS_SCREEN_4_INCH) {
+        rect  = CGRectMake(0, 44, 320, 256);
+        rectViewForPickerView = CGRectMake(0, 150, 320, 300);
+    }else
+    {
+       //TODO:4英寸屏适配
+        
+    }
+
+    viewforPickerView = [[UIView alloc]initWithFrame:rectViewForPickerView];
+
+    UIToolbar * toolBar= [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,320.0,44.0)];
+    [toolBar setBarStyle:UIBarStyleBlackOpaque];
+    UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                      style:UIBarButtonItemStyleBordered target:self action:@selector(hidePickerView)];
+    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    toolBar.items = [[NSArray alloc] initWithObjects:flexibleSpaceLeft,barButtonDone,nil];
+    barButtonDone.tintColor=[UIColor blackColor];
+    [viewforPickerView addSubview:toolBar];
+    
+    pickerViewOne = [[UIPickerView alloc] initWithFrame:rect];
+    pickerViewOne.dataSource = self;
+    pickerViewOne.delegate = self;
+    pickerViewOne.tag = FirstPickerViewTag;
+    pickerViewOne.showsSelectionIndicator = YES;
+    [pickerViewOne setHidden:YES];
+    [viewforPickerView addSubview:pickerViewOne];
+    
+    
+    pickerViewTwo = [[UIPickerView alloc] initWithFrame:rect];
+    pickerViewTwo.dataSource = self;
+    pickerViewTwo.delegate = self;
+    pickerViewTwo.tag = SecondPickerViewTag;
+    pickerViewTwo.showsSelectionIndicator = YES;
+    [pickerViewTwo setHidden:YES];
+    [viewforPickerView addSubview:pickerViewTwo];
+    
+    
+    pickerViewThree = [[UIPickerView alloc] initWithFrame:rect];
+    pickerViewThree.dataSource = self;
+    pickerViewThree.delegate = self;
+    pickerViewThree.tag = ThirdPickerViewTag;
+    pickerViewThree.showsSelectionIndicator = YES;
+    [pickerViewThree setHidden:YES];
+    [viewforPickerView addSubview:pickerViewThree];
+    
+    
+    [viewforPickerView setHidden:YES];
+    [self.view addSubview:viewforPickerView];
+
+}
+
+-(void)hidePickerView
+{
+    [self resetTableviewFrame];
+    [viewforPickerView setHidden:YES];
+    [pickerViewThree setHidden:YES];
+    [pickerViewTwo setHidden:YES];
+    [pickerViewOne setHidden:YES];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -64,9 +206,10 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     [self setAddressTable:nil];
     [super viewDidUnload];
 }
-- (IBAction)saveBtnAction:(id)sender {
+- (IBAction)saveBtnAction:(id)sender
+{
+    
 }
-
 
 #pragma mark - UITableViewDelegate
 
@@ -125,10 +268,88 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     if (indexPath.row == 3) {
         AddAddressCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell setFirstBlock:^()
+         {
+             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             [viewforPickerView setHidden:NO];
+             [pickerViewOne setHidden:NO];
+         }
+         ];
+        [cell setSecondBlock:^()
+         {
+             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, PickerViewOffsetY);
+             [viewforPickerView setHidden:NO];
+             [pickerViewTwo setHidden:NO];
+         }];
+        [cell setThirdBlock:^()
+         {
+             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             [viewforPickerView setHidden:NO];
+             [pickerViewThree setHidden:NO];
+         }];
+        cell.firstTextField.text    = firstPickerViewSelectedStr;
+        cell.secondTextfield.text   = secondPickerViewSelectedStr;
+        cell.thirdTextfield.text    = thirdPickerViewSelectedStr;
         return cell;
     }
     normalCell.backgroundColor = [UIColor clearColor];
     return normalCell;
 }
 
+
+#pragma mark - UIPickerViewDelegate
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    Region * region = nil;
+    if (pickerView.tag == FirstPickerViewTag) {
+        region = [dataSourceOne objectAtIndex:row];
+    }else if (pickerView.tag == SecondPickerViewTag)
+    {
+        region = [dataSourceTwo objectAtIndex:row];
+    }else
+    {
+        region = [dataSourceThree objectAtIndex:row];
+    }
+    return region.local_name;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    Region * region = nil;
+    if (pickerView.tag == FirstPickerViewTag) {
+        region = [dataSourceOne objectAtIndex:row];
+        firstPickerViewSelectedStr = region.local_name;
+    }else if (pickerView.tag == SecondPickerViewTag)
+    {
+        region = [dataSourceTwo objectAtIndex:row];
+        secondPickerViewSelectedStr = region.local_name;
+    }else
+    {
+        region = [dataSourceThree objectAtIndex:row];
+        thirdPickerViewSelectedStr = region.local_name;
+    }
+    [self.addressTable reloadData];
+    NSLog(@"地址选择了: %@",region.local_name);
+}
+
+#pragma mark - UIPickerViewDataSourceDelegate
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView.tag == FirstPickerViewTag) {
+        return [dataSourceOne count];
+    }else if (pickerView.tag == SecondPickerViewTag)
+    {
+        return [dataSourceTwo count];
+    }else
+    {
+        return  [dataSourceThree count];
+    }
+}
 @end

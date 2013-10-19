@@ -54,4 +54,6 @@
 
 #define VUserInfo           @"vuserInfo"
 #define VServerUserInfo     @"serverUserInfo"
+
+
 #endif

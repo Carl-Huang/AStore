@@ -7,8 +7,17 @@
 //
 
 #import "AddAddressCell.h"
-
 @implementation AddAddressCell
+
+-(void) awakeFromNib
+{
+    self.firstTextField.adjustsFontSizeToFitWidth   = YES;
+    self.secondTextfield.adjustsFontSizeToFitWidth  = YES;
+    self.thirdTextfield.adjustsFontSizeToFitWidth   = YES;
+    [self.fourthTextfield setReturnKeyType:UIReturnKeyDone];
+    self.fourthTextfield.delegate = self;
+    
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -26,4 +35,24 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)firstBtnAction:(id)sender {
+    self.firstBlock();
+}
+
+- (IBAction)secondBtnAction:(id)sender {
+    self.secondBlock();
+}
+
+- (IBAction)thirdBtnAction:(id)sender {
+    self.thirdBlock();
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([string isEqualToString:@"\n"]) {
+        [textField resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
 @end

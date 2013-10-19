@@ -107,7 +107,10 @@
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
         ;
     }];
-    cell.priceLabel.text = info.price;
+    float floatString = [info.price floatValue];
+    NSString * priceStr = [NSString stringWithFormat:@"%0.1f",floatString];
+
+    cell.priceLabel.text = priceStr;
     cell.titleLabel.text = info.name;
     return cell;
 }

@@ -15,6 +15,7 @@
 #import "User.h"
 #import "LoginViewController.h"
 #import "HttpHelper.h"
+#import <objc/runtime.h>
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -62,12 +63,21 @@ static NSString * cellIdentifier = @"cellIdentifier";
     NSIndexPath *tableSelection = [self.commodityTableView indexPathForSelectedRow];
     [self.commodityTableView deselectRowAtIndexPath:tableSelection animated:NO];
 }
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [Commodity archivingCommodityArray:myDelegate.commodityArray];
+
+}
 -(void)initializedInterface
 {
     NSLog(@"%s",__func__);
     if (comodityInfo) {
-        NSString * priceStr = [comodityInfo.price substringToIndex:[comodityInfo.price length] - 2];
-        NSString * mKPriceStr = [comodityInfo.mktprice substringToIndex:[comodityInfo.price length] - 2];
+        float floatString1 = [comodityInfo.price floatValue];
+        NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString1];
+        float floatString2 = [comodityInfo.mktprice floatValue];
+        NSString * mKPriceStr = [NSString stringWithFormat:@"%.1f",floatString2];
         self.costLabel.text = priceStr;
         self.proceLabel.text = mKPriceStr;
         NSString * imageUrlStr = [self extractImageURLWithStr:comodityInfo.small_pic];
@@ -235,17 +245,38 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 - (IBAction)putInCartAction:(id)sender {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate.commodityArray addObject:self.comodityInfo];
-    NSLog(@"购物车里物品数量：%d",[myDelegate.commodityArray count]);
+    NSInteger count = 1;
+    BOOL canAddObj = YES;
+    if ([myDelegate.commodityArray count] != 0) {
+        for (int i = 0; i<[myDelegate.commodityArray count] ;i++) {
+            NSMutableDictionary * infoDic = [[myDelegate.commodityArray objectAtIndex:i]mutableCopy];
+            count = [[infoDic objectForKey:@"count"]integerValue];
+            Commodity * info = [infoDic objectForKey:@"commodity"];
+            if ([info.product_id isEqualToString:self.comodityInfo.product_id]) {
+                count ++;
+                infoDic[@"count"] = [NSNumber numberWithInteger:count];
+                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:infoDic];
+                canAddObj = NO;
+            }
+        }
+        if (canAddObj) {
+            [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
+        }
+    }else
+    {
+        [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
+    }
+   objc_setAssociatedObject(self.comodityInfo, (__bridge const void *)(self.comodityInfo.product_id), [NSNumber numberWithInt:count], OBJC_ASSOCIATION_COPY);
+
 }
 
 - (IBAction)buyImmediatelyAction:(id)sender {
     //提交订单
     if ([User isLogin]) {
         //清空购物车信息
-        [Commodity removeCommodityArray];
-        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        [myDelegate.commodityArray removeAllObjects];
+//        [Commodity removeCommodityArray];
+//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//        [myDelegate.commodityArray removeAllObjects];
     }else
     {
         prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"

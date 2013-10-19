@@ -30,7 +30,8 @@
     [super viewDidLoad];
     [self setLeftTitle:comodityInfo.name];
     [self setBackItem:nil];
-    NSString * priceStr = [comodityInfo.price substringToIndex:[comodityInfo.price length]-2];
+    float floatString = [comodityInfo.price floatValue];
+    NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
     self.price.text = priceStr;
     self.goods_id.text = comodityInfo.goods_id;
     

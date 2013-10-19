@@ -145,7 +145,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
                                             }];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.pruductName.text = info.name;
-    NSString * priceStr = [info.price substringToIndex:[info.price length] - 2];
+    float floatString = [info.price floatValue];
+    NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
     cell.productPrice.text = priceStr;
     return cell;
 }

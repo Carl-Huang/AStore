@@ -55,7 +55,7 @@
         self.price      = [aDecoder decodeObjectForKey:@"price"];
         self.product_id = [aDecoder decodeObjectForKey:@"product_id"];
         self.score      = [aDecoder decodeObjectForKey:@"score"];
-        self.name       = [aDecoder decodeObjectForKey:@"score"];
+        self.name       = [aDecoder decodeObjectForKey:@"name"];
         self.unit       = [aDecoder decodeObjectForKey:@"unit"];
         self.weight     = [aDecoder decodeObjectForKey:@"weight"];
         self.marketable = [aDecoder decodeObjectForKey:@"marketable"];

@@ -18,6 +18,7 @@
 #import "Commodity.h"
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
+#import <objc/runtime.h>
 static NSString * cellIdentifier = @"cartCellIdentifier";
 static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @interface CartViewController ()
@@ -183,17 +184,22 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
             float sum = 0;
-            for (Commodity * info in dataSource) {
-                sum += [info.price integerValue];
+            for (NSDictionary  * infoDic in dataSource) {
+                Commodity * info = [infoDic objectForKey:@"commodity"];
+                NSInteger num = [[infoDic objectForKey:@"count"]integerValue];
+                float price = [info.price floatValue];
+                sum += price*num;
             }
-            headerCell.moneyValue.text = [NSString stringWithFormat:@"%f",sum];
+            headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
             return headerCell;
             
         }else
         {
             NSInteger row = indexPath.row -1;
-            Commodity * info = [dataSource objectAtIndex:row];
+            NSDictionary * dic = [dataSource objectAtIndex:row];
+            NSNumber * produceNum = [dic objectForKey:@"count"];
+            Commodity * info = [dic objectForKey:@"commodity"];
             NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
             __weak CartCell *weakCell = cell;
             NSURL *url = [NSURL URLWithString:imageUrlStr];
@@ -207,10 +213,14 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                                                     }];
 
             cell.productName.text = info.name;
-            cell.productNumber.text = info.product_id;
-            cell.MoneySum.text = info.price;
+            cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
+            float floatString = [info.price floatValue];
+            NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
+            cell.MoneySum.text = priceStr;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
+            NSNumber * number = objc_getAssociatedObject(info, (__bridge const void *)(info.product_id));
+            NSLog(@"%d",[number intValue]);
             
         }
 

@@ -41,7 +41,8 @@
         UIImageView * imageView = [[UIImageView alloc]init];
         __block UIImageView * weakImageView = imageView;
         [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-            NSString * priceStr = [NSString stringWithFormat:@"￥%@",[info.price substringToIndex:[info.price length]-2]];
+            float floatString = [info.price floatValue];
+            NSString * priceStr = [NSString stringWithFormat:@"￥%0.1f",floatString];
             ACPItem *item = [[ACPItem alloc]initACPItem:image iconImage:nil andLabel:priceStr];
             [itemDic setObject:item forKey:[NSString stringWithFormat:@"%d",i]];
             if ([itemDic count] == [dataSource count]) {

@@ -19,6 +19,7 @@
 #import "constants.h"
 #import <objc/runtime.h>
 #import "User.h"
+#import "AppDelegate.h"
 static NSString * const cellIdentifier = @"cellIdentifier";
 @interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate>
 {
@@ -210,13 +211,32 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 }
 - (IBAction)saveBtnAction:(id)sender
 {
+    if (!nameField.text) {
+        [self showAlertViewWithTitle:@"提示" message:@"名字不能为空"];
+        return;
+    }
+    if (!phoneField.text) {
+        [self showAlertViewWithTitle:@"提示" message:@"手机不能为空"];
+    return;
+    }
+
+    
     AddAddressCell * cell = (AddAddressCell *)objc_getAssociatedObject(self.addressTable, AssociateObjcKey);
     NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",cell.firstTextField.text,cell.secondTextfield.text,cell.thirdTextfield.text];
     NSString * addrStr = [NSString stringWithFormat:@"%@",cell.fourthTextfield.text];
+    NSString * fixedPhoneNum = nil;
+    
+    if (fixedTelField.text) {
+        fixedPhoneNum = fixedTelField.text;
+    }else
+        fixedPhoneNum = @"";
     
     //TODO: memberId 有问题
     NSDictionary * userInfoDic = [User getUserInfo];
-    [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addrStr mobile:phoneField.text tel:fixedTelField.text withCompletedBlock:^(id item, NSError *error) {
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate showLoginViewOnView:self.view];
+    ModifyAddressViewController *weakSelf = self;
+    [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addrStr mobile:phoneField.text tel:fixedPhoneNum withCompletedBlock:^(id item, NSError *error) {
         if (error) {
             NSLog(@"%@",[error description]);
         }
@@ -224,6 +244,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         for (NSDictionary * dic in array) {
             if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
                 NSLog(@"添加地址成功");
+                [weakSelf performSelectorOnMainThread:@selector(hideprocessingView) withObject:nil waitUntilDone:NO];
             }else
             {
                 NSLog(@"添加地址失败");
@@ -232,6 +253,12 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     }];
 }
 
+-(void)hideprocessingView
+{
+    NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+}
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -386,5 +413,13 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         return NO;
     }
     return YES;
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [pAlert show];
+    pAlert = nil;
+    
 }
 @end

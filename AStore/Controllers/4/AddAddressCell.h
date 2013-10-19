@@ -11,7 +11,7 @@ typedef void(^firstBtnBlock) ();
 typedef void(^secondBtnBlock) ();
 typedef void(^thirdBtnBlock) ();
 
-@interface AddAddressCell : UITableViewCell<UITextFieldDelegate>
+@interface AddAddressCell : UITableViewCell<UITextFieldDelegate,NSCopying>
 - (IBAction)firstBtnAction:(id)sender;
 - (IBAction)secondBtnAction:(id)sender;
 - (IBAction)thirdBtnAction:(id)sender;

@@ -331,4 +331,18 @@
         failedBlock(error);
     }];
 }
+
++(void)addNewAddress:(NSString *)memberId name:(NSString *)name area:(NSString *)areaStr addr:(NSString *)addrStr mobile:(NSString *)mobileStr tel:(NSString *)telStr withCompletedBlock:(void (^)(id item,NSError *error))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"addAddrs=1&&mid=%@&&name=%@&&area=%@&&addr=%@&&mobile=%@&&tel=%@",memberId,name,areaStr,addrStr,mobileStr,telStr];
+    NSLog(@"%s",__func__);
+    NSLog(@"%@",cmdStr);
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
+    
+}
+
 @end

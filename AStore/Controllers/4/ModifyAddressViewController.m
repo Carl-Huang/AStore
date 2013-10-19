@@ -9,6 +9,7 @@
 #define SecondPickerViewTag     102
 #define ThirdPickerViewTag      103
 #define PickerViewOffsetY       -140
+#define AssociateObjcKey        @"associateobjkey"
 
 #import "ModifyAddressViewController.h"
 #import "UIViewController+LeftTitle.h"
@@ -17,8 +18,9 @@
 #import "Region.h"
 #import "constants.h"
 #import <objc/runtime.h>
+#import "User.h"
 static NSString * const cellIdentifier = @"cellIdentifier";
-@interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
+@interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate>
 {
     UITextField * nameField;
     UITextField * phoneField;
@@ -208,7 +210,26 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 }
 - (IBAction)saveBtnAction:(id)sender
 {
+    AddAddressCell * cell = (AddAddressCell *)objc_getAssociatedObject(self.addressTable, AssociateObjcKey);
+    NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",cell.firstTextField.text,cell.secondTextfield.text,cell.thirdTextfield.text];
+    NSString * addrStr = [NSString stringWithFormat:@"%@",cell.fourthTextfield.text];
     
+    
+    NSDictionary * userInfoDic = [User getUserInfo];
+    [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addrStr mobile:phoneField.text tel:fixedTelField.text withCompletedBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }
+        NSArray * array = item;
+        for (NSDictionary * dic in array) {
+            if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                NSLog(@"添加地址成功");
+            }else
+            {
+                NSLog(@"添加地址失败");
+            }
+        }
+    }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -250,6 +271,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     {
         normalCell.textLabel.text = @"*姓名: ";
         nameField = [[UITextField alloc]initWithFrame:CGRectMake(95, 15, 260, 40)];
+        nameField.delegate = self;
         [normalCell.contentView addSubview:nameField];
         
     }
@@ -257,12 +279,14 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     {
         normalCell.textLabel.text = @"*手机: ";
         phoneField = [[UITextField alloc]initWithFrame:CGRectMake(95, 15, 260, 40)];
+        phoneField.delegate =self;
         [normalCell.contentView addSubview:phoneField];
     }
     if(indexPath.row == 2)
     {
         normalCell.textLabel.text = @"固定电话: ";
         fixedTelField = [[UITextField alloc]initWithFrame:CGRectMake(95,15, 200, 40)];
+        fixedTelField.delegate = self;
         [normalCell.contentView addSubview:fixedTelField];
     }
     if (indexPath.row == 3) {
@@ -290,6 +314,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         cell.firstTextField.text    = firstPickerViewSelectedStr;
         cell.secondTextfield.text   = secondPickerViewSelectedStr;
         cell.thirdTextfield.text    = thirdPickerViewSelectedStr;
+        objc_setAssociatedObject(self.addressTable, [AssociateObjcKey UTF8String], cell, OBJC_ASSOCIATION_RETAIN);
         return cell;
     }
     normalCell.backgroundColor = [UIColor clearColor];
@@ -351,5 +376,15 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     {
         return  [dataSourceThree count];
     }
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([string isEqualToString:@"\n"]) {
+        [textField resignFirstResponder];
+        return NO;
+    }
+    return YES;
 }
 @end

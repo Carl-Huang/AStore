@@ -57,4 +57,7 @@
 
 //获取地区信息
 +(void)getRegionWithSuccessBlock:(void(^)(NSArray * array))successBlock failedBlock:(void(^)(NSError *error))failedBlock;
+
+//新增收货人地址
++(void)addNewAddress:(NSString *)memberId name:(NSString *)name area:(NSString *)areaStr addr:(NSString *)addrStr mobile:(NSString *)mobileStr tel:(NSString *)telStr withCompletedBlock:(void (^)(id item,NSError *error))block;
 @end

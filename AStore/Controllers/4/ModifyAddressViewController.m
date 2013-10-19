@@ -214,7 +214,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",cell.firstTextField.text,cell.secondTextfield.text,cell.thirdTextfield.text];
     NSString * addrStr = [NSString stringWithFormat:@"%@",cell.fourthTextfield.text];
     
-    
+    //TODO: memberId 有问题
     NSDictionary * userInfoDic = [User getUserInfo];
     [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addrStr mobile:phoneField.text tel:fixedTelField.text withCompletedBlock:^(id item, NSError *error) {
         if (error) {

@@ -50,6 +50,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if ([string isEqualToString:@"\n"]) {
+        self.textFieldBlock(textField.text);
         [textField resignFirstResponder];
         return NO;
     }

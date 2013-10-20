@@ -17,9 +17,10 @@
 #import "AddAddressCell.h"
 #import "Region.h"
 #import "constants.h"
-#import <objc/runtime.h>
 #import "User.h"
 #import "AppDelegate.h"
+#import "AddressInfo.h"
+
 static NSString * const cellIdentifier = @"cellIdentifier";
 @interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate>
 {
@@ -30,6 +31,11 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSString * firstPickerViewSelectedStr;
     NSString * secondPickerViewSelectedStr;
     NSString * thirdPickerViewSelectedStr;
+    NSString * name;
+    NSString * phone;
+    NSString * tel;
+    
+    NSString * addressTextFieldText;
     UIView * viewforPickerView;
 }
 @property (strong ,nonatomic)UIPickerView * pickerViewOne;
@@ -46,6 +52,8 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 @implementation ModifyAddressViewController
 @synthesize pickerViewOne,pickerViewTwo,pickerViewThree;
 @synthesize dataSourceOne,dataSourceTwo,dataSourceThree;
+@synthesize modifitedData;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -53,9 +61,8 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         dataSourceOne   = [NSMutableArray array];
         dataSourceTwo   = [NSMutableArray array];
         dataSourceThree = [NSMutableArray array];
-        firstPickerViewSelectedStr  = @"";
-        secondPickerViewSelectedStr = @"";
-        thirdPickerViewSelectedStr  = @"";
+        
+        modifitedData = nil;
         // Custom initialization
     }
     return self;
@@ -72,7 +79,26 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     UIView * bgView = [UIView new];
     bgView.backgroundColor = [UIColor clearColor];
     [self.addressTable setBackgroundView:bgView];
-    
+    if (modifitedData) {
+        name    = modifitedData.name;
+        phone   = modifitedData.mobile;
+        tel     = modifitedData.tel;
+        addressTextFieldText = modifitedData.addr;
+        
+        firstPickerViewSelectedStr  = @"";
+        secondPickerViewSelectedStr = @"";
+        thirdPickerViewSelectedStr  = @"";
+    }else
+    {
+        name    = nil;
+        phone   = nil;
+        tel     = nil;
+        addressTextFieldText = nil;
+        firstPickerViewSelectedStr  = @"";
+        secondPickerViewSelectedStr = @"";
+        thirdPickerViewSelectedStr  = @"";
+    }
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -211,46 +237,82 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 }
 - (IBAction)saveBtnAction:(id)sender
 {
-    if (!nameField.text) {
-        [self showAlertViewWithTitle:@"提示" message:@"名字不能为空"];
-        return;
-    }
-    if (!phoneField.text) {
-        [self showAlertViewWithTitle:@"提示" message:@"手机不能为空"];
-    return;
-    }
-
-    
-    AddAddressCell * cell = (AddAddressCell *)objc_getAssociatedObject(self.addressTable, AssociateObjcKey);
-    NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",cell.firstTextField.text,cell.secondTextfield.text,cell.thirdTextfield.text];
-    NSString * addrStr = [NSString stringWithFormat:@"%@",cell.fourthTextfield.text];
+    NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",firstPickerViewSelectedStr,secondPickerViewSelectedStr,thirdPickerViewSelectedStr];
     NSString * fixedPhoneNum = nil;
-    
+    if (fixedTelField.text) {
+        fixedPhoneNum = fixedTelField.text;
+    }else
+        fixedPhoneNum = @"";
+    ModifyAddressViewController *weakSelf = self;
     if (fixedTelField.text) {
         fixedPhoneNum = fixedTelField.text;
     }else
         fixedPhoneNum = @"";
     
-    //TODO: memberId 有问题
-    NSDictionary * userInfoDic = [User getUserInfo];
+    
+    if (modifitedData == nil) {
+        //新增地址信息
+        if (!nameField.text) {
+            [self showAlertViewWithTitle:@"提示" message:@"名字不能为空"];
+            return;
+        }
+        if (!phoneField.text) {
+            [self showAlertViewWithTitle:@"提示" message:@"手机不能为空"];
+            return;
+        }
+        
+        //TODO: memberId 有问题
+        [self showProcessingView];
+        NSDictionary * userInfoDic = [User getUserInfo];
+        
+        [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addressTextFieldText mobile:phoneField.text tel:fixedPhoneNum withCompletedBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }
+            NSArray * array = item;
+            for (NSDictionary * dic in array) {
+                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                    NSLog(@"添加地址成功");
+                    [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
+                }else
+                {
+                    NSLog(@"添加地址失败");
+                    [weakSelf hideprocessingView];
+                    [weakSelf showAlertViewWithTitle:@"提示" message:@"添加地址失败"];
+                }
+            }
+        }];
+    }else
+    {
+        //修改地址信息
+        [self showProcessingView];
+        [HttpHelper updateAddressId:modifitedData.addr_id name:nameField.text area:areaStr addrs:addressTextFieldText mobile:phoneField.text tel:fixedPhoneNum withCompletedBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }
+            NSArray * array = item;
+            for (NSDictionary * dic in array) {
+                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                    NSLog(@"更新地址成功");
+                    [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
+                }else
+                {
+                    NSLog(@"更新地址失败");
+                    [weakSelf hideprocessingView];
+                    [weakSelf showAlertViewWithTitle:@"提示" message:@"更新地址失败"];
+                }
+            }
+
+        }];
+    }
+    
+}
+
+-(void)showProcessingView
+{
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
-    ModifyAddressViewController *weakSelf = self;
-    [HttpHelper addNewAddress:[userInfoDic objectForKey:DMemberId] name:nameField.text area:areaStr addr:addrStr mobile:phoneField.text tel:fixedPhoneNum withCompletedBlock:^(id item, NSError *error) {
-        if (error) {
-            NSLog(@"%@",[error description]);
-        }
-        NSArray * array = item;
-        for (NSDictionary * dic in array) {
-            if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
-                NSLog(@"添加地址成功");
-                [weakSelf performSelectorOnMainThread:@selector(hideprocessingView) withObject:nil waitUntilDone:NO];
-            }else
-            {
-                NSLog(@"添加地址失败");
-            }
-        }
-    }];
+
 }
 
 -(void)hideprocessingView
@@ -258,6 +320,24 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate removeLoadingViewWithView:nil];
+    //回到上一层界面
+}
+
+-(void)hideProcessingViewAndBackToParentView
+{
+    NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+    //回到上一层界面
+    [self.navigationController popViewControllerAnimated:YES];
+}
+-(textFieldConfigureBlock)configureTextFieldBlock
+{
+    textFieldConfigureBlock block = ^(id item)
+    {
+        addressTextFieldText = (NSString *)item;
+    };
+    return block;
 }
 #pragma mark - UITableViewDelegate
 
@@ -294,10 +374,12 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         normalCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"normalCell"];
         normalCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    CGRect textFieldRect = CGRectMake(95, 10, 260, 50);
     if(indexPath.row == 0)
     {
         normalCell.textLabel.text = @"*姓名: ";
-        nameField = [[UITextField alloc]initWithFrame:CGRectMake(95, 15, 260, 40)];
+        nameField = [[UITextField alloc]initWithFrame:textFieldRect];
+        nameField.text = name;
         nameField.delegate = self;
         [normalCell.contentView addSubview:nameField];
         
@@ -305,15 +387,17 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     if(indexPath.row == 1)
     {
         normalCell.textLabel.text = @"*手机: ";
-        phoneField = [[UITextField alloc]initWithFrame:CGRectMake(95, 15, 260, 40)];
+        phoneField = [[UITextField alloc]initWithFrame:textFieldRect];
+        phoneField.text = phone;
         phoneField.delegate =self;
         [normalCell.contentView addSubview:phoneField];
     }
     if(indexPath.row == 2)
     {
         normalCell.textLabel.text = @"固定电话: ";
-        fixedTelField = [[UITextField alloc]initWithFrame:CGRectMake(95,15, 200, 40)];
+        fixedTelField = [[UITextField alloc]initWithFrame:textFieldRect];
         fixedTelField.delegate = self;
+        fixedTelField.text = tel;
         [normalCell.contentView addSubview:fixedTelField];
     }
     if (indexPath.row == 3) {
@@ -338,10 +422,11 @@ static NSString * const cellIdentifier = @"cellIdentifier";
              [viewforPickerView setHidden:NO];
              [pickerViewThree setHidden:NO];
          }];
+        [cell setTextFieldBlock:[self configureTextFieldBlock]];
         cell.firstTextField.text    = firstPickerViewSelectedStr;
         cell.secondTextfield.text   = secondPickerViewSelectedStr;
         cell.thirdTextfield.text    = thirdPickerViewSelectedStr;
-        objc_setAssociatedObject(self.addressTable, [AssociateObjcKey UTF8String], cell, OBJC_ASSOCIATION_RETAIN);
+        cell.fourthTextfield.text   = addressTextFieldText;
         return cell;
     }
     normalCell.backgroundColor = [UIColor clearColor];

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef void (^configureAddressBlock) (id item);
+@class AddressInfo;
+typedef void (^configureAddressBlock) (id item1,id item2);
 @interface AddressCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *chooseBtn;
 @property (weak, nonatomic) IBOutlet UIButton *alterBtn;
@@ -16,6 +17,8 @@ typedef void (^configureAddressBlock) (id item);
 @property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (strong ,nonatomic) AddressInfo * addressInfo;
+
 @property (assign, nonatomic) BOOL isChooseBtnSelect;
 @property (assign, nonatomic) BOOL isAlterBtnSelect;
 @property (assign, nonatomic) BOOL isDeleteBtnSelect;

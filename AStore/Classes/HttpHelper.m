@@ -345,4 +345,16 @@
     
 }
 
++(void)updateAddressId:(NSString *)addr_id name:(NSString *)name area:(NSString *)area addrs:(NSString *)addr mobile:(NSString *)mobile tel:(NSString *)tel withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"uptateAddrs=1&&addr_id=%@&&name=%@&&area=%@&&addr=%@&&mobile=%@&&tel=%@",addr_id,name,area,addr,mobile,tel];
+    NSLog(@"%s",__func__);
+    NSLog(@"%@",cmdStr);
+    
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
+}
 @end

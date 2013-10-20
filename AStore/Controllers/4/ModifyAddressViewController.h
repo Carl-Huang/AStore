@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class AddressInfo;
 @interface ModifyAddressViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *addressTable;
+@property (strong ,nonatomic) AddressInfo * modifitedData;
 - (IBAction)saveBtnAction:(id)sender;
 
 @end

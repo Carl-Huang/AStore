@@ -184,6 +184,7 @@ static NSString * cellIdentifier = @"addressCell";
     AddressInfo * address = nil;
     address = [dataSource objectAtIndex:indexPath.row];
     [self configureCellBlockWithCell:cell];
+    [cell setAddressInfo:address];
     cell.userNameLabel.text = address.name;
     cell.telephoneLabel.text = address.tel;
     cell.phoneLabel.text = address.mobile;
@@ -198,20 +199,21 @@ static NSString * cellIdentifier = @"addressCell";
 
 -(void)configureCellBlockWithCell:(AddressCell *)cell
 {
-    configureAddressBlock block = ^(id item)
+    configureAddressBlock block = ^(id item1,id item2)
     {
         NSLog(@"configureAddressBlock processing");
-        UIButton * btn = (UIButton *)item;
+        UIButton * btn = (UIButton *)item1;
         if (btn.tag == chooseBtnTag) {
             if ([btn.titleLabel.text isEqualToString:@"选择"]) {
-                [item setTitle:@"已选" forState:UIControlStateNormal];
+                [item1 setTitle:@"已选" forState:UIControlStateNormal];
             }else
             {
-                [item setTitle:@"选择" forState:UIControlStateNormal];
+                [item1 setTitle:@"选择" forState:UIControlStateNormal];
             }
         }else if (btn.tag == alterBtnTag)
         {
             ModifyAddressViewController * viewController = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
+            [viewController setModifitedData:item2];
             [self.navigationController pushViewController:viewController animated:YES];
             viewController = nil;
         }else if (btn.tag == deleteBtnTag)

@@ -1039,9 +1039,6 @@
 		C3C999C517F2CDCE00043727 /* 4 */ = {
 			isa = PBXGroup;
 			children = (
-				4EAEE3D717FE2245002857F1 /* AddressCell.h */,
-				4EAEE3D817FE2245002857F1 /* AddressCell.m */,
-				4EAEE3D917FE2245002857F1 /* AddressCell.xib */,
 				4EAEE3DA17FE2246002857F1 /* CommodityInfoCell.h */,
 				4EAEE3DB17FE2247002857F1 /* CommodityInfoCell.m */,
 				4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */,
@@ -1069,6 +1066,9 @@
 				4EAEE3CD17FDECE8002857F1 /* MyAddressViewController.h */,
 				4EAEE3CE17FDECE8002857F1 /* MyAddressViewController.m */,
 				4EAEE3CF17FDECE9002857F1 /* MyAddressViewController.xib */,
+				4EAEE3D717FE2245002857F1 /* AddressCell.h */,
+				4EAEE3D817FE2245002857F1 /* AddressCell.m */,
+				4EAEE3D917FE2245002857F1 /* AddressCell.xib */,
 				4EAEE3E717FE3118002857F1 /* ModifyAddressViewController.h */,
 				4EAEE3E817FE3119002857F1 /* ModifyAddressViewController.m */,
 				4EAEE3E917FE3119002857F1 /* ModifyAddressViewController.xib */,

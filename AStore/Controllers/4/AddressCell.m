@@ -8,6 +8,7 @@
 
 #import "AddressCell.h"
 #import "constants.h"
+#import "AddressInfo.h"
 @implementation AddressCell
 @synthesize addressBlock;
 @synthesize chooseBtn;
@@ -53,7 +54,7 @@
 
 - (IBAction)chooseBtnAction:(id)sender {
     NSLog(@"%s",__func__);
-    self.addressBlock(sender);
+    self.addressBlock(sender,self.addressInfo);
     self.isChooseBtnSelect = !self.isChooseBtnSelect;
     if (self.isChooseBtnSelect) {
         [self.chooseBtn setBackgroundImage:nil forState:UIControlStateNormal];
@@ -66,7 +67,7 @@
 
 - (IBAction)alterBtnAction:(id)sender {
     NSLog(@"%s",__func__);
-    self.addressBlock(sender);
+    self.addressBlock(sender,self.addressInfo);
 //    self.isAlterBtnSelect = !self.isAlterBtnSelect;
 //    if (self.isAlterBtnSelect) {
 //        [self.alterBtn setBackgroundImage:nil forState:UIControlStateNormal];
@@ -78,7 +79,7 @@
 
 - (IBAction)deleteBtnAction:(id)sender {
     NSLog(@"%s",__func__);
-    self.addressBlock(sender);
+    self.addressBlock(sender,self.addressInfo);
 //    self.isDeleteBtnSelect = !self.isDeleteBtnSelect;
 //    if (self.isDeleteBtnSelect) {
 //        [self.deleteBtn setBackgroundImage:nil forState:UIControlStateNormal];

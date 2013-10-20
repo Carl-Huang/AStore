@@ -76,10 +76,11 @@ static NSString * cellIdentifier = @"cellIdentifier";
     if (comodityInfo) {
         float floatString1 = [comodityInfo.point floatValue];
         NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString1];
-        float floatString2 = [comodityInfo.mktprice floatValue];
-        NSString * mKPriceStr = [NSString stringWithFormat:@"%.1f",floatString2];
+        //TODO:获取会员总积分
+//        float floatString2 = [comodityInfo.mktprice floatValue];
+//        NSString * mKPriceStr = [NSString stringWithFormat:@"%.1f",floatString2];
         self.costLabel.text = priceStr;
-        self.proceLabel.text = mKPriceStr;
+//        self.proceLabel.text = mKPriceStr;
         NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:comodityInfo.small_pic];
         NSURL *url = [NSURL URLWithString:imageUrlStr];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];

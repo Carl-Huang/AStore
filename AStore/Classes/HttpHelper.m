@@ -357,4 +357,16 @@
         block(nil,error);
     }];
 }
+
++(void)deleteAddressWithAddressId:(NSString *)addId completedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"delAddrs=%@",addId];
+    NSLog(@"%s",__func__);
+    NSLog(@"%@",cmdStr);
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
+}
 @end

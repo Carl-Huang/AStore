@@ -45,7 +45,7 @@
 + (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
 
 
-
+//Added by vedon <<<<<<<<<<<<<<<<<<<
 //提取图片的url
 +(NSString *)extractImageURLWithStr:(NSString *)str;
 
@@ -63,4 +63,8 @@
 
 //更新地址
 +(void)updateAddressId:(NSString *)addr_id name:(NSString *)name area:(NSString *)area addrs:(NSString *)addr mobile:(NSString *)mobile tel:(NSString *)tel withCompletedBlock:(void (^)(id item,NSError * error))block;
+
+//删除地址
++(void)deleteAddressWithAddressId:(NSString *)addId completedBlock:(void (^)(id item,NSError * error))block;
+//EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

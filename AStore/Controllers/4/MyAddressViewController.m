@@ -21,9 +21,12 @@
 #import "AddressInfo.h"
 #import "AppDelegate.h"
 static NSString * cellIdentifier = @"addressCell";
-@interface MyAddressViewController ()
+@interface MyAddressViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     BOOL isAlertViewCanShow;
+    UIBarButtonItem * newItem;
+    UIBarButtonItem * deleteItem;
+    UIBarButtonItem * backItem;
 }
 @property (strong ,nonatomic)NSMutableArray * dataSource;
 
@@ -56,17 +59,23 @@ static NSString * cellIdentifier = @"addressCell";
     [newItemBtn setBackgroundImage:newItemImg forState:UIControlStateNormal];
     [newItemBtn setTitle:@"添加" forState:UIControlStateNormal];
     [newItemBtn addTarget:self action:@selector(newItem) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem * newItem = [[UIBarButtonItem alloc] initWithCustomView:newItemBtn];
+    newItem = [[UIBarButtonItem alloc] initWithCustomView:newItemBtn];
+    
+    UIImage * deleteItemImg = [UIImage imageNamed:@"删除btn"];
+    UIButton * deleteItemBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [deleteItemBtn setFrame:CGRectMake(0, 0, deleteItemImg.size.width, deleteItemImg.size.height)];
+    [deleteItemBtn setBackgroundImage:newItemImg forState:UIControlStateNormal];
+    [deleteItemBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [deleteItemBtn addTarget:self action:@selector(endDeleteMode) forControlEvents:UIControlEventTouchUpInside];
+    deleteItem = [[UIBarButtonItem alloc] initWithCustomView:deleteItemBtn];
     
     UIImage *backImg = [UIImage imageNamed:@"返回btn"];
     UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setFrame:CGRectMake(0, 0, backImg.size.width, backImg.size.height)];
     [backBtn setBackgroundImage:backImg forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(pushBack:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem * backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+    backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
     self.navigationItem.rightBarButtonItems = @[backItem,newItem];
-    backItem = nil;
-    newItem = nil;
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
     isAlertViewCanShow = YES;
@@ -80,6 +89,7 @@ static NSString * cellIdentifier = @"addressCell";
 
 -(void)fetchDataFromServer
 {
+    [self.dataSource removeAllObjects];
     if (memberId) {
         NSLog(@"Member ID :%@",memberId);
         
@@ -127,21 +137,17 @@ static NSString * cellIdentifier = @"addressCell";
 -(void)newItem
 {
     NSLog(@"%s",__func__);
-    //TODO:增加一个地址数据
-    
     ModifyAddressViewController * viewcontroller = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller  = nil;
-    //增加地址数据
-//    NSString *cmdStr = [NSString stringWithFormat:@"addAddrs=bb&&mid=3496&&name=carl2&&area=广东省&&addr=广州市天河区&&mobile=15018492358&&tel=15018492358"];
-//    
-//    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
-//        ;
-//    } errorBlock:^(NSError *error) {
-//        ;
-//    }];
+
 }
 
+-(void)endDeleteMode
+{
+    self.navigationItem.rightBarButtonItems = @[backItem,newItem];
+    [self.addressTable setEditing:NO animated:YES];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -197,6 +203,40 @@ static NSString * cellIdentifier = @"addressCell";
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(UITableViewCellEditingStyle )tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        AddressInfo *cellInfo = [dataSource objectAtIndex:indexPath.row];
+        [HttpHelper deleteAddressWithAddressId:cellInfo.addr_id completedBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }
+            NSArray * array = item;
+            for (NSDictionary * dic in array) {
+                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                    NSLog(@"删除地址成功");
+                }else
+                {
+                    NSLog(@"删除地址失败");
+                }
+            }
+            
+        }];
+        [self.dataSource removeObjectAtIndex:indexPath.row];
+        [self.addressTable reloadData];
+    }
+}
+
 -(void)configureCellBlockWithCell:(AddressCell *)cell
 {
     configureAddressBlock block = ^(id item1,id item2)
@@ -218,7 +258,8 @@ static NSString * cellIdentifier = @"addressCell";
             viewController = nil;
         }else if (btn.tag == deleteBtnTag)
         {
-            
+            self.navigationItem.rightBarButtonItems = @[backItem,deleteItem];
+            [self.addressTable setEditing:YES animated:YES];
         }else
             NSLog(@"Other Tag");
         

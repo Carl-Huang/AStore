@@ -66,5 +66,8 @@
 
 //删除地址
 +(void)deleteAddressWithAddressId:(NSString *)addId completedBlock:(void (^)(id item,NSError * error))block;
+
+//获取赠品
++(void)getGiftWithCompleteBlock:(void (^)(id item,NSError * error))block;
 //EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

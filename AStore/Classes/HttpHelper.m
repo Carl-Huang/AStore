@@ -17,6 +17,7 @@
 #import "GetOrderInfo.h"
 #import "User.h"
 #import "Region.h"
+#import "GetGiftInfo.h"
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
@@ -369,4 +370,18 @@
         block(nil,error);
     }];
 }
+
++(void)getGiftWithCompleteBlock:(void (^)(id, NSError *))block
+{
+    //获取赠品
+    NSString * giftStr = [NSString stringWithFormat:@"getGift=1&&start=0&&count=30"];
+    giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
+    [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+
+}
+
 @end

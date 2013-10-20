@@ -168,7 +168,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">商品兑换</string>
+								<string key="IBUIText">赠品兑换</string>
 								<object class="NSColor" key="IBUITextColor" id="844370441">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -235,6 +235,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{242, 89}, {72, 21}}</string>
 								<reference key="NSSuperview" ref="59539200"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>

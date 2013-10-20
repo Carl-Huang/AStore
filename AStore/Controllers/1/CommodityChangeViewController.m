@@ -8,7 +8,7 @@
 
 #import "CommodityChangeViewController.h"
 #import "CommodityEXCell.h"
-#import "Commodity.h"
+#import "GetGiftInfo.h"
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
@@ -32,7 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:@"商品兑换"];
+    [self setLeftTitle:@"赠品兑换"];
     [self setBackItem:nil];
     
     UINib * cellNib = [UINib nibWithNibName:@"CommodityEXCell" bundle:[NSBundle bundleForClass:[CommodityEXCell class]]];
@@ -43,14 +43,26 @@
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
-    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
-        if ([commoditys count]) {
-            dataSource = commoditys;
-            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-        }
-    } withErrorBlock:^(NSError *error) {
-            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+    CommodityChangeViewController * weakSelf = self;
+    [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }else
+        dataSource = item;
+        
+        
+     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
     }];
+    
+    
+//    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
+//        if ([commoditys count]) {
+//            dataSource = commoditys;
+//            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+//        }
+//    } withErrorBlock:^(NSError *error) {
+//            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+//    }];
 }
 
 -(void)refreshTableView
@@ -95,7 +107,7 @@
 {
     static NSString *CellIdentifier = @"CommodityEXCell";
     CommodityEXCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    Commodity * info = [dataSource objectAtIndex:indexPath.row];
+    GetGiftInfo * info = [dataSource objectAtIndex:indexPath.row];
     NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
     __weak CommodityEXCell *weakCell = cell;
     NSURL *url = [NSURL URLWithString:imageUrlStr];
@@ -109,7 +121,7 @@
                                        }];
 
     cell.titleLabel.text = info.name;
-    cell.pointLabel.text = info.score;
+    cell.pointLabel.text = info.point;
     return cell;
 }
 

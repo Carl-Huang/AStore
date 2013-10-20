@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E00978A1813980900D4DE40 /* PresentCommodityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0097881813980900D4DE40 /* PresentCommodityViewController.m */; };
+		4E00978B1813980900D4DE40 /* PresentCommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E0097891813980900D4DE40 /* PresentCommodityViewController.xib */; };
+		4E00978F18139CC600D4DE40 /* PresentCommodityDesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */; };
+		4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */; };
 		4E4AD2481812922B00726E60 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4AD2471812922B00726E60 /* Region.m */; };
 		4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA9637A18051D9B00E9B54B /* userInfo.m */; };
 		4EAD6C831807C7AB00B3F887 /* GetOrderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD6C821807C7AB00B3F887 /* GetOrderInfo.m */; };
@@ -245,6 +249,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E0097871813980800D4DE40 /* PresentCommodityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentCommodityViewController.h; sourceTree = "<group>"; };
+		4E0097881813980900D4DE40 /* PresentCommodityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentCommodityViewController.m; sourceTree = "<group>"; };
+		4E0097891813980900D4DE40 /* PresentCommodityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresentCommodityViewController.xib; sourceTree = "<group>"; };
+		4E00978C18139CC400D4DE40 /* PresentCommodityDesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentCommodityDesViewController.h; sourceTree = "<group>"; };
+		4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentCommodityDesViewController.m; sourceTree = "<group>"; };
+		4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresentCommodityDesViewController.xib; sourceTree = "<group>"; };
 		4E4AD2461812922B00726E60 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		4E4AD2471812922B00726E60 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		4EA9637918051D9B00E9B54B /* userInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userInfo.h; sourceTree = "<group>"; };
@@ -688,7 +698,6 @@
 		C342179D17F1E1F500B42F5E = {
 			isa = PBXGroup;
 			children = (
-				C3845CE517F3F63500DED3C5 /* QuartzCore.framework */,
 				C34217AF17F1E1F500B42F5E /* AStore */,
 				C34217A817F1E1F500B42F5E /* Frameworks */,
 				C34217A717F1E1F500B42F5E /* Products */,
@@ -706,6 +715,7 @@
 		C34217A817F1E1F500B42F5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C3845CE517F3F63500DED3C5 /* QuartzCore.framework */,
 				C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */,
 				C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */,
 				C3845C9917F3D8BD00DED3C5 /* Security.framework */,
@@ -975,6 +985,12 @@
 				C38262E717F6D03E00C96A38 /* NoticeContentViewController.m */,
 				C38262E817F6D03F00C96A38 /* NoticeContentViewController.xib */,
 				C37DA8A1180C535400F08B92 /* CommodityButton.xib */,
+				4E0097871813980800D4DE40 /* PresentCommodityViewController.h */,
+				4E0097881813980900D4DE40 /* PresentCommodityViewController.m */,
+				4E0097891813980900D4DE40 /* PresentCommodityViewController.xib */,
+				4E00978C18139CC400D4DE40 /* PresentCommodityDesViewController.h */,
+				4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */,
+				4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */,
 			);
 			path = 1;
 			sourceTree = "<group>";
@@ -1292,6 +1308,8 @@
 				4EB6C1DF180C6FCF0098E6F1 /* MainCell6.xib in Resources */,
 				4EBDD079180F72FE00CB4CC5 /* YHJDetailViewController.xib in Resources */,
 				4EE31C20181263FB00384992 /* AddAddressCell.xib in Resources */,
+				4E00978B1813980900D4DE40 /* PresentCommodityViewController.xib in Resources */,
+				4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1384,6 +1402,8 @@
 				4EBDD078180F72FE00CB4CC5 /* YHJDetailViewController.m in Sources */,
 				4EE31C1E181263E700384992 /* AddAddressCell.m in Sources */,
 				4E4AD2481812922B00726E60 /* Region.m in Sources */,
+				4E00978A1813980900D4DE40 /* PresentCommodityViewController.m in Sources */,
+				4E00978F18139CC600D4DE40 /* PresentCommodityDesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

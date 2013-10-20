@@ -8,8 +8,10 @@
 #define FirstPickerViewTag      101
 #define SecondPickerViewTag     102
 #define ThirdPickerViewTag      103
+#define FixedTextFieldTag       201
 #define PickerViewOffsetY       -140
 #define AssociateObjcKey        @"associateobjkey"
+
 
 #import "ModifyAddressViewController.h"
 #import "UIViewController+LeftTitle.h"
@@ -20,7 +22,7 @@
 #import "User.h"
 #import "AppDelegate.h"
 #import "AddressInfo.h"
-
+#import "MyAddressViewController.h"
 static NSString * const cellIdentifier = @"cellIdentifier";
 @interface ModifyAddressViewController ()<UITableViewDataSource,UITableViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate>
 {
@@ -37,6 +39,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     
     NSString * addressTextFieldText;
     UIView * viewforPickerView;
+    CGRect originTableFrame;
 }
 @property (strong ,nonatomic)UIPickerView * pickerViewOne;
 @property (strong ,nonatomic)UIPickerView * pickerViewTwo;
@@ -98,7 +101,8 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         secondPickerViewSelectedStr = @"";
         thirdPickerViewSelectedStr  = @"";
     }
-
+    [self setupTextField];
+    originTableFrame = self.addressTable.frame;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -113,7 +117,9 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 
 -(void)resetTableviewFrame
 {
-    self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, -PickerViewOffsetY);
+    [UIView animateWithDuration:0.3 animations:^{
+        self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, -PickerViewOffsetY);
+    }];
 }
 
 -(void)getRegionTyepWithDataArray:(NSArray *)array
@@ -328,6 +334,13 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate removeLoadingViewWithView:nil];
+    NSArray * viewControllers = self.navigationController.viewControllers;
+    for (UIViewController * viewController in viewControllers) {
+        if ([viewController isKindOfClass:[MyAddressViewController class]]) {
+            [viewController performSelector:@selector(fetchDataFromServer)];
+        }
+    }
+    
     //回到上一层界面
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -335,9 +348,38 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 {
     textFieldConfigureBlock block = ^(id item)
     {
+        if (originTableFrame.origin.y == self.addressTable.frame.origin.y) {
+            [UIView animateWithDuration:0.3 animations:^{
+                self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY+40);
+            }];
+        }else
+        {
+            [UIView animateWithDuration:0.3 animations:^{
+                 self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,-PickerViewOffsetY-40);
+            }];
+        }
+        
         addressTextFieldText = (NSString *)item;
     };
     return block;
+}
+
+-(void)setupTextField
+{
+    CGRect textFieldRect = CGRectMake(95, 10, 260, 50);
+    nameField = [[UITextField alloc]initWithFrame:textFieldRect];
+    nameField.text = name;
+    nameField.delegate = self;
+    
+    phoneField = [[UITextField alloc]initWithFrame:textFieldRect];
+    phoneField.text = phone;
+    phoneField.delegate =self;
+    
+    fixedTelField = [[UITextField alloc]initWithFrame:textFieldRect];
+    fixedTelField.delegate = self;
+    fixedTelField.text = tel;
+    fixedTelField.tag = FixedTextFieldTag;
+    fixedTelField.returnKeyType = UIReturnKeyDone;
 }
 #pragma mark - UITableViewDelegate
 
@@ -374,30 +416,20 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         normalCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"normalCell"];
         normalCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    CGRect textFieldRect = CGRectMake(95, 10, 260, 50);
+    
     if(indexPath.row == 0)
     {
         normalCell.textLabel.text = @"*姓名: ";
-        nameField = [[UITextField alloc]initWithFrame:textFieldRect];
-        nameField.text = name;
-        nameField.delegate = self;
         [normalCell.contentView addSubview:nameField];
-        
     }
     if(indexPath.row == 1)
     {
         normalCell.textLabel.text = @"*手机: ";
-        phoneField = [[UITextField alloc]initWithFrame:textFieldRect];
-        phoneField.text = phone;
-        phoneField.delegate =self;
         [normalCell.contentView addSubview:phoneField];
     }
     if(indexPath.row == 2)
     {
         normalCell.textLabel.text = @"固定电话: ";
-        fixedTelField = [[UITextField alloc]initWithFrame:textFieldRect];
-        fixedTelField.delegate = self;
-        fixedTelField.text = tel;
         [normalCell.contentView addSubview:fixedTelField];
     }
     if (indexPath.row == 3) {
@@ -405,20 +437,26 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setFirstBlock:^()
          {
-             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             [UIView animateWithDuration:0.3 animations:^{
+                 self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             }];
              [viewforPickerView setHidden:NO];
              [pickerViewOne setHidden:NO];
          }
          ];
         [cell setSecondBlock:^()
          {
-             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, PickerViewOffsetY);
+             [UIView animateWithDuration:0.3 animations:^{
+                 self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             }];
              [viewforPickerView setHidden:NO];
              [pickerViewTwo setHidden:NO];
          }];
         [cell setThirdBlock:^()
          {
-             self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             [UIView animateWithDuration:0.3 animations:^{
+                 self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY);
+             }];
              [viewforPickerView setHidden:NO];
              [pickerViewThree setHidden:NO];
          }];

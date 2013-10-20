@@ -84,12 +84,14 @@ static NSString * cellIdentifier = @"addressCell";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self fetchDataFromServer];
+     if ([dataSource count] == 0) {
+         [self fetchDataFromServer];
+     }
 }
 
 -(void)fetchDataFromServer
 {
-    [self.dataSource removeAllObjects];
+    MyAddressViewController *weakSelf= self;
     if (memberId) {
         NSLog(@"Member ID :%@",memberId);
         
@@ -97,6 +99,7 @@ static NSString * cellIdentifier = @"addressCell";
     NSString *cmdStr = [NSString stringWithFormat:@"getAddrs=%@",memberId];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
+        [weakSelf.dataSource removeAllObjects];
         for (AddressInfo * address in items) {
             [dataSource addObject:address];
         }
@@ -109,7 +112,6 @@ static NSString * cellIdentifier = @"addressCell";
             NSLog(@"获取地址失败：%@",[error description]);
         }
     }];
-
 }
 
 -(void)reloadTableview

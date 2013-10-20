@@ -114,6 +114,7 @@
 {
     NSData * data = [NSKeyedArchiver archivedDataWithRootObject:array];
     [[NSUserDefaults standardUserDefaults]setObject:data forKey:@"CommodityArray"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
 }
 
 +(NSArray *)unarchivingCommodityArray

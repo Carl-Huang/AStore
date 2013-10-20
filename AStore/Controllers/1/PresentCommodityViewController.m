@@ -50,8 +50,26 @@ static NSString * cellIdentifier = @"cellIdentifier";
 {
     [super viewDidLoad];
     [self setLeftTitle:@"赠品兑换"];
-    [self setBackItem:nil];
     self.commodityTableView.backgroundColor = [UIColor clearColor];
+    
+    
+    UIImage * exchangeBtnImage = [UIImage imageNamed:@"删除btn"];
+    UIButton * exchangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [exchangeBtn setFrame:CGRectMake(0, 0, exchangeBtnImage.size.width, exchangeBtnImage.size.height)];
+    [exchangeBtn setBackgroundImage:exchangeBtnImage forState:UIControlStateNormal];
+    [exchangeBtn setTitle:@"兑换" forState:UIControlStateNormal];
+    [exchangeBtn addTarget:self action:@selector(exchangeItem) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem * exchangeBarBtn = [[UIBarButtonItem alloc] initWithCustomView:exchangeBtn];
+    
+    UIImage *backImg = [UIImage imageNamed:@"返回btn"];
+    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBtn setFrame:CGRectMake(0, 0, backImg.size.width, backImg.size.height)];
+    [backBtn setBackgroundImage:backImg forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(pushBack) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem * backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+    
+    self.navigationItem.rightBarButtonItems = @[backItem,exchangeBarBtn];
     [self initializedInterface];
     
     // Do any additional setup after loading the view from its nib.
@@ -64,11 +82,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self.commodityTableView deselectRowAtIndexPath:tableSelection animated:NO];
 }
 
--(void)viewWillDisappear:(BOOL)animated
-{
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//    [Commodity archivingCommodityArray:myDelegate.commodityArray];
 
+-(void)exchangeItem
+{
+    
+}
+
+-(void)pushBack
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)initializedInterface
 {

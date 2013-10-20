@@ -39,7 +39,7 @@
     //webView
     NSString *htmlContent = [self analysisStr:comodityInfo.intro];
     [self.webViewDes loadHTMLString:htmlContent baseURL:nil];
-    self.webViewDes.scalesPageToFit = YES;
+//    [self.webViewDes setScalesPageToFit:YES];
 
     
     // Do any additional setup after loading the view from its nib.
@@ -84,5 +84,13 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
+    CGSize contentSize = self.webViewDes.scrollView.contentSize;
+    CGSize viewSize = self.view.bounds.size;
+    
+    float rw = viewSize.width / contentSize.width;
+    
+    _webViewDes.scrollView.minimumZoomScale = rw;
+    _webViewDes.scrollView.maximumZoomScale = rw;
+    _webViewDes.scrollView.zoomScale = rw;
 }
 @end

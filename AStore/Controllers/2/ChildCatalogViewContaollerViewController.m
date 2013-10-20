@@ -67,16 +67,18 @@ static NSString * cellIdentifier = @"cellIdentifier";
 //根据相应的cat_id从服务器获取资料
 -(void)fetchDataFromServer
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate  showLoginViewOnView:self.view];
-
-    [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        dataSource = commoditys;
-        [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
-        NSLog(@"%@",commoditys);
-    } withErrorBlock:^(NSError *error) {
-        [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
-    }];
+    if (dataSource == nil) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate  showLoginViewOnView:self.view];
+        
+        [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+            dataSource = commoditys;
+            [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
+            NSLog(@"%@",commoditys);
+        } withErrorBlock:^(NSError *error) {
+            [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
+        }];
+    }
 }
 
 

@@ -47,10 +47,20 @@
     self.thirdBlock();
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    self.textFieldBlock(textField.text);
+    return YES;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.textFieldBlock(textField.text);
+}
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if ([string isEqualToString:@"\n"]) {
-        self.textFieldBlock(textField.text);
+//        self.textFieldBlock(textField.text);
         [textField resignFirstResponder];
         return NO;
     }

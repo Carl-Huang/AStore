@@ -286,18 +286,26 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if ([productId isEqualToString:info.product_id] ) {
             if (action == MinusAction) {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                num -= 1;
-                dic[@"count"] = [NSNumber numberWithInteger:num];
-                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                if (num == 0) {
+                    //当货物数量到0件时，删除该数据
+                    [myDelegate.commodityArray removeObjectAtIndex:i];
+                    [self.cartTable reloadData];
+                }else
+                {
+                    //减少货物数量
+                    num -= 1;
+                    dic[@"count"] = [NSNumber numberWithInteger:num];
+                    [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                }
+                               
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
                 num += 1;
                 dic[@"count"] = [NSNumber numberWithInteger:num];
                 [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
-
             }
-            
+            [Commodity archivingCommodityArray:myDelegate.commodityArray];
         }
     }
 }

@@ -244,6 +244,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 }
 
 - (IBAction)putInCartAction:(id)sender {
+    NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     NSInteger count = 1;
     BOOL canAddObj = YES;
@@ -266,6 +267,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else
     {
         [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
+        [Commodity archivingCommodityArray:myDelegate.commodityArray];
     }
 //   objc_setAssociatedObject(self.comodityInfo, (__bridge const void *)(self.comodityInfo.product_id), [NSNumber numberWithInt:count], OBJC_ASSOCIATION_COPY);
 

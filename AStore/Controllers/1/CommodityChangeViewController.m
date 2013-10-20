@@ -12,6 +12,7 @@
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
+#import "PresentCommodityViewController.h"
 @interface CommodityChangeViewController ()
 @property (strong ,nonatomic) NSArray * dataSource;
 @end
@@ -41,28 +42,20 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate showLoginViewOnView:self.view];
-    CommodityChangeViewController * weakSelf = self;
-    [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
-        if (error) {
-            NSLog(@"%@",[error description]);
-        }else
-        dataSource = item;
+    if (dataSource == nil) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate showLoginViewOnView:self.view];
+        CommodityChangeViewController * weakSelf = self;
         
-        
-     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-    }];
-    
-    
-//    [HttpHelper getGifCommodityWithSuccessBlock:^(NSArray *commoditys) {
-//        if ([commoditys count]) {
-//            dataSource = commoditys;
-//            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-//        }
-//    } withErrorBlock:^(NSError *error) {
-//            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-//    }];
+        [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }else
+                dataSource = item;
+            [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        }];
+
+    }
 }
 
 -(void)refreshTableView
@@ -122,6 +115,7 @@
 
     cell.titleLabel.text = info.name;
     cell.pointLabel.text = info.point;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -131,7 +125,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    GetGiftInfo * info  = [dataSource objectAtIndex:indexPath.row];
+    PresentCommodityViewController * viewController = [[PresentCommodityViewController alloc]initWithNibName:@"PresentCommodityViewController" bundle:nil];
+    [viewController setComodityInfo:info];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
 }
 
 @end

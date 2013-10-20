@@ -30,7 +30,7 @@ static NSString * cellIdentifier = @"cellidentifier";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        dataSource = [[NSArray alloc]init];
+        dataSource = nil;
     }
     return self;
 }
@@ -62,15 +62,16 @@ static NSString * cellIdentifier = @"cellidentifier";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        if (commoditys) {
-            dataSource = commoditys;
-            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-        }
-    } withErrorBlock:^(NSError *error) {
-        ;
-    }];
-
+    if (dataSource == nil) {
+        [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+            if (commoditys) {
+                dataSource = commoditys;
+                [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+            }
+        } withErrorBlock:^(NSError *error) {
+            ;
+        }];
+    }
 }
 
 -(void)refreshTableView

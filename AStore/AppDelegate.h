@@ -15,6 +15,7 @@
 @property (strong, nonatomic) AKTabBarController * akTabBarController;
 @property (strong ,nonatomic) MBProgressHUD * loadingView;
 @property (strong ,nonatomic) NSMutableArray * commodityArray;
+@property (strong ,nonatomic) NSMutableArray * presentArray;
 -(void)showLoginViewOnView:(UIView *)view;
 -(void)removeLoadingViewWithView:(UIView *)view;
 @end

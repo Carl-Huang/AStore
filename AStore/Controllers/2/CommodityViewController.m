@@ -16,6 +16,7 @@
 #import "LoginViewController.h"
 #import "HttpHelper.h"
 #import <objc/runtime.h>
+#import "NSMutableArray+SaveCustomiseData.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -67,7 +68,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 -(void)viewWillDisappear:(BOOL)animated
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [Commodity archivingCommodityArray:myDelegate.commodityArray];
+//    [Commodity archivingCommodityArray:myDelegate.commodityArray];
+    [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
 
 }
 -(void)initializedInterface
@@ -267,7 +269,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else
     {
         [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
-        [Commodity archivingCommodityArray:myDelegate.commodityArray];
+        [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
     }
 //   objc_setAssociatedObject(self.comodityInfo, (__bridge const void *)(self.comodityInfo.product_id), [NSNumber numberWithInt:count], OBJC_ASSOCIATION_COPY);
 

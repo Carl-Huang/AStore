@@ -9,7 +9,7 @@
 #define SecondPickerViewTag     102
 #define ThirdPickerViewTag      103
 #define FixedTextFieldTag       201
-#define PickerViewOffsetY       -140
+#define PickerViewOffsetY       (([[UIScreen mainScreen] bounds].size.height == 568)?0:-140)
 #define AssociateObjcKey        @"associateobjkey"
 
 
@@ -176,7 +176,9 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     }else
     {
        //TODO:4英寸屏适配
-        
+        rect  = CGRectMake(0, 44, 320, 256);
+        rectViewForPickerView = CGRectMake(0, 240, 320, 300);
+
     }
 
     viewforPickerView = [[UIView alloc]initWithFrame:rectViewForPickerView];
@@ -349,14 +351,20 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     textFieldConfigureBlock block = ^(id item)
     {
         if (originTableFrame.origin.y == self.addressTable.frame.origin.y) {
-            [UIView animateWithDuration:0.3 animations:^{
-                self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY+40);
-            }];
+            if (!IS_SCREEN_4_INCH) {
+                [UIView animateWithDuration:0.3 animations:^{
+                    self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,PickerViewOffsetY+40);
+                }];
+            }
+        
         }else
         {
-            [UIView animateWithDuration:0.3 animations:^{
-                 self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,-PickerViewOffsetY-40);
-            }];
+            if (!IS_SCREEN_4_INCH) {
+                [UIView animateWithDuration:0.3 animations:^{
+                    self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0,-PickerViewOffsetY-40);
+                }];
+            }
+        
         }
         
         addressTextFieldText = (NSString *)item;

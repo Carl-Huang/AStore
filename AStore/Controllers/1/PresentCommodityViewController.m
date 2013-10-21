@@ -16,6 +16,7 @@
 #import "HttpHelper.h"
 #import "GetGiftInfo.h"
 #import "PresentCommodityDesViewController.h"
+#import "NSMutableArray+SaveCustomiseData.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -85,7 +86,31 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)exchangeItem
 {
-    
+    NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSInteger count = 1;
+    BOOL canAddObj = YES;
+    if ([myDelegate.presentArray count] != 0) {
+        for (int i = 0; i<[myDelegate.presentArray count] ;i++) {
+            NSMutableDictionary * infoDic = [[myDelegate.presentArray objectAtIndex:i]mutableCopy];
+            
+            GetGiftInfo * info = [infoDic objectForKey:@"present"];
+            if ([info.gift_id isEqualToString:self.comodityInfo.gift_id]) {
+                count = [[infoDic objectForKey:@"count"]integerValue];
+                count ++;
+                infoDic[@"count"] = [NSNumber numberWithInteger:count];
+                [myDelegate.presentArray replaceObjectAtIndex:i withObject:infoDic];
+                canAddObj = NO;
+            }
+        }
+        if (canAddObj) {
+            [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
+        }
+    }else
+    {
+        [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
+        [NSMutableArray archivingCommodityArray:myDelegate.presentArray withKey:@"PresentArray"];
+    }
 }
 
 -(void)pushBack

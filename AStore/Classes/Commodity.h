@@ -33,7 +33,5 @@
 +(void)printCommodityInfo:(Commodity *)info;
 +(void)archivingCommodityObj:(Commodity *)item;
 +(Commodity *)unarchivingCommodityObj;
-+(void)archivingCommodityArray:(NSArray * )array;
-+(NSArray *)unarchivingCommodityArray;
-+(void)removeCommodityArray;
+
 @end

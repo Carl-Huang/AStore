@@ -11,6 +11,9 @@
 		4E00978B1813980900D4DE40 /* PresentCommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E0097891813980900D4DE40 /* PresentCommodityViewController.xib */; };
 		4E00978F18139CC600D4DE40 /* PresentCommodityDesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */; };
 		4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */; };
+		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
+		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
+		4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */; };
 		4E4AD2481812922B00726E60 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4AD2471812922B00726E60 /* Region.m */; };
 		4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA9637A18051D9B00E9B54B /* userInfo.m */; };
 		4EAD6C831807C7AB00B3F887 /* GetOrderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD6C821807C7AB00B3F887 /* GetOrderInfo.m */; };
@@ -255,6 +258,12 @@
 		4E00978C18139CC400D4DE40 /* PresentCommodityDesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentCommodityDesViewController.h; sourceTree = "<group>"; };
 		4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentCommodityDesViewController.m; sourceTree = "<group>"; };
 		4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresentCommodityDesViewController.xib; sourceTree = "<group>"; };
+		4E06566218156FFD00AB6216 /* GetOrderGoodInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGoodInfo.h; sourceTree = "<group>"; };
+		4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGoodInfo.m; sourceTree = "<group>"; };
+		4E0656651815722700AB6216 /* GetOrderGiftInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGiftInfo.h; sourceTree = "<group>"; };
+		4E0656661815722700AB6216 /* GetOrderGiftInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGiftInfo.m; sourceTree = "<group>"; };
+		4E1189951815031300081C01 /* NSMutableArray+SaveCustomiseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+SaveCustomiseData.h"; sourceTree = "<group>"; };
+		4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+SaveCustomiseData.m"; sourceTree = "<group>"; };
 		4E4AD2461812922B00726E60 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		4E4AD2471812922B00726E60 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		4EA9637918051D9B00E9B54B /* userInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userInfo.h; sourceTree = "<group>"; };
@@ -619,6 +628,10 @@
 				4EAD6C881807DD7900B3F887 /* CategoryInfo.m */,
 				4E4AD2461812922B00726E60 /* Region.h */,
 				4E4AD2471812922B00726E60 /* Region.m */,
+				4E06566218156FFD00AB6216 /* GetOrderGoodInfo.h */,
+				4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */,
+				4E0656651815722700AB6216 /* GetOrderGiftInfo.h */,
+				4E0656661815722700AB6216 /* GetOrderGiftInfo.m */,
 			);
 			name = Model;
 			path = Classes;
@@ -1107,6 +1120,8 @@
 				4EB7889F1803D4E300DAF3E5 /* RegularExpressions.m */,
 				4EB788A11803D54C00DAF3E5 /* User.h */,
 				4EB788A21803D54C00DAF3E5 /* User.m */,
+				4E1189951815031300081C01 /* NSMutableArray+SaveCustomiseData.h */,
+				4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1404,6 +1419,9 @@
 				4E4AD2481812922B00726E60 /* Region.m in Sources */,
 				4E00978A1813980900D4DE40 /* PresentCommodityViewController.m in Sources */,
 				4E00978F18139CC600D4DE40 /* PresentCommodityDesViewController.m in Sources */,
+				4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */,
+				4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */,
+				4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

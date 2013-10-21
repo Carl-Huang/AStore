@@ -69,5 +69,13 @@
 
 //获取赠品
 +(void)getGiftWithCompleteBlock:(void (^)(id item,NSError * error))block;
+
+//获取订单
++(void)getOrderWithMemberId:(NSString *)memberId withCompletedBlock:(void (^)(id item,NSError * error))block;
+//获取订单商品的详细信息
++(void)getOrderDetailWithOrderId:(NSString *)orderId withCompletedBlock:(void (^)(id item,NSError * error))block;
+
+//获取订单赠品的详细信息
++(void)getOrderDetailWithGiftId:(NSString *)orderId withCompletedBlock:(void (^)(id item,NSError * error))block;
 //EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

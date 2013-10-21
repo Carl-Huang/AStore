@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GetGiftInfo : NSObject
+@interface GetGiftInfo : NSObject<NSCoding>
 @property (strong ,nonatomic) NSString * gift_id;           //赠品ID
 @property (strong ,nonatomic) NSString * name;
+@property (strong ,nonatomic) NSString * weight;
 @property (strong ,nonatomic) NSString * storage;
 @property (strong ,nonatomic) NSString * small_pic;         //图片路径
 @property (strong ,nonatomic) NSString * point;             //赠品兑换所需积分

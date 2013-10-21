@@ -16,5 +16,9 @@
 @property (strong ,nonatomic) NSString * status;        //状态
 @property (strong ,nonatomic) NSString * acttime;       //下单时间
 
+@property (strong ,nonatomic) NSString * final_amount;
+@property (strong ,nonatomic) NSString * cost_freight;
+@property (strong ,nonatomic) NSString * score_g;
+@property (strong ,nonatomic) NSString * score_u;
 
 @end

@@ -18,8 +18,8 @@
 #import "Commodity.h"
 #import "HttpHelper.h"
 #import "UIImageView+AFNetworking.h"
-#import <objc/runtime.h>
-
+#import "NSMutableArray+SaveCustomiseData.h"
+#import "GetGiftInfo.h"
 typedef NS_ENUM(NSInteger, ActionType)
 {
     PlusAction = 1,
@@ -41,9 +41,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        dataSource = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"5"}];
-        
-        giftArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"限量:20",JiFen:@"1000"}];
     }
     return self;
 }
@@ -86,6 +83,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     self.dataSource  = myDelegate.commodityArray;
+    self.giftArray = myDelegate.presentArray;
     [self.cartTable reloadData];
 
 }
@@ -219,11 +217,14 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                                         NSLog(@"下载图片失败");
                                                     }];
-            cell.commodityId = info.product_id;
+            cell.type = CommodityCellType;
+            cell.Id = info.product_id;
             cell.productName.text = info.name;
             cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
             float floatString = [info.price floatValue];
             NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
+            
+            //金额
             cell.MoneySum.text = priceStr;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
@@ -238,17 +239,46 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"积分:";
             headerCell.moneyValue.text = @"1000";
+            float sum = 0;
+            for (NSDictionary  * infoDic in giftArray) {
+                GetGiftInfo * info = [infoDic objectForKey:@"present"];
+                NSInteger num = [[infoDic objectForKey:@"count"]integerValue];
+                float price = [info.point floatValue];
+                sum += price*num;
+            }
+             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
             return headerCell;
         }else
         {
-            NSInteger row = indexPath.row -1;
-            cell.productImage.image = [UIImage imageNamed:[[giftArray objectAtIndex:row]objectForKey:ProductImage]];
-            cell.productName.text = [[giftArray objectAtIndex:row]objectForKey:ProductName];
-            cell.productNumber.text = [[giftArray objectAtIndex:row]objectForKey:ProductNumber];
-            cell.MoneySum.text = [[giftArray objectAtIndex:row]objectForKey:ProductPrice];
             [cell.jifenLabel setHidden:NO];
-            cell.jifen.text = [[giftArray objectAtIndex:row]objectForKey:JiFen];
+            [cell.jifen setHidden:NO];
+            NSInteger row = indexPath.row -1;
+            NSDictionary * dic = [giftArray objectAtIndex:row];
+            NSNumber * produceNum = [dic objectForKey:@"count"];
+            GetGiftInfo * info = [dic objectForKey:@"present"];
+            NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+            __weak CartCell *weakCell = cell;
+            NSURL *url = [NSURL URLWithString:imageUrlStr];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+            [cell.productImage setImageWithURLRequest:request placeholderImage:nil
+                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                  [weakCell.productImage setImage:image];
+                                                  [weakCell setNeedsLayout];
+                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                  NSLog(@"下载图片失败");
+                                              }];
+            cell.type = PresentCellType;
+            cell.Id = info.gift_id;
+            cell.productName.text = info.name;
+            cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
+            float floatString = [info.point floatValue];
+            //积分
+            NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
+            cell.jifen.text = priceStr;
+            //限量
+            NSString * str = [NSString stringWithFormat:@"限量:%@",info.limit_num];
+            cell.MoneySum.text = str;
         }
 
     }
@@ -257,10 +287,16 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(CarCellMinusBlock)cellMinusBlock
 {
-    CarCellMinusBlock block = ^(id item)
+    CarCellMinusBlock block = ^(id item,CellType type)
     {
         NSLog(@"%s",__func__);
-        [self alterCommodityNumWithId:(NSString *)item withAction:MinusAction];
+        if (type == CommodityCellType) {
+             [self alterCommodityNumWithId:(NSString *)item withAction:MinusAction];
+        }else
+        {
+            [self alterPresentNumWithId:(NSString *)item withAction:MinusAction];
+        }
+       
         [self.cartTable reloadData];
     };
     return block;
@@ -268,10 +304,16 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(CarCellPlusBlock)cellPlusBlock
 {
-    CarCellPlusBlock block = ^(id item)
+    CarCellPlusBlock block = ^(id item,CellType type)
     {
         NSLog(@"%s",__func__);
-        [self alterCommodityNumWithId:(NSString *)item withAction:PlusAction];
+        if (type == CommodityCellType) {
+            [self alterCommodityNumWithId:(NSString *)item withAction:PlusAction];
+        }else
+        {
+            [self alterPresentNumWithId:(NSString *)item withAction:PlusAction];
+        }
+        
         [self.cartTable reloadData];
     };
     return block;
@@ -305,7 +347,41 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 dic[@"count"] = [NSNumber numberWithInteger:num];
                 [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
             }
-            [Commodity archivingCommodityArray:myDelegate.commodityArray];
+            [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+        }
+    }
+}
+
+
+-(void)alterPresentNumWithId:(NSString * )productId withAction:(NSInteger)action
+{
+    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+    for (int i = 0;i<[myDelegate.presentArray count];i++) {
+        NSMutableDictionary * dic = [[myDelegate.presentArray objectAtIndex:i]mutableCopy];
+        GetGiftInfo * info = [dic objectForKey:@"present"];
+        if ([productId isEqualToString:info.gift_id] ) {
+            if (action == MinusAction) {
+                NSInteger  num = [[dic objectForKey:@"count"]integerValue];
+                if (num == 0) {
+                    //当货物数量到0件时，删除该数据
+                    [myDelegate.presentArray removeObjectAtIndex:i];
+                    [self.cartTable reloadData];
+                }else
+                {
+                    //减少货物数量
+                    num -= 1;
+                    dic[@"count"] = [NSNumber numberWithInteger:num];
+                    [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
+                }
+                
+            }else
+            {
+                NSInteger  num = [[dic objectForKey:@"count"]integerValue];
+                num += 1;
+                dic[@"count"] = [NSNumber numberWithInteger:num];
+                [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
+            }
+            [NSMutableArray archivingCommodityArray:myDelegate.presentArray withKey:@"PresentArray"];
         }
     }
 }

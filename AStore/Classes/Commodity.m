@@ -109,26 +109,4 @@
     Commodity * item = (Commodity *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
     return  item;
 }
-
-+(void)archivingCommodityArray:(NSArray * )array
-{
-    NSData * data = [NSKeyedArchiver archivedDataWithRootObject:array];
-    [[NSUserDefaults standardUserDefaults]setObject:data forKey:@"CommodityArray"];
-    [[NSUserDefaults standardUserDefaults]synchronize];
-}
-
-+(NSArray *)unarchivingCommodityArray
-{
-    NSData * data = [[NSUserDefaults standardUserDefaults]objectForKey:@"CommodityArray"];
-    NSArray * array = (NSArray * )[NSKeyedUnarchiver unarchiveObjectWithData:data];
-    if (array) {
-        return array;
-    }
-    return nil;
-}
-+(void)removeCommodityArray
-{
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"CommodityArray"];
-    [[NSUserDefaults standardUserDefaults]synchronize];
-}
 @end

@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "Commodity.h"
-typedef void (^CarCellMinusBlock)(id item);
-typedef void (^CarCellPlusBlock)(id item);
+
+typedef NS_ENUM(NSInteger, CellType)
+{
+    CommodityCellType = 1,
+    PresentCellType = 2,
+    DefaultCellType = 3,
+};
+
+typedef void (^CarCellMinusBlock)(id item,CellType type);
+typedef void (^CarCellPlusBlock)(id item,CellType type);
 @interface CartCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *productImage;
 @property (weak, nonatomic) IBOutlet UILabel *productName;
@@ -17,7 +25,9 @@ typedef void (^CarCellPlusBlock)(id item);
 @property (weak, nonatomic) IBOutlet UILabel *productNumber;
 @property (weak, nonatomic) IBOutlet UILabel *jifenLabel;
 @property (weak, nonatomic) IBOutlet UILabel *jifen;
-@property (strong ,nonatomic) NSString * commodityId;
+@property (assign ,nonatomic) CellType type;
+
+@property (strong ,nonatomic) NSString * Id;
 @property (strong ,nonatomic) CarCellPlusBlock plusBlock;
 @property (strong ,nonatomic) CarCellMinusBlock munisBlock;
 - (IBAction)minusAction:(id)sender;

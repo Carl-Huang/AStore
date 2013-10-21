@@ -18,6 +18,8 @@
 #import "User.h"
 #import "Region.h"
 #import "GetGiftInfo.h"
+#import "GetOrderGoodInfo.h"
+#import "GetOrderGiftInfo.h"
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
@@ -384,4 +386,36 @@
 
 }
 
+
++(void)getOrderWithMemberId:(NSString *)memberId withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * strCmd = [NSString stringWithFormat:@"getOrders=%@",memberId];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[GetOrderInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+}
++(void)getOrderDetailWithOrderId:(NSString *)orderId withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * strCmd = [NSString stringWithFormat:@"getOrders_dtl_good=%@",orderId];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[GetOrderGoodInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+}
+
++(void)getOrderDetailWithGiftId:(NSString *)orderId withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * strCmd = [NSString stringWithFormat:@"getOrders_dtl_gift=%@",orderId];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[GetOrderGiftInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+}
 @end

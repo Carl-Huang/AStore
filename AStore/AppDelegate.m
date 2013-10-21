@@ -20,7 +20,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     commodityArray = [[NSMutableArray alloc]init];
-    self.commodityArray = (NSMutableArray *)[Commodity unarchivingCommodityArray];
+    if ([Commodity unarchivingCommodityArray]) {
+        self.commodityArray = (NSMutableArray *)[Commodity unarchivingCommodityArray];
+    }
+//    self.commodityArray = (NSMutableArray *)[Commodity unarchivingCommodityArray];
     [self customUI];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.

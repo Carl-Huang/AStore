@@ -121,7 +121,10 @@
 {
     NSData * data = [[NSUserDefaults standardUserDefaults]objectForKey:@"CommodityArray"];
     NSArray * array = (NSArray * )[NSKeyedUnarchiver unarchiveObjectWithData:data];
-    return array;
+    if (array) {
+        return array;
+    }
+    return nil;
 }
 +(void)removeCommodityArray
 {

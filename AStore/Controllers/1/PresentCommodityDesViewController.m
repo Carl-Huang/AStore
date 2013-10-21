@@ -39,7 +39,8 @@
     //webView
     NSString *htmlContent = [self analysisStr:comodityInfo.intro];
     [self.webViewDes loadHTMLString:htmlContent baseURL:nil];
-//    [self.webViewDes setScalesPageToFit:YES];
+    [self.webViewDes setScalesPageToFit:YES];
+    [self.webViewDes setAutoresizingMask:UIViewAutoresizingFlexibleWidth |UIViewAutoresizingFlexibleHeight];
 
     
     // Do any additional setup after loading the view from its nib.

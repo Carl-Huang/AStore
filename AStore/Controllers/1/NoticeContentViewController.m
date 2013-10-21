@@ -34,6 +34,8 @@
     [self.contentWebView loadHTMLString:contentStr baseURL:nil];
     self.contentWebView.delegate = self;
     self.contentWebView.scalesPageToFit = YES;
+    [self.contentWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth |UIViewAutoresizingFlexibleHeight];
+
 }
 
 - (void)didReceiveMemoryWarning

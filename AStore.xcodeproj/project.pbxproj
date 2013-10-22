@@ -1083,9 +1083,6 @@
 		C3C999C517F2CDCE00043727 /* 4 */ = {
 			isa = PBXGroup;
 			children = (
-				4EAEE3DA17FE2246002857F1 /* CommodityInfoCell.h */,
-				4EAEE3DB17FE2247002857F1 /* CommodityInfoCell.m */,
-				4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */,
 				4EAEE3DD17FE2248002857F1 /* CouponCell.h */,
 				4EAEE3DE17FE224A002857F1 /* CouponCell.m */,
 				4EAEE3DF17FE224B002857F1 /* CouponCell.xib */,
@@ -1104,6 +1101,9 @@
 				4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */,
 				4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */,
 				4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */,
+				4EAEE3DA17FE2246002857F1 /* CommodityInfoCell.h */,
+				4EAEE3DB17FE2247002857F1 /* CommodityInfoCell.m */,
+				4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */,
 				4EAEE3C317FDD804002857F1 /* MyCouponViewController.h */,
 				4EAEE3C417FDD804002857F1 /* MyCouponViewController.m */,
 				4EAEE3C517FDD804002857F1 /* MyCouponViewController.xib */,

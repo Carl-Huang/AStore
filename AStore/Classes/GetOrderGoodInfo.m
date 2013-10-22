@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
-#import "GetOrderDetailInfo.h"
+#import "GetOrderGoodInfo.h"
 
 @implementation GetOrderGoodInfo
 

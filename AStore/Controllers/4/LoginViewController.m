@@ -13,7 +13,11 @@
 #import "HttpHelper.h"
 #import "User.h"
 #import "AppDelegate.h"
+#import "userInfo.h"
 @interface LoginViewController () <UITextFieldDelegate>
+{
+    userInfo * userinfo;
+}
 @property (nonatomic,retain) UITextField * usernameField;
 @property (nonatomic,retain) UITextField * passwordField;
 @property (nonatomic,strong) NSDictionary *userInfoDic;
@@ -168,37 +172,52 @@
     [self.passwordField resignFirstResponder];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
-    [HttpHelper userLoginWithName:_usernameField.text pwd:_passwordField.text completedBlock:^(id items) {
+    
+    [HttpHelper getUserInfoWithUserName:_usernameField.text pwd:_passwordField.text completedBlock:^(id item, NSError *error) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
-        for (NSDictionary * dic in items) {
-            if ([dic count]==1) {
-                [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];
-                NSLog(@"登陆失败");
-            }else
-            {
-                self.userInfoDic = dic;
-                [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
-            }
+        if (error) {
+            NSLog(@"%@",[error description]);
         }
+        NSArray * array = item;
+        if ([array count]) {
+            userinfo = [array objectAtIndex:0];
+            [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
 
-    } failedBlock:^(NSError * error) {
-        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        [myDelegate removeLoadingViewWithView:nil];
-        [self showAlertViewWithTitle:@"提示" message:@"服务器错误"];
+        }else
+        {
+            [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];
+            NSLog(@"登陆失败");
+        }
     }];
+    
+    
+    
+//    [HttpHelper userLoginWithName:_usernameField.text pwd:_passwordField.text completedBlock:^(id items) {
+//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//        [myDelegate removeLoadingViewWithView:nil];
+//        for (NSDictionary * dic in items) {
+//            if ([dic count]==1) {
+//                [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];
+//                NSLog(@"登陆失败");
+//            }else
+//            {
+//                self.userInfoDic = dic;
+//                [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
+//            }
+//        }
+//
+//    } failedBlock:^(NSError * error) {
+//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//        [myDelegate removeLoadingViewWithView:nil];
+//        [self showAlertViewWithTitle:@"提示" message:@"服务器错误"];
+//    }];
 }
 
 -(void)pushToUserCenterViewController
 {
-    [User saveUserInfo:_usernameField.text password:_passwordField.text memberId:[self.userInfoDic objectForKey:DMemberId]];
-    NSArray * ary = self.navigationController.viewControllers;
-    for (UIViewController * viewcontroller in ary) {
-        if ([viewcontroller isKindOfClass:[UserCenterViewController class]]) {
-            [self.navigationController popToViewController:viewcontroller animated:YES];
-            return;
-        }
-    }
+    [userInfo archivingUserInfo:userinfo];
+    [User saveUserInfo:_usernameField.text password:_passwordField.text memberId:userinfo.member_id];
     UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;

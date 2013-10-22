@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface userInfo : NSObject
+@interface userInfo : NSObject<NSCoding>
 @property (nonatomic,strong)NSString * area;
 @property (nonatomic,strong)NSString * lv_name;
 @property (nonatomic,strong)NSString * member_id;
@@ -17,4 +17,9 @@
 @property (nonatomic,strong)NSString * name;
 @property (nonatomic,strong)NSString * point;
 @property (nonatomic,strong)NSString * uname;
+@property (nonatomic,strong)NSString * title;
+@property (nonatomic,strong)NSString * email;
++(void)archivingUserInfo:(userInfo * )userinfo;
++(userInfo *)unarchivingUserInfo;
++(void)removeUserInfo;
 @end

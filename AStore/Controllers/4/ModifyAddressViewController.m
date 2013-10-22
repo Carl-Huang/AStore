@@ -175,10 +175,8 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         rectViewForPickerView = CGRectMake(0, 150, 320, 300);
     }else
     {
-       //TODO:4英寸屏适配
         rect  = CGRectMake(0, 44, 320, 256);
         rectViewForPickerView = CGRectMake(0, 240, 320, 300);
-
     }
 
     viewforPickerView = [[UIView alloc]initWithFrame:rectViewForPickerView];

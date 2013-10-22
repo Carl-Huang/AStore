@@ -32,16 +32,6 @@
     }
     return self;
 }
-//-(void)awakeFromNib
-//{
-//    [super awakeFromNib];
-//    NSDictionary * localServerData = [User getServerUserInfoFL];
-//    if (localServerData) {
-//        self.pointLabel.text = [synDicInfo objectForKey:DPoint];
-//        self.userTypeLabel.text = [synDicInfo objectForKey:DLevelName];
-//        usernameLabel.text =  [localServerData objectForKey:DUserName];
-//    }
-//}
 
 - (void)viewDidLoad
 {
@@ -56,11 +46,11 @@
     NSLog(@"%s",__func__);
     NSDictionary * localUserData = [User getUserInfo];
     if (localUserData) {
-        NSDictionary * localServerData = [User getServerUserInfoFL];
+        userInfo * localServerData = [userInfo unarchivingUserInfo];
         if (localServerData) {
-            self.pointLabel.text = [localServerData objectForKey:DPoint];
-            self.userTypeLabel.text = [localServerData objectForKey:DLevelName];
-            usernameLabel.text =  [localServerData objectForKey:DUserName];
+            self.pointLabel.text = localServerData.point;
+            self.userTypeLabel.text = localServerData.lv_name;
+            usernameLabel.text =  localServerData.uname;
         }
 
         [self synchronizationWithServer:localUserData];
@@ -99,31 +89,31 @@
     [super viewDidUnload];
 }
 
--(void)synchronizationWithServer:(NSDictionary *)userInfo
+-(void)synchronizationWithServer:(NSDictionary *)infoDic
 {
-    synDicInfo = userInfo;
+    synDicInfo = infoDic;
     NSLog(@"%s",__func__);
-    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",[userInfo objectForKey:DUserName],[userInfo objectForKey:DPassword]];
-    NSLog(@"cmdStr :%@",cmdStr);
-    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
-        for (NSDictionary * dic in catInfo) {
-            synDicInfo = dic;
-            [User saveServerUserInfoTL:synDicInfo];
-            [self performSelectorOnMainThread:@selector(updateInterface) withObject:nil waitUntilDone:YES];
+    
+    [HttpHelper getUserInfoWithUserName:[infoDic objectForKey:DUserName] pwd:[infoDic objectForKey:DPassword] completedBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
         }
-    } errorBlock:^(NSError *error) {
-        ;
+        NSArray * array = item;
+        if ([array count]) {
+            userInfo *info = [array objectAtIndex:0];
+            [userInfo archivingUserInfo:info];
+            [self performSelectorOnMainThread:@selector(updateInterface:) withObject:info waitUntilDone:YES];
+        }
     }];
-   
+
 }
 
--(void)updateInterface
+-(void)updateInterface:(id)object
 {
     NSLog(@"%s",__func__);
-    NSLog(@"%@",synDicInfo);
-    self.pointLabel.text = [synDicInfo objectForKey:DPoint];
-    self.userTypeLabel.text = [synDicInfo objectForKey:DLevelName];
-    [self.view setNeedsLayout];
+    userInfo * info = object;
+    self.pointLabel.text = info.point;
+    self.userTypeLabel.text = info.lv_name;
 }
 #pragma mark - UITableViewDateSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -226,7 +216,8 @@
 - (IBAction)loginOutAction:(id)sender
 {
     [User deleteUserInfo];
-    [User deleteServerUserInfo];
+    
+    [userInfo removeUserInfo];
     NSArray *ary = self.navigationController.viewControllers;
     for (UIViewController *viewcontroller in ary) {
         if ([ary isKindOfClass:[LoginViewController class]]) {

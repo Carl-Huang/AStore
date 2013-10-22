@@ -29,7 +29,7 @@
     NSString * urlString = [NSString stringWithFormat:@"%@%@",SERVER_URL,@"youjian.php?getCategory=\""];
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
 
-    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@",NSStringFromSelector(_cmd));
         
         NSArray * results = (NSArray *)responseObject;
@@ -476,6 +476,19 @@
     NSString * strCmd = [NSString stringWithFormat:@"dly_type=1"];
     strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
     [HttpHelper requestWithString:strCmd withClass:[DeliveryTypeInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+
+}
+
++(void)getUserInfoWithUserName:(NSString *)name pwd:(NSString *)password completedBlock:(void (^)(id, NSError *))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"getUser=%@&&pwd=%@",name,password];
+    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper requestWithString:cmdStr withClass:[userInfo class] successBlock:^(NSArray *items) {
         block(items,nil);
     } errorBlock:^(NSError *error) {
         block (nil,error);

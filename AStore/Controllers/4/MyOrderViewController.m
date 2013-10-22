@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
-#define OrderAlerMessage @"获取订单失败,是否重新获取"
+#define OrderAlerMessage @"订单为空"
 
 
 #import "MyOrderViewController.h"
@@ -15,19 +15,19 @@
 #import "constants.h"
 #import "HttpHelper.h"
 #import "User.h"
+#import "AppDelegate.h"
 #import "GetOrderInfo.h"
 #import "GetGiftInfo.h"
-#import "AppDelegate.h"
 @interface MyOrderViewController ()<UIAlertViewDelegate>
 {
     BOOL isAlertViewCanShow;
 }
-@property (strong ,nonatomic)NSMutableArray * commoditiesArray;
+@property (strong ,nonatomic)NSMutableArray * orderInfoArray;
 @property (strong ,nonatomic)NSMutableArray * giftArray;
 @end
 
 @implementation MyOrderViewController
-@synthesize commoditiesArray;
+@synthesize orderInfoArray;
 @synthesize giftArray;
 
  static NSString * cellIdentifier = @"commodityInfoCell";
@@ -36,8 +36,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        commoditiesArray = [[NSMutableArray alloc]init];
-        giftArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -68,25 +66,37 @@
     NSString * cmdStr = [NSString stringWithFormat:@"getOrders=%@",[userInfoDic objectForKey:DMemberId]];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     NSLog(@"cmdStr :%@",cmdStr);
-    [HttpHelper requestWithString:cmdStr withClass:[GetOrderInfo class] successBlock:^(NSArray *items) {
-        [commoditiesArray addObject:items];
-        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
-    } errorBlock:^(NSError *error) {
-        NSLog(@"获取订单失败");
-        [self showAlertViewWithTitle:@"提示" message:OrderAlerMessage];
-        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
-    }];
     
+    [HttpHelper getOrderWithMemberId:cmdStr withCompletedBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }
+        if ([item count]) {
+            orderInfoArray = item;
+            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+        }else
+        {
+            NSLog(@"订单为空");
+            [self showAlertViewWithTitle:@"提示" message:OrderAlerMessage];
+            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+        }
+        
+    }];
     
     //获取赠品
-    NSString * giftStr = [NSString stringWithFormat:@"getGift&&start=0&&count=1"];
-    giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
-    [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
-        [giftArray addObject:items];
-        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
-    } errorBlock:^(NSError *error) {
-
+    [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }
+        if ([item count]) {
+            giftArray = item;
+            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+        }else
+        {
+            NSLog(@"赠品订单为空");
+        }
     }];
+    
 }
 
 -(void)reloadTableview
@@ -164,7 +174,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return [commoditiesArray count];
+        return [orderInfoArray count];
     }else if(section == 1)
         return [giftArray count];
     return 1;
@@ -181,7 +191,7 @@
     CommodityInfoCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section == 0) {
-        GetOrderInfo * orderInfo = [commoditiesArray objectAtIndex:indexPath.row];
+        GetOrderInfo * orderInfo = [orderInfoArray objectAtIndex:indexPath.row];
         cell.orderNum.text          = orderInfo.order_id;
         cell.orderTime.text         = orderInfo.acttime;
         cell.orderStatus.text       = orderInfo.status;

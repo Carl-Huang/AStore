@@ -55,6 +55,9 @@
 //用户注册
 +(void)userRegisterWithName:(NSString * )name pwd:(NSString *)pwd email:(NSString *)email completedBlock:(void (^)(id items))successBlock failedBlock:(void (^)(NSError * error))failedBlock;
 
+//获取用户信息
++(void)getUserInfoWithUserName:(NSString *)name pwd:(NSString *)password completedBlock:(void (^)(id item,NSError * error))block;
+
 //获取地区信息
 +(void)getRegionWithSuccessBlock:(void(^)(NSArray * array))successBlock failedBlock:(void(^)(NSError *error))failedBlock;
 
@@ -85,6 +88,7 @@
 +(void)getGiftStoreWithGiftId:(NSArray *)giftIds withCompletedBlock:(void (^)(id item,NSError * error))block;
 //获取配送方式
 +(void)getDeliveryTypeWithCompletedBlock:(void (^)(id item,NSError * error))block;
+
 
 //提交订单（商品）
 

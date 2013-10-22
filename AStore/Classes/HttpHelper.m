@@ -20,6 +20,9 @@
 #import "GetGiftInfo.h"
 #import "GetOrderGoodInfo.h"
 #import "GetOrderGiftInfo.h"
+#import "ProductStoreInfo.h"
+#import "GiftStoreInfo.h"
+#import "DeliveryTypeInfo.h"
 @implementation HttpHelper
 + (void) getAllCatalogWithSuccessBlock:(void (^)(NSDictionary * catInfo))success errorBlock:(void(^)(NSError * error))failure
 {
@@ -417,5 +420,66 @@
     } errorBlock:^(NSError *error) {
         block (nil,error);
     }];
+}
+
++(void)getProductStoreWithProductId:(NSArray *)produceIds withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    /*
+     product_id 数值，也可以传多个 用，分隔如（22,123）
+     */
+    NSString * productId = [[NSString alloc]init];
+    for (int i =0 ;i<[produceIds count];i++) {
+        NSString * str = [produceIds objectAtIndex:i];
+        NSString * formatStr  = nil;
+        if (i != 0 ) {
+            formatStr = [NSString stringWithFormat:@",%@",str];
+            productId = [productId stringByAppendingString:formatStr];
+        }else
+        {
+            productId = str;
+        }
+    }
+    NSString * strCmd = [NSString stringWithFormat:@"get_goods_Store=%@",productId];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[ProductStoreInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+}
+
++(void)getGiftStoreWithGiftId:(NSArray *)giftIds withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * giftId = [[NSString alloc]init];
+    for (int i =0 ;i<[giftIds count];i++) {
+        NSString * str = [giftIds objectAtIndex:i];
+        NSString * formatStr  = nil;
+        if (i != 0 ) {
+            formatStr = [NSString stringWithFormat:@",%@",str];
+            giftId = [giftId stringByAppendingString:formatStr];
+        }else
+        {
+            giftId = str;
+        }
+    }
+    NSString * strCmd = [NSString stringWithFormat:@"get_gift_Store=%@",giftId];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[GiftStoreInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+}
+
++(void)getDeliveryTypeWithCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * strCmd = [NSString stringWithFormat:@"dly_type=1"];
+    strCmd = [SERVER_URL_Prefix stringByAppendingString:strCmd];
+    [HttpHelper requestWithString:strCmd withClass:[DeliveryTypeInfo class] successBlock:^(NSArray *items) {
+        block(items,nil);
+    } errorBlock:^(NSError *error) {
+        block (nil,error);
+    }];
+
 }
 @end

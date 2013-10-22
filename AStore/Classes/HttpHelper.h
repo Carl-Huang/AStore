@@ -70,6 +70,7 @@
 //获取赠品
 +(void)getGiftWithCompleteBlock:(void (^)(id item,NSError * error))block;
 
+
 //获取订单
 +(void)getOrderWithMemberId:(NSString *)memberId withCompletedBlock:(void (^)(id item,NSError * error))block;
 //获取订单商品的详细信息
@@ -77,5 +78,18 @@
 
 //获取订单赠品的详细信息
 +(void)getOrderDetailWithGiftId:(NSString *)orderId withCompletedBlock:(void (^)(id item,NSError * error))block;
+
+//根据product_id获取商品库存
++(void)getProductStoreWithProductId:(NSArray *)produceId withCompletedBlock:(void (^)(id item,NSError * error))block;
+//根据gift_id获取赠品库存
++(void)getGiftStoreWithGiftId:(NSArray *)giftIds withCompletedBlock:(void (^)(id item,NSError * error))block;
+//获取配送方式
++(void)getDeliveryTypeWithCompletedBlock:(void (^)(id item,NSError * error))block;
+
+//提交订单（商品）
+
+//提交订单（赠品）
+
+
 //EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

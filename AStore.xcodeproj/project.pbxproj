@@ -11,6 +11,9 @@
 		4E00978B1813980900D4DE40 /* PresentCommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E0097891813980900D4DE40 /* PresentCommodityViewController.xib */; };
 		4E00978F18139CC600D4DE40 /* PresentCommodityDesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */; };
 		4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */; };
+		4E03EB801816823100D80E27 /* ProductStoreInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB7F1816823100D80E27 /* ProductStoreInfo.m */; };
+		4E03EB831816825D00D80E27 /* GiftStoreInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB821816825D00D80E27 /* GiftStoreInfo.m */; };
+		4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */; };
 		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
 		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
 		4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */; };
@@ -258,6 +261,12 @@
 		4E00978C18139CC400D4DE40 /* PresentCommodityDesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentCommodityDesViewController.h; sourceTree = "<group>"; };
 		4E00978D18139CC400D4DE40 /* PresentCommodityDesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentCommodityDesViewController.m; sourceTree = "<group>"; };
 		4E00978E18139CC500D4DE40 /* PresentCommodityDesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresentCommodityDesViewController.xib; sourceTree = "<group>"; };
+		4E03EB7E1816823100D80E27 /* ProductStoreInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductStoreInfo.h; sourceTree = "<group>"; };
+		4E03EB7F1816823100D80E27 /* ProductStoreInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductStoreInfo.m; sourceTree = "<group>"; };
+		4E03EB811816825D00D80E27 /* GiftStoreInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftStoreInfo.h; sourceTree = "<group>"; };
+		4E03EB821816825D00D80E27 /* GiftStoreInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftStoreInfo.m; sourceTree = "<group>"; };
+		4E03EB841816839200D80E27 /* DeliveryTypeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeliveryTypeInfo.h; sourceTree = "<group>"; };
+		4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeliveryTypeInfo.m; sourceTree = "<group>"; };
 		4E06566218156FFD00AB6216 /* GetOrderGoodInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGoodInfo.h; sourceTree = "<group>"; };
 		4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGoodInfo.m; sourceTree = "<group>"; };
 		4E0656651815722700AB6216 /* GetOrderGiftInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGiftInfo.h; sourceTree = "<group>"; };
@@ -632,6 +641,12 @@
 				4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */,
 				4E0656651815722700AB6216 /* GetOrderGiftInfo.h */,
 				4E0656661815722700AB6216 /* GetOrderGiftInfo.m */,
+				4E03EB7E1816823100D80E27 /* ProductStoreInfo.h */,
+				4E03EB7F1816823100D80E27 /* ProductStoreInfo.m */,
+				4E03EB811816825D00D80E27 /* GiftStoreInfo.h */,
+				4E03EB821816825D00D80E27 /* GiftStoreInfo.m */,
+				4E03EB841816839200D80E27 /* DeliveryTypeInfo.h */,
+				4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */,
 			);
 			name = Model;
 			path = Classes;
@@ -1422,6 +1437,9 @@
 				4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */,
 				4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */,
 				4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */,
+				4E03EB801816823100D80E27 /* ProductStoreInfo.m in Sources */,
+				4E03EB831816825D00D80E27 /* GiftStoreInfo.m in Sources */,
+				4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

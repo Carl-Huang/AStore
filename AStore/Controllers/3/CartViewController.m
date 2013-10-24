@@ -347,7 +347,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 dic[@"count"] = [NSNumber numberWithInteger:num];
                 [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
             }
-            [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+            [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
         }
     }
 }
@@ -381,7 +381,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 dic[@"count"] = [NSNumber numberWithInteger:num];
                 [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
             }
-            [NSMutableArray archivingCommodityArray:myDelegate.presentArray withKey:@"PresentArray"];
+            [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
         }
     }
 }

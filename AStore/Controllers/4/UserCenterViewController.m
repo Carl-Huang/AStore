@@ -16,6 +16,7 @@
 #import "User.h"
 #import "HttpHelper.h"
 #import "userInfo.h"
+#import "NSMutableArray+SaveCustomiseData.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @property (nonatomic, strong)__block NSDictionary * synDicInfo;
@@ -215,16 +216,20 @@
 
 - (IBAction)loginOutAction:(id)sender
 {
+    //清理用户数据
     [User deleteUserInfo];
-    
     [userInfo removeUserInfo];
-    NSArray *ary = self.navigationController.viewControllers;
-    for (UIViewController *viewcontroller in ary) {
-        if ([ary isKindOfClass:[LoginViewController class]]) {
-            [self.navigationController popToViewController:viewcontroller animated:YES];
-            return;
-        }
-    }
+    [NSMutableArray removeObjArrayWithkey:@"CommodityArray"];
+    [NSMutableArray removeObjArrayWithkey:@"PresentArray"];
+    
+    
+//    NSArray *ary = self.navigationController.viewControllers;
+//    for (UIViewController *viewcontroller in ary) {
+//        if ([ary isKindOfClass:[LoginViewController class]]) {
+//            [self.navigationController popToViewController:viewcontroller animated:YES];
+//            return;
+//        }
+//    }
     LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:loginViewController animated:YES];
     loginViewController = nil;

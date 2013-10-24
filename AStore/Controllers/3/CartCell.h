@@ -26,7 +26,7 @@ typedef void (^CarCellPlusBlock)(id item,CellType type);
 @property (weak, nonatomic) IBOutlet UILabel *jifenLabel;
 @property (weak, nonatomic) IBOutlet UILabel *jifen;
 @property (assign ,nonatomic) CellType type;
-
+@property (assign , nonatomic)BOOL isSelected;
 @property (strong ,nonatomic) NSString * Id;
 @property (strong ,nonatomic) CarCellPlusBlock plusBlock;
 @property (strong ,nonatomic) CarCellMinusBlock munisBlock;

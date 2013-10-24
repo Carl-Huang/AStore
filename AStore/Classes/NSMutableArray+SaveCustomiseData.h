@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSMutableArray (SaveCustomiseData)
-+(void)archivingCommodityArray:(NSArray * )array withKey:(NSString *)key;
-+(NSArray *)unarchivingCommodityArrayWithKey:(NSString *)key;
-+(void)removeCommodityArrayWithkey:(NSString *)key;
++(void)archivingObjArray:(NSArray * )array withKey:(NSString *)key;
++(NSArray *)unarchivingObjArrayWithKey:(NSString *)key;
++(void)removeObjArrayWithkey:(NSString *)key;
 @end

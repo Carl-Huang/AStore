@@ -109,7 +109,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else
     {
         [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
-        [NSMutableArray archivingCommodityArray:myDelegate.presentArray withKey:@"PresentArray"];
+        [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
     }
 }
 

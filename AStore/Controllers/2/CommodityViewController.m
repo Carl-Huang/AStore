@@ -69,7 +69,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 //    [Commodity archivingCommodityArray:myDelegate.commodityArray];
-    [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+    [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
 
 }
 -(void)initializedInterface
@@ -269,7 +269,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else
     {
         [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
-        [NSMutableArray archivingCommodityArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+        [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
     }
 //   objc_setAssociatedObject(self.comodityInfo, (__bridge const void *)(self.comodityInfo.product_id), [NSNumber numberWithInt:count], OBJC_ASSOCIATION_COPY);
 

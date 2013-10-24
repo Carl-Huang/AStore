@@ -13,7 +13,7 @@
 #import "DeliveryViewController.h"
 #import "DeliveryCell.h"
 #import "UIViewController+LeftTitle.h"
-
+#import "HttpHelper.h"
 static NSString * cellIdentifier = @"cellIdentifier";
 @interface DeliveryViewController ()
 @property (strong ,nonatomic)NSArray * dataSourece;
@@ -41,6 +41,14 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self.deliveryTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     // Do any additional setup after loading the view from its nib.
 }
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [HttpHelper getDeliveryTypeWithCompletedBlock:^(id item, NSError *error) {
+        ;
+    }];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -267,7 +267,14 @@
 //将取得的内容转换为模型
 + (NSArray *)mapModelProcess:(id)responseObject withClass:(Class)class
 {
+    //判断返回值
     NSArray * results = (NSArray *)responseObject;
+    NSDictionary * dic = [results objectAtIndex:0];
+    if ([dic count] == 1) {
+        return  nil;
+    }
+    
+    
     unsigned int outCount,i;
     objc_property_t * properties = class_copyPropertyList(class, &outCount);
     NSMutableArray * models = [NSMutableArray arrayWithCapacity:results.count];

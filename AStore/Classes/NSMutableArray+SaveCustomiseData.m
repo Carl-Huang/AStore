@@ -10,14 +10,14 @@
 
 @implementation NSMutableArray (SaveCustomiseData)
 
-+(void)archivingCommodityArray:(NSArray * )array withKey:(NSString *)key
++(void)archivingObjArray:(NSArray * )array withKey:(NSString *)key
 {
     NSData * data = [NSKeyedArchiver archivedDataWithRootObject:array];
     [[NSUserDefaults standardUserDefaults]setObject:data forKey:key];
     [[NSUserDefaults standardUserDefaults]synchronize];
 }
 
-+(NSArray *)unarchivingCommodityArrayWithKey:(NSString *)key
++(NSArray *)unarchivingObjArrayWithKey:(NSString *)key
 {
     NSData * data = [[NSUserDefaults standardUserDefaults]objectForKey:key];
     NSArray * array = (NSArray * )[NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -26,7 +26,7 @@
     }
     return nil;
 }
-+(void)removeCommodityArrayWithkey:(NSString *)key
++(void)removeObjArrayWithkey:(NSString *)key
 {
     [[NSUserDefaults standardUserDefaults]removeObjectForKey:key];
     [[NSUserDefaults standardUserDefaults]synchronize];

@@ -25,11 +25,11 @@
 
     commodityArray  = [[NSMutableArray alloc]init];
     presentArray    = [[NSMutableArray alloc]init];
-    if ([NSMutableArray unarchivingCommodityArrayWithKey:@"CommodityArray"]) {
-        self.commodityArray  = (NSMutableArray *)[NSMutableArray unarchivingCommodityArrayWithKey:@"CommodityArray"];
+    if ([NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"]) {
+        self.commodityArray  = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"];
     }
-    if ([NSMutableArray unarchivingCommodityArrayWithKey:@"PresentArray"]) {
-        self.presentArray  = (NSMutableArray *)[NSMutableArray unarchivingCommodityArrayWithKey:@"PresentArray"];
+    if ([NSMutableArray unarchivingObjArrayWithKey:@"PresentArray"]) {
+        self.presentArray  = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"PresentArray"];
     }
 
 //    self.commodityArray = (NSMutableArray *)[Commodity unarchivingCommodityArray];
@@ -74,8 +74,8 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
     //保存购物车的物品
-    [NSMutableArray archivingCommodityArray:self.commodityArray withKey:@"CommodityArray"];
-    [NSMutableArray archivingCommodityArray:self.presentArray withKey:@"PresentArray"];
+    [NSMutableArray archivingObjArray:self.commodityArray withKey:@"CommodityArray"];
+    [NSMutableArray archivingObjArray:self.presentArray withKey:@"PresentArray"];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -88,8 +88,8 @@
     if (self.presentArray) {
         self.presentArray = nil;
     }
-    self.commodityArray = (NSMutableArray *)[NSMutableArray unarchivingCommodityArrayWithKey:@"CommodityArray"];
-    self.presentArray = (NSMutableArray *)[NSMutableArray unarchivingCommodityArrayWithKey:@"PresentArray"];
+    self.commodityArray = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"];
+    self.presentArray = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"PresentArray"];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

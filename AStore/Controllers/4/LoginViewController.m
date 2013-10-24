@@ -168,6 +168,14 @@
 
 - (IBAction)loginAction:(id)sender {
     NSLog(@"%@",NSStringFromSelector(_cmd));
+    if (self.usernameField.text.length == 0) {
+        [self showAlertViewWithTitle:@"提示" message:@"用户名不能为空"];
+        return;
+    }
+    if (self.passwordField.text.length == 0) {
+        [self showAlertViewWithTitle:@"提示" message:@"密码不能为空"];
+        return;
+    }
     [self.usernameField resignFirstResponder];
     [self.passwordField resignFirstResponder];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -179,11 +187,12 @@
         if (error) {
             NSLog(@"%@",[error description]);
         }
-        NSArray * array = item;
-        if ([array count]) {
-            userinfo = [array objectAtIndex:0];
-            [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
-
+        if (item) {
+            NSArray * array = item;
+            if ([array count]) {
+                userinfo = [array objectAtIndex:0];
+                [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
+            }
         }else
         {
             [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];

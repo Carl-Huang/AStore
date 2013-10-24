@@ -99,6 +99,13 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     self.dataSource  = myDelegate.commodityArray;
     self.giftArray = myDelegate.presentArray;
+    
+    for (int i = 0;  i<dataSource.count; i++) {
+         [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
+    }
+    for (int i = 0;  i<giftArray.count; i++) {
+        [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
+    }
     [self.cartTable reloadData];
 
 }
@@ -259,12 +266,15 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if (indexPath.row == 0) {
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
-            float sum = 0;
-            for (NSDictionary  * infoDic in dataSource) {
+            float sum = 0.0;
+            for (int i = 0;i < dataSource.count;i++) {
+                NSDictionary  * infoDic = [dataSource objectAtIndex:i];
                 Commodity * info = [infoDic objectForKey:@"commodity"];
                 NSInteger num = [[infoDic objectForKey:@"count"]integerValue];
                 float price = [info.price floatValue];
-                sum += price*num;
+                if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+                    sum += price*num;
+                }
             }
             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
@@ -299,12 +309,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             cell.MoneySum.text = priceStr;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
-            if (isSectionOneFirstShow) {
-                if (indexPath.row == [self.dataSource count]) {
-                    isSectionOneFirstShow = NO;
-                }
-                [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
-            }
+//            if (isSectionOneFirstShow) {
+//                if (indexPath.row == [self.dataSource count]) {
+//                    isSectionOneFirstShow = NO;
+//                }
+//                [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+//            }
             if ([commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]) {
                 [cell setSelected:isCommodityCheckout animated:YES];
             }
@@ -357,12 +367,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             //限量
             NSString * str = [NSString stringWithFormat:@"限量:%@",info.limit_num];
             cell.MoneySum.text = str;
-            if (isSectionTwoFirstShow) {
-                if (indexPath.row == [self.giftArray count]) {
-                    isSectionTwoFirstShow = NO;
-                }
-                [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
-            }
+//            if (isSectionTwoFirstShow) {
+//                if (indexPath.row == [self.giftArray count]) {
+//                    isSectionTwoFirstShow = NO;
+//                }
+//                [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+//            }
             if ([presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]) {
                 [cell setSelected:YES animated:YES];
             }

@@ -29,6 +29,14 @@ typedef NS_ENUM(NSInteger, ActionType)
 static NSString * cellIdentifier = @"cartCellIdentifier";
 static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @interface CartViewController ()
+{
+    BOOL isSectionOneFirstShow;
+    BOOL isSectionTwoFirstShow;
+    BOOL isCommodityCheckout;
+    BOOL isGiftCheckout;
+    NSMutableDictionary * commodityDicInfo;
+    NSMutableDictionary * presentDicInfo;
+}
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
 @end
@@ -66,6 +74,13 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [self.cartTable registerNib:cell2Nib forCellReuseIdentifier:cellHeaderIdentifier];
     
     [self.cartTable setEditing:YES];
+    
+    isSectionTwoFirstShow = YES;
+    isSectionOneFirstShow = YES;
+    isCommodityCheckout = YES;
+    isGiftCheckout = YES;
+    commodityDicInfo = [NSMutableDictionary dictionary];
+    presentDicInfo = [NSMutableDictionary dictionary];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -92,6 +107,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 -(void)deleteItem
 {
     NSLog(@"%s",__func__);
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -111,12 +127,62 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [super viewDidUnload];
 }
 
+
+//获取订单中的物品
+-(NSArray *)getCommodityProduct
+{
+    NSMutableArray * array = [NSMutableArray array];
+    for (int i = 0; i < [self.dataSource count];i++) {
+        NSDictionary * dic =  [self.dataSource objectAtIndex:i];
+        Commodity *com = [dic objectForKey:@"commodity"];
+        if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [array addObject:com];
+        }
+    }
+    return array;
+}
+
+-(NSArray *)getGiftProduct
+{
+    NSMutableArray * array = [NSMutableArray array];
+    for (int i = 0; i < [self.giftArray count];i++) {
+        NSDictionary * dic =  [self.giftArray objectAtIndex:i];
+        GetGiftInfo *gift = [dic objectForKey:@"present"];
+        if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [array addObject:gift];
+        }
+    }
+    return array;
+}
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //    CommodityInfoCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-}
+    if (indexPath.row != 0) {
+        if (indexPath.section == 0) {
+            BOOL bo = (BOOL)[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+            [commodityDicInfo setObject:[NSNumber numberWithBool:!bo] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+        }
+        if (indexPath.section == 1) {
+            BOOL bo = (BOOL)[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+            [presentDicInfo setObject:[NSNumber numberWithBool:!bo] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
 
+        }
+    }else
+    {
+        if (indexPath.section == 0) {
+            isCommodityCheckout  = !isCommodityCheckout;
+            isSectionOneFirstShow = !isSectionOneFirstShow;
+        }else
+        {
+            isGiftCheckout = !isGiftCheckout;
+            isSectionTwoFirstShow = !isSectionTwoFirstShow;
+        }
+        [tableView reloadData];
+ 
+    }
+    //    CommodityInfoCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
@@ -183,6 +249,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CartCell * cell = [self.cartTable dequeueReusableCellWithIdentifier:cellIdentifier];
+    UIView *backView = [[UIView alloc] initWithFrame:cell.frame];
+    cell.selectedBackgroundView = backView;
+    cell.selectedBackgroundView.backgroundColor = [UIColor clearColor];
+    
     [cell setMunisBlock:[self cellMinusBlock]];
     [cell setPlusBlock:[self cellPlusBlock]];
     if (indexPath.section == 0) {
@@ -198,6 +268,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }
             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
+            [headerCell setSelected:isCommodityCheckout animated:YES];
             return headerCell;
             
         }else
@@ -228,9 +299,15 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             cell.MoneySum.text = priceStr;
             [cell.jifenLabel setHidden:YES];
             [cell.jifen setHidden:YES];
-//            NSNumber * number = objc_getAssociatedObject(info, (__bridge const void *)(info.product_id));
-//            NSLog(@"%d",[number intValue]);
-            
+            if (isSectionOneFirstShow) {
+                if (indexPath.row == [self.dataSource count]) {
+                    isSectionOneFirstShow = NO;
+                }
+                [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+            }
+            if ([commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]) {
+                [cell setSelected:isCommodityCheckout animated:YES];
+            }
         }
 
     }else
@@ -248,6 +325,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }
              headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
             [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
+            [headerCell setSelected:isGiftCheckout animated:YES];
             return headerCell;
         }else
         {
@@ -279,9 +357,20 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             //限量
             NSString * str = [NSString stringWithFormat:@"限量:%@",info.limit_num];
             cell.MoneySum.text = str;
+            if (isSectionTwoFirstShow) {
+                if (indexPath.row == [self.giftArray count]) {
+                    isSectionTwoFirstShow = NO;
+                }
+                [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+            }
+            if ([presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]) {
+                [cell setSelected:YES animated:YES];
+            }
+
         }
 
     }
+   
     return  cell;
 }
 
@@ -296,8 +385,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         {
             [self alterPresentNumWithId:(NSString *)item withAction:MinusAction];
         }
-       
-        [self.cartTable reloadData];
     };
     return block;
 }
@@ -313,8 +400,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         {
             [self alterPresentNumWithId:(NSString *)item withAction:PlusAction];
         }
-        
-        [self.cartTable reloadData];
     };
     return block;
 }
@@ -328,10 +413,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if ([productId isEqualToString:info.product_id] ) {
             if (action == MinusAction) {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                if (num == 0) {
+                if (num == 1) {
                     //当货物数量到0件时，删除该数据
                     [myDelegate.commodityArray removeObjectAtIndex:i];
+                     [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
                     [self.cartTable reloadData];
+                    return;
                 }else
                 {
                     //减少货物数量
@@ -348,6 +435,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
             }
             [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+            [self.cartTable beginUpdates];
+            [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            [self.cartTable endUpdates];
         }
     }
 }
@@ -362,10 +453,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if ([productId isEqualToString:info.gift_id] ) {
             if (action == MinusAction) {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                if (num == 0) {
+                if (num == 1) {
                     //当货物数量到0件时，删除该数据
                     [myDelegate.presentArray removeObjectAtIndex:i];
+                     [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
                     [self.cartTable reloadData];
+                    return;
                 }else
                 {
                     //减少货物数量
@@ -382,6 +475,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
             }
             [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
+            [self.cartTable beginUpdates];
+            [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i+1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+            [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+            [self.cartTable endUpdates];
         }
     }
 }

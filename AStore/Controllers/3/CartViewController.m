@@ -34,6 +34,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     BOOL isSectionTwoFirstShow;
     BOOL isCommodityCheckout;
     BOOL isGiftCheckout;
+    BOOL isShouldShowSectionOneRows;
+    BOOL isShouldShowSectionTwoRows;
     NSMutableDictionary * commodityDicInfo;
     NSMutableDictionary * presentDicInfo;
 }
@@ -79,6 +81,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     isSectionOneFirstShow = YES;
     isCommodityCheckout = YES;
     isGiftCheckout = YES;
+    isShouldShowSectionOneRows = YES;
+    isShouldShowSectionTwoRows = YES;
     commodityDicInfo = [[NSMutableDictionary alloc]init];
     presentDicInfo = [NSMutableDictionary dictionary];
     // Do any additional setup after loading the view from its nib.
@@ -141,6 +145,19 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [super viewDidUnload];
 }
 
+-(void)hideSectionOneRows
+{
+    NSLog(@"%s",__func__);
+    isShouldShowSectionOneRows = !isShouldShowSectionOneRows;
+    [self.cartTable reloadData];
+}
+
+-(void)hideSectionTwoRows
+{
+    NSLog(@"%s",__func__);
+    isShouldShowSectionTwoRows = !isShouldShowSectionTwoRows;
+    [self.cartTable reloadData];
+}
 
 //获取订单中的物品
 -(NSArray *)getCommodityProduct
@@ -169,6 +186,124 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
     return array;
 }
+
+-(CartCell *)configureCommodityCell:(CartCell *)cell WithIndexPath:(NSIndexPath *)indexPath
+{
+   
+    NSInteger row = indexPath.row -1;
+    NSDictionary * dic = [dataSource objectAtIndex:row];
+    NSNumber * produceNum = [dic objectForKey:@"count"];
+    Commodity * info = [dic objectForKey:@"commodity"];
+    NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+    __weak CartCell *weakCell = cell;
+    NSURL *url = [NSURL URLWithString:imageUrlStr];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+    [cell.productImage setImageWithURLRequest:request placeholderImage:nil
+                                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                          [weakCell.productImage setImage:image];
+                                          [weakCell setNeedsLayout];
+                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                          NSLog(@"下载图片失败");
+                                      }];
+    cell.type = CommodityCellType;
+    cell.Id = info.product_id;
+    cell.productName.text = info.name;
+    cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
+    float floatString = [info.price floatValue];
+    NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
+    
+    //金额
+    cell.MoneySum.text = priceStr;
+    [cell.jifenLabel setHidden:YES];
+    [cell.jifen setHidden:YES];
+    if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue]) {
+        [cell setSelected:isCommodityCheckout animated:YES];
+    }
+    return cell;
+}
+
+-(CartCell *)configurePresentCell:(CartCell *)cell WithIndexPath:(NSIndexPath *)indexPath
+{
+    [cell.jifenLabel setHidden:NO];
+    [cell.jifen setHidden:NO];
+    NSInteger row = indexPath.row -1;
+    NSDictionary * dic = [giftArray objectAtIndex:row];
+    NSNumber * produceNum = [dic objectForKey:@"count"];
+    GetGiftInfo * info = [dic objectForKey:@"present"];
+    NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+    __weak CartCell *weakCell = cell;
+    NSURL *url = [NSURL URLWithString:imageUrlStr];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+    [cell.productImage setImageWithURLRequest:request placeholderImage:nil
+                                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                          [weakCell.productImage setImage:image];
+                                          [weakCell setNeedsLayout];
+                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                          NSLog(@"下载图片失败");
+                                      }];
+    cell.type = PresentCellType;
+    cell.Id = info.gift_id;
+    cell.productName.text = info.name;
+    cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
+    float floatString = [info.point floatValue];
+    //积分
+    NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
+    cell.jifen.text = priceStr;
+    //限量
+    NSString * str = [NSString stringWithFormat:@"限量:%@",info.limit_num];
+    cell.MoneySum.text = str;
+    if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue]) {
+        [cell setSelected:isGiftCheckout animated:YES];
+    }
+    return cell;
+}
+
+#pragma  mark - Cell Block
+-(CarCellMinusBlock)cellMinusBlock
+{
+    CarCellMinusBlock block = ^(id item,CellType type)
+    {
+        NSLog(@"%s",__func__);
+        if (type == CommodityCellType) {
+            [self alterCommodityNumWithId:(NSString *)item withAction:MinusAction];
+        }else
+        {
+            [self alterPresentNumWithId:(NSString *)item withAction:MinusAction];
+        }
+    };
+    return block;
+}
+
+-(CarCellPlusBlock)cellPlusBlock
+{
+    CarCellPlusBlock block = ^(id item,CellType type)
+    {
+        NSLog(@"%s",__func__);
+        if (type == CommodityCellType) {
+            [self alterCommodityNumWithId:(NSString *)item withAction:PlusAction];
+        }else
+        {
+            [self alterPresentNumWithId:(NSString *)item withAction:PlusAction];
+        }
+    };
+    return block;
+}
+
+-(CloseAccountActionBlock)configureCloseAccountBlock
+{
+    CloseAccountActionBlock block = ^()
+    {
+        //TODO:传要购买的物品
+        
+        NSLog(@"%s",__func__);
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        [self.navigationController pushViewController:viewController animated:YES];
+        viewController = nil;
+
+    };
+    return block;
+}
+
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -232,8 +367,14 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [headerView setBackgroundColor:[UIColor clearColor]];
     
     if (section == 0 ) {
+        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideSectionOneRows)];
+        [headerView addGestureRecognizer:tapGesture];
+        tapGesture = nil;
         label.text = @"购买的商品";
     } else if(section == 1){
+        UITapGestureRecognizer * tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideSectionTwoRows)];
+        [headerView addGestureRecognizer:tapGesture];
+        tapGesture = nil;
         label.text = @"赠品";
     }
     [headerView addSubview:imageView];
@@ -242,6 +383,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     label = nil;
     return headerView;
 }
+
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
@@ -256,12 +398,16 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        NSLog(@"section0 have %d rows",[dataSource count]+1);
-        return [dataSource count]+1;
+        if (isShouldShowSectionOneRows) {
+            return [dataSource count]+1;
+        }
     }else if(section == 1)
-        NSLog(@"section1 have %d rows",[giftArray count]+1);
-        return [giftArray count]+1;
-    return 1;
+    {
+        if (isShouldShowSectionTwoRows) {
+              return [giftArray count]+1;
+        }
+    }
+    return 0;
 }
 
 
@@ -297,45 +443,15 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     }
                 }else
                     sum = 0.0;
-            
             }
-            
             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
-            [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
+            [headerCell setBlock:[self configureCloseAccountBlock]];
             [headerCell setSelected:isCommodityCheckout animated:YES];
             return headerCell;
             
         }else
         {
-            NSInteger row = indexPath.row -1;
-            NSDictionary * dic = [dataSource objectAtIndex:row];
-            NSNumber * produceNum = [dic objectForKey:@"count"];
-            Commodity * info = [dic objectForKey:@"commodity"];
-            NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
-            __weak CartCell *weakCell = cell;
-            NSURL *url = [NSURL URLWithString:imageUrlStr];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-            [cell.productImage setImageWithURLRequest:request placeholderImage:nil
-                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                        [weakCell.productImage setImage:image];
-                                                        [weakCell setNeedsLayout];
-                                                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                        NSLog(@"下载图片失败");
-                                                    }];
-            cell.type = CommodityCellType;
-            cell.Id = info.product_id;
-            cell.productName.text = info.name;
-            cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
-            float floatString = [info.price floatValue];
-            NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
-            
-            //金额
-            cell.MoneySum.text = priceStr;
-            [cell.jifenLabel setHidden:YES];
-            [cell.jifen setHidden:YES];
-            if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue]) {
-                [cell setSelected:isCommodityCheckout animated:YES];
-            }
+            [self configureCommodityCell:cell WithIndexPath:indexPath];
         }
 
     }else
@@ -357,45 +473,14 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     }
                 }else
                     sum = 0.0;
-            
             }
              headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
-            [headerCell.closeAccountBtn addTarget:self action:@selector(closeAccount) forControlEvents:UIControlEventTouchUpInside];
+            [headerCell setBlock:[self configureCloseAccountBlock]];
             [headerCell setSelected:isGiftCheckout animated:YES];
             return headerCell;
         }else
         {
-            [cell.jifenLabel setHidden:NO];
-            [cell.jifen setHidden:NO];
-            NSInteger row = indexPath.row -1;
-            NSDictionary * dic = [giftArray objectAtIndex:row];
-            NSNumber * produceNum = [dic objectForKey:@"count"];
-            GetGiftInfo * info = [dic objectForKey:@"present"];
-            NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
-            __weak CartCell *weakCell = cell;
-            NSURL *url = [NSURL URLWithString:imageUrlStr];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-            [cell.productImage setImageWithURLRequest:request placeholderImage:nil
-                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                  [weakCell.productImage setImage:image];
-                                                  [weakCell setNeedsLayout];
-                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                                  NSLog(@"下载图片失败");
-                                              }];
-            cell.type = PresentCellType;
-            cell.Id = info.gift_id;
-            cell.productName.text = info.name;
-            cell.productNumber.text = [NSString stringWithFormat:@"%@",produceNum];
-            float floatString = [info.point floatValue];
-            //积分
-            NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
-            cell.jifen.text = priceStr;
-            //限量
-            NSString * str = [NSString stringWithFormat:@"限量:%@",info.limit_num];
-            cell.MoneySum.text = str;
-            if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue]) {
-                [cell setSelected:isGiftCheckout animated:YES];
-            }
+            [self configurePresentCell:cell WithIndexPath:indexPath];
 
         }
 
@@ -404,35 +489,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     return  cell;
 }
 
--(CarCellMinusBlock)cellMinusBlock
-{
-    CarCellMinusBlock block = ^(id item,CellType type)
-    {
-        NSLog(@"%s",__func__);
-        if (type == CommodityCellType) {
-             [self alterCommodityNumWithId:(NSString *)item withAction:MinusAction];
-        }else
-        {
-            [self alterPresentNumWithId:(NSString *)item withAction:MinusAction];
-        }
-    };
-    return block;
-}
-
--(CarCellPlusBlock)cellPlusBlock
-{
-    CarCellPlusBlock block = ^(id item,CellType type)
-    {
-        NSLog(@"%s",__func__);
-        if (type == CommodityCellType) {
-            [self alterCommodityNumWithId:(NSString *)item withAction:PlusAction];
-        }else
-        {
-            [self alterPresentNumWithId:(NSString *)item withAction:PlusAction];
-        }
-    };
-    return block;
-}
 
 -(void)alterCommodityNumWithId:(NSString * )productId withAction:(NSInteger)action
 {
@@ -518,11 +574,4 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
 }
 
--(void)closeAccount
-{
-    NSLog(@"%s",__func__);
-    ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-    [self.navigationController pushViewController:viewController animated:YES];
-    viewController = nil;
-}
 @end

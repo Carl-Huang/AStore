@@ -26,4 +26,7 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)closeAccountAction:(id)sender {
+    self.block();
+}
 @end

@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^CloseAccountActionBlock) ();
 @interface CartCellHeader : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *sumLabel;
 @property (weak, nonatomic) IBOutlet UILabel *moneyValue;
-@property (weak, nonatomic) IBOutlet UIButton *closeAccountBtn;
+@property (strong ,nonatomic) CloseAccountActionBlock block;
+
+- (IBAction)closeAccountAction:(id)sender;
 
 @end

@@ -10,5 +10,6 @@
 
 @interface CommodityListViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *commodityListTable;
-
+@property (strong ,nonatomic)NSArray * commoditiesArray;
+@property (strong ,nonatomic)NSArray * giftArray;
 @end

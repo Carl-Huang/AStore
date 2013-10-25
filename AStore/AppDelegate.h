@@ -16,6 +16,8 @@
 @property (strong ,nonatomic) MBProgressHUD * loadingView;
 @property (strong ,nonatomic) NSMutableArray * commodityArray;
 @property (strong ,nonatomic) NSMutableArray * presentArray;
+@property (strong ,nonatomic) NSArray * buiedCommodityArray;
+@property (strong ,nonatomic) NSArray * buiedPresentArray;
 -(void)showLoginViewOnView:(UIView *)view;
 -(void)removeLoadingViewWithView:(UIView *)view;
 @end

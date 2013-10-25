@@ -19,12 +19,17 @@
 @synthesize loadingView;
 @synthesize commodityArray;
 @synthesize presentArray;
-
+@synthesize buiedCommodityArray;
+@synthesize buiedPresentArray;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+    //储存购物车的商品或赠品
     commodityArray  = [[NSMutableArray alloc]init];
     presentArray    = [[NSMutableArray alloc]init];
+    //储存购买的商品或赠品
+//    buiedCommodityArray = [[NSMutableArray alloc]init];
+//    buiedPresentArray = [[NSMutableArray alloc]init];
+    
     if ([NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"]) {
         self.commodityArray  = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"];
     }

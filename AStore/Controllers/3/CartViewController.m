@@ -36,6 +36,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     BOOL isGiftCheckout;
     BOOL isShouldShowSectionOneRows;
     BOOL isShouldShowSectionTwoRows;
+    BOOL isViewFirstShow;
     NSMutableDictionary * commodityDicInfo;
     NSMutableDictionary * presentDicInfo;
 }
@@ -83,6 +84,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     isGiftCheckout = YES;
     isShouldShowSectionOneRows = YES;
     isShouldShowSectionTwoRows = YES;
+    isViewFirstShow = YES;
     commodityDicInfo = [[NSMutableDictionary alloc]init];
     presentDicInfo = [NSMutableDictionary dictionary];
     // Do any additional setup after loading the view from its nib.
@@ -104,14 +106,16 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     self.dataSource  = myDelegate.commodityArray;
     self.giftArray = myDelegate.presentArray;
     
-    for (int i = 0;  i<dataSource.count; i++) {
-         [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
+    if (isViewFirstShow) {
+        isViewFirstShow = NO;
+        for (int i = 0;  i<dataSource.count; i++) {
+            [commodityDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
+        }
+        for (int i = 0;  i<giftArray.count; i++) {
+            [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
+        }
+        [self.cartTable reloadData];
     }
-    for (int i = 0;  i<giftArray.count; i++) {
-        [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
-    }
-    [self.cartTable reloadData];
-
 }
 
 
@@ -162,29 +166,35 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 //获取订单中的物品
 -(NSArray *)getCommodityProduct
 {
-
     NSMutableArray * array = [NSMutableArray array];
-    for (int i = 0; i < [self.dataSource count];i++) {
-        NSDictionary * dic =  [self.dataSource objectAtIndex:i];
-        Commodity *com = [dic objectForKey:@"commodity"];
-        if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-            [array addObject:com];
+    if (isCommodityCheckout) {
+        for (int i = 0; i < [self.dataSource count];i++) {
+            NSDictionary * dic =  [self.dataSource objectAtIndex:i];
+            //        Commodity *com = [dic objectForKey:@"commodity"];
+            if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+                [array addObject:dic];
+            }
         }
+        return array;
     }
-    return array;
+    return nil;
+    
 }
 
 -(NSArray *)getGiftProduct
 {
     NSMutableArray * array = [NSMutableArray array];
-    for (int i = 0; i < [self.giftArray count];i++) {
-        NSDictionary * dic =  [self.giftArray objectAtIndex:i];
-        GetGiftInfo *gift = [dic objectForKey:@"present"];
-        if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-            [array addObject:gift];
+    if (isGiftCheckout) {
+        for (int i = 0; i < [self.giftArray count];i++) {
+            NSDictionary * dic =  [self.giftArray objectAtIndex:i];
+            //        GetGiftInfo *gift = [dic objectForKey:@"present"];
+            if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+                [array addObject:dic];
+            }
         }
+        return array;
     }
-    return array;
+    return nil;
 }
 
 -(CartCell *)configureCommodityCell:(CartCell *)cell WithIndexPath:(NSIndexPath *)indexPath
@@ -298,6 +308,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         NSLog(@"%s",__func__);
         ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
         [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedCommodityArray = [self getCommodityProduct];
+        myDelegate.buiedPresentArray = [self getGiftProduct];
         viewController = nil;
 
     };
@@ -422,7 +435,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     UIView *backView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView = backView;
     cell.selectedBackgroundView.backgroundColor = [UIColor clearColor];
-    
     [cell setMunisBlock:[self cellMinusBlock]];
     [cell setPlusBlock:[self cellPlusBlock]];
     if (indexPath.section == 0) {

@@ -126,12 +126,13 @@ typedef NS_ENUM(NSInteger, PaymentType)
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    //观察配送方式的改变，更新deliveryTypeInfo
     if ([keyPath isEqual:@"deliveryMethod"]) {
+        //获取配送方式
         deliveryTypeInfo = [change objectForKey:NSKeyValueChangeNewKey];
         NSLog(@"%@",deliveryTypeInfo.dt_name);
     }else if ([keyPath isEqual:@"selectAddressInfo"])
     {
+        //获取地址信息
         addressTypeInfo = [change objectForKey:NSKeyValueChangeNewKey];
         NSLog(@"%@",addressTypeInfo.addr);
     }

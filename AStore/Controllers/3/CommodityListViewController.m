@@ -12,10 +12,14 @@
 #import "UIViewController+LeftTitle.h"
 #import "CommodityListCell.h"
 #import "constants.h"
+#import "Commodity.h"
+#import "AppDelegate.h"
+#import "GetGiftInfo.h"
+#import "HttpHelper.h"
+#import "UIImageView+AFNetworking.h"
 static NSString * cellIdentifier = @"commodityListCell";
 @interface CommodityListViewController ()
-@property (strong ,nonatomic)NSArray * commoditiesArray;
-@property (strong ,nonatomic)NSArray * giftArray;
+
 
 @end
 
@@ -27,9 +31,9 @@ static NSString * cellIdentifier = @"commodityListCell";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        commoditiesArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"￥5"}];
-        
-        giftArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"￥20"}];
+//        commoditiesArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"￥5"}];
+//        
+//        giftArray = @[@{ProductName: @"果粒橙 500 ml",ProductImage:@"食品logo",ProductNumber:@"12",ProductPrice:@"￥20"}];
 
     }
     return self;
@@ -44,6 +48,14 @@ static NSString * cellIdentifier = @"commodityListCell";
     UINib * cellNib = [UINib nibWithNibName:@"CommodityListCell" bundle:[NSBundle bundleForClass:[CommodityListCell class]]];
     [self.commodityListTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     // Do any additional setup after loading the view from its nib.
+    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    if (myDelegate.buiedCommodityArray) {
+        self.commoditiesArray = myDelegate.buiedCommodityArray;
+    }
+    if (myDelegate.buiedPresentArray) {
+        self.giftArray = myDelegate.buiedPresentArray;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -71,7 +83,7 @@ static NSString * cellIdentifier = @"commodityListCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return  30.0;
+    return  45.0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -117,18 +129,47 @@ static NSString * cellIdentifier = @"commodityListCell";
 {
     CommodityListCell *cell = nil;
     cell = [self.commodityListTable dequeueReusableCellWithIdentifier:cellIdentifier];
+    
     if (indexPath.section == 0) {
+        NSDictionary * dic = [self.commoditiesArray objectAtIndex:indexPath.row];
+        Commodity * info = [dic objectForKey:@"commodity"];
+        cell.productName.text = info.name;
+        float floatString = [info.price floatValue];
+        NSString * priceStr = [NSString stringWithFormat:@"￥%.1f",floatString];
+        cell.productPrice.text = priceStr;
+        NSString * imageStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:imageStr] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
+        //Set the items
+        __weak  CommodityListCell *weakCell = cell;
+        [weakCell.productImage setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            [weakCell.productImage setImage:image];
+            [weakCell setNeedsLayout];
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            ;
+        }];
         
-        cell.productName.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:ProductName];
-        cell.productPrice.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:ProductPrice];
-        cell.productQuantity.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:ProductNumber];
-        cell.productImage.image = [UIImage imageNamed:[[commoditiesArray objectAtIndex:indexPath.row]objectForKey:ProductImage]];
+        cell.productQuantity.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"count"]];
     }else if(indexPath.section == 1)
     {
-        cell.productName.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductName];
-        cell.productPrice.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductPrice];
-        cell.productQuantity.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductNumber];
+        NSDictionary * dic = [self.giftArray objectAtIndex:indexPath.row];
+        GetGiftInfo * info = [dic objectForKey:@"present"];
+        cell.productName.text = info.name;
+        cell.productPrice.text = info.point;
+        cell.productQuantity.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"count"]];
         cell.productImage.image =[UIImage imageNamed:[[giftArray objectAtIndex:indexPath.row]objectForKey:ProductImage]];
+        NSString * imageStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:imageStr] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30];
+        __weak  CommodityListCell *weakCell = cell;
+        [weakCell.productImage setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            [weakCell.productImage setImage:image];
+            [weakCell setNeedsLayout];
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            ;
+        }];
+//        cell.productName.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductName];
+//        cell.productPrice.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductPrice];
+//        cell.productQuantity.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductNumber];
+//        cell.productImage.image =[UIImage imageNamed:[[giftArray objectAtIndex:indexPath.row]objectForKey:ProductImage]];
     }
     
     

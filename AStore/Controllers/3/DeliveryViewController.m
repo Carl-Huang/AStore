@@ -16,8 +16,15 @@
 #import "HttpHelper.h"
 #import "DeliveryTypeInfo.h"
 #import "AppDelegate.h"
+#import <objc/runtime.h>
 static NSString * cellIdentifier = @"cellIdentifier";
+static NSString * const selectKey = @"selectKey";
 @interface DeliveryViewController ()
+{
+    NSInteger preSelectItem;
+    NSInteger selectItem;
+    id selectObj;
+}
 @property (strong ,nonatomic)NSArray * dataSourece;
 
 @end
@@ -44,6 +51,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     // Do any additional setup after loading the view from its nib.
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
+    selectObj = [[NSObject alloc]init];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -97,19 +105,24 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self setDeliveryBtn:nil];
     [super viewDidUnload];
 }
--(void)checkBtnAction
+-(void)checkBtnAction:(id)sender
 {
     NSLog(@"%s",__func__);
+    UIButton * btn = (UIButton *)sender;
+    [btn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
 }
 
 - (IBAction)deliveryBtnAction:(id)sender {
     NSLog(@"%s",__func__);
+    DeliveryTypeInfo * info = objc_getAssociatedObject(self, (__bridge const void *)(selectKey));
+    NSLog(@"%@",info.dt_name);
 }
 
 #pragma mark TableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    DeliveryTypeInfo * info = [self.dataSourece objectAtIndex:indexPath.row];
+    objc_setAssociatedObject(self, (__bridge const void *)(selectKey), info, OBJC_ASSOCIATION_RETAIN);
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -131,7 +144,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     DeliveryTypeInfo * info = [self.dataSourece objectAtIndex:indexPath.row];
     cell.timeToReach.text = info.dt_name;
     cell.timeLimitation.text = [self html:info.detail TrimWhiteSpace:YES];
-    [cell.checkBtn addTarget:self action:@selector(checkBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [cell.checkBtn addTarget:self action:@selector(checkBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
 

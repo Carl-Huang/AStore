@@ -200,27 +200,6 @@
         }
     }];
     
-    
-    
-//    [HttpHelper userLoginWithName:_usernameField.text pwd:_passwordField.text completedBlock:^(id items) {
-//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//        [myDelegate removeLoadingViewWithView:nil];
-//        for (NSDictionary * dic in items) {
-//            if ([dic count]==1) {
-//                [self showAlertViewWithTitle:@"登陆失败" message:@"密码或用户名错误"];
-//                NSLog(@"登陆失败");
-//            }else
-//            {
-//                self.userInfoDic = dic;
-//                [self performSelectorOnMainThread:@selector(pushToUserCenterViewController) withObject:nil waitUntilDone:YES];
-//            }
-//        }
-//
-//    } failedBlock:^(NSError * error) {
-//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//        [myDelegate removeLoadingViewWithView:nil];
-//        [self showAlertViewWithTitle:@"提示" message:@"服务器错误"];
-//    }];
 }
 
 -(void)pushToUserCenterViewController

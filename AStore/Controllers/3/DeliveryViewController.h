@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class DeliveryTypeInfo;
 @interface DeliveryViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *deliveryTable;
 @property (weak, nonatomic) IBOutlet UIButton *deliveryBtn;
+@property (strong ,nonatomic) DeliveryTypeInfo * deliveryMethod;
 - (IBAction)deliveryBtnAction:(id)sender;
 
 @end

@@ -23,7 +23,7 @@ static NSString * const selectKey = @"selectKey";
 {
     NSInteger preSelectItem;
     NSInteger selectItem;
-    id selectObj;
+    NSMutableDictionary * selectItemsDic;
 }
 @property (strong ,nonatomic)NSArray * dataSourece;
 
@@ -31,6 +31,8 @@ static NSString * const selectKey = @"selectKey";
 
 @implementation DeliveryViewController
 @synthesize dataSourece;
+@synthesize deliveryMethod;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -51,14 +53,14 @@ static NSString * const selectKey = @"selectKey";
     // Do any additional setup after loading the view from its nib.
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
-    selectObj = [[NSObject alloc]init];
+    selectItemsDic = [NSMutableDictionary dictionary];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
    
     
-    DeliveryViewController * weakSelf = self;
+    __weak DeliveryViewController * weakSelf = self;
     [HttpHelper getDeliveryTypeWithCompletedBlock:^(id item, NSError *error) {
 //        for (DeliveryTypeInfo * info in item) {
 //            NSLog(@"%@",info.dt_name);
@@ -69,6 +71,9 @@ static NSString * const selectKey = @"selectKey";
         }
         if ([item count]) {
             weakSelf.dataSourece = item;
+            for (int i = 0; i< weakSelf.dataSourece.count; i++) {
+                [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+            }
             [weakSelf.deliveryTable reloadData];
             
         }
@@ -114,15 +119,23 @@ static NSString * const selectKey = @"selectKey";
 
 - (IBAction)deliveryBtnAction:(id)sender {
     NSLog(@"%s",__func__);
-    DeliveryTypeInfo * info = objc_getAssociatedObject(self, (__bridge const void *)(selectKey));
-    NSLog(@"%@",info.dt_name);
+    self.deliveryMethod = objc_getAssociatedObject(self, (__bridge const void *)(selectKey));
 }
 
 #pragma mark TableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //设置全部item的标志位为0
+    for (int i = 0 ;i <[selectItemsDic count]; i++) {
+        [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+    }
+    //设置选中item的标志位为 1
+    [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+    
+    //取出对应的信息
     DeliveryTypeInfo * info = [self.dataSourece objectAtIndex:indexPath.row];
     objc_setAssociatedObject(self, (__bridge const void *)(selectKey), info, OBJC_ASSOCIATION_RETAIN);
+    [tableView reloadData];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -145,6 +158,15 @@ static NSString * const selectKey = @"selectKey";
     cell.timeToReach.text = info.dt_name;
     cell.timeLimitation.text = [self html:info.detail TrimWhiteSpace:YES];
     [cell.checkBtn addTarget:self action:@selector(checkBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[selectItemsDic objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]] integerValue] == 1) {
+        [cell.checkBtn setImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
+
+    }else
+    {
+        [cell.checkBtn setImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal];
+    }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
 

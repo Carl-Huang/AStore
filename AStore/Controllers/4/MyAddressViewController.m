@@ -27,6 +27,7 @@ static NSString * cellIdentifier = @"addressCell";
     UIBarButtonItem * newItem;
     UIBarButtonItem * deleteItem;
     UIBarButtonItem * backItem;
+    NSMutableDictionary * selectItemsDic;
 }
 @property (strong ,nonatomic)NSMutableArray * dataSource;
 
@@ -35,6 +36,7 @@ static NSString * cellIdentifier = @"addressCell";
 @implementation MyAddressViewController
 @synthesize dataSource;
 @synthesize memberId;
+@synthesize selectAddressInfo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -79,7 +81,7 @@ static NSString * cellIdentifier = @"addressCell";
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
     isAlertViewCanShow = YES;
-
+    selectItemsDic = [NSMutableDictionary dictionary];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -91,7 +93,7 @@ static NSString * cellIdentifier = @"addressCell";
 
 -(void)fetchDataFromServer
 {
-    MyAddressViewController *weakSelf= self;
+    __weak MyAddressViewController *weakSelf= self;
     if (memberId) {
         NSLog(@"Member ID :%@",memberId);
         
@@ -100,8 +102,10 @@ static NSString * cellIdentifier = @"addressCell";
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
         [weakSelf.dataSource removeAllObjects];
-        for (AddressInfo * address in items) {
+        for (int i = 0;i< [items count];i++) {
+            AddressInfo * address  = [items objectAtIndex:i];
             [dataSource addObject:address];
+            [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
         }
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
@@ -198,7 +202,15 @@ static NSString * cellIdentifier = @"addressCell";
     cell.phoneLabel.text = address.mobile;
     NSString * areaInfo = [address.area stringByAppendingString:address.addr];
     cell.addressInfoLabel.text = areaInfo;
-    
+    cell.chooseBtn.tag = indexPath.row;
+    if ([[selectItemsDic objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]integerValue] == 1) {
+        [cell.chooseBtn setTitle:@"已选" forState:UIControlStateNormal];
+       [cell.chooseBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
+    }else
+    {
+        [cell.chooseBtn setTitle:@"选择" forState:UIControlStateNormal];
+        [cell.chooseBtn setBackgroundImage:nil forState:UIControlStateNormal];
+    }
     
     cell.backgroundColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -241,18 +253,12 @@ static NSString * cellIdentifier = @"addressCell";
 
 -(void)configureCellBlockWithCell:(AddressCell *)cell
 {
+    __weak MyAddressViewController *weakSelf = self;
     configureAddressBlock block = ^(id item1,id item2)
     {
         NSLog(@"configureAddressBlock processing");
         UIButton * btn = (UIButton *)item1;
-        if (btn.tag == chooseBtnTag) {
-            if ([btn.titleLabel.text isEqualToString:@"选择"]) {
-                [item1 setTitle:@"已选" forState:UIControlStateNormal];
-            }else
-            {
-                [item1 setTitle:@"选择" forState:UIControlStateNormal];
-            }
-        }else if (btn.tag == alterBtnTag)
+        if (btn.tag == alterBtnTag)
         {
             ModifyAddressViewController * viewController = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
             [viewController setModifitedData:item2];
@@ -262,8 +268,21 @@ static NSString * cellIdentifier = @"addressCell";
         {
             self.navigationItem.rightBarButtonItems = @[backItem,deleteItem];
             [self.addressTable setEditing:YES animated:YES];
-        }else
-            NSLog(@"Other Tag");
+        }else {
+            
+            for (int i =0; i<[selectItemsDic count]; i++) {
+                [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+            }
+            [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",btn.tag]];
+            if ([btn.titleLabel.text isEqualToString:@"选择"]) {
+                [item1 setTitle:@"已选" forState:UIControlStateNormal];
+            }else
+            {
+                [item1 setTitle:@"选择" forState:UIControlStateNormal];
+            }
+            weakSelf.selectAddressInfo =(AddressInfo *)item2;
+            [weakSelf.addressTable reloadData];
+        }
         
         
         NSLog(@"%d",btn.tag);

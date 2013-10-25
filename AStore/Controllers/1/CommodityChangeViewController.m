@@ -45,7 +45,7 @@
     if (dataSource == nil) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate showLoginViewOnView:self.view];
-        CommodityChangeViewController * weakSelf = self;
+        __weak CommodityChangeViewController * weakSelf = self;
         
         [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
             if (error) {

@@ -107,7 +107,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    ModifyAddressViewController * weakSelf = self;
+    __weak ModifyAddressViewController * weakSelf = self;
     [HttpHelper getRegionWithSuccessBlock:^(NSArray * array) {
         [weakSelf getRegionTyepWithDataArray:array];
     } failedBlock:^(NSError *error) {
@@ -249,7 +249,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         fixedPhoneNum = fixedTelField.text;
     }else
         fixedPhoneNum = @"";
-    ModifyAddressViewController *weakSelf = self;
+    __weak ModifyAddressViewController *weakSelf = self;
     if (fixedTelField.text) {
         fixedPhoneNum = fixedTelField.text;
     }else

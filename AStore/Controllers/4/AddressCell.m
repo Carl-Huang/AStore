@@ -32,7 +32,7 @@
         self.isChooseBtnSelect = NO;
         self.isAlterBtnSelect = NO;
         self.isDeleteBtnSelect = NO;
-        chooseBtn.tag = chooseBtnTag;
+//        chooseBtn.tag = chooseBtnTag;
         alterBtn.tag = alterBtnTag;
         deleteBtn.tag = deleteBtnTag;
         // Initialization code
@@ -53,15 +53,15 @@
 }
 
 - (IBAction)chooseBtnAction:(id)sender {
-    NSLog(@"%s",__func__);
+//    NSLog(@"%s",__func__);
     self.addressBlock(sender,self.addressInfo);
-    self.isChooseBtnSelect = !self.isChooseBtnSelect;
-    if (self.isChooseBtnSelect) {
-        [self.chooseBtn setBackgroundImage:nil forState:UIControlStateNormal];
-    }else
-    {
-        [self.chooseBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
-    }
+//    self.isChooseBtnSelect = !self.isChooseBtnSelect;
+//    if (self.isChooseBtnSelect) {
+//        [self.chooseBtn setBackgroundImage:nil forState:UIControlStateNormal];
+//    }else
+//    {
+//        [self.chooseBtn setBackgroundImage:[UIImage imageNamed:@"分类背景框-b"] forState:UIControlStateNormal];
+//    }
 
 }
 

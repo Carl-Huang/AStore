@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class AddressInfo;
 @interface MyAddressViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *addressTable;
 @property (strong ,nonatomic)NSString * memberId;
+@property (strong ,nonatomic) AddressInfo * selectAddressInfo;
 -(void)setMyAddressDataSourece:(NSArray *)dataAry;
 @end

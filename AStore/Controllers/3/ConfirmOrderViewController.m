@@ -13,12 +13,22 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #import "CommodityListViewController.h"
 #import "AppDelegate.h"
 #import "AKTabBarController.h"
+#import "DeliveryTypeInfo.h"
+#import "MyAddressViewController.h"
+#import "AddressInfo.h"
+#import "User.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
     OfflinePaymentType,
 };
 @interface ConfirmOrderViewController ()
+{
+    
+    DeliveryTypeInfo * deliveryTypeInfo; //配送方式
+    AddressInfo * addressTypeInfo;       //个人地址信息
+    
+}
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (assign ,nonatomic)BOOL isCheck;
 @property (assign ,nonatomic)PaymentType payType;
@@ -113,13 +123,26 @@ typedef NS_ENUM(NSInteger, PaymentType)
      NSLog(@"%s",__func__);
 }
 
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    //观察配送方式的改变，更新deliveryTypeInfo
+    if ([keyPath isEqual:@"deliveryMethod"]) {
+        deliveryTypeInfo = [change objectForKey:NSKeyValueChangeNewKey];
+        NSLog(@"%@",deliveryTypeInfo.dt_name);
+    }else if ([keyPath isEqual:@"selectAddressInfo"])
+    {
+        addressTypeInfo = [change objectForKey:NSKeyValueChangeNewKey];
+        NSLog(@"%@",addressTypeInfo.addr);
+    }
+}
 #pragma mark - UITableviewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger rowIndex = indexPath.row+indexPath.section*2;
     switch (rowIndex) {
         case 0:
-            
+            [self pushMyAddressViewController];
             break;
         case 1:
             
@@ -139,6 +162,7 @@ typedef NS_ENUM(NSInteger, PaymentType)
 -(void)pushDeliveryViewController
 {
     DeliveryViewController * viewcontroller = [[DeliveryViewController alloc]initWithNibName:@"DeliveryViewController" bundle:nil];
+    [viewcontroller addObserver:self forKeyPath:@"deliveryMethod" options:NSKeyValueObservingOptionNew context:NULL];
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller = nil;
 }
@@ -150,7 +174,19 @@ typedef NS_ENUM(NSInteger, PaymentType)
     viewcontroller = nil;
 }
 
-
+-(void)pushMyAddressViewController
+{
+    MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
+    NSDictionary * localUserData = [User getUserInfo];
+    NSString * str = [NSString stringWithFormat:@"%@",[localUserData objectForKey:@"area"]];
+    if (![str isEqualToString:@"<null>"]) {
+        NSLog(@"%@",str);
+    }
+    [viewController setMemberId:[localUserData objectForKey:DMemberId]];
+    [viewController addObserver:self forKeyPath:@"selectAddressInfo" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50;

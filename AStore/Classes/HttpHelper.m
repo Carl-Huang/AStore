@@ -706,8 +706,6 @@
     } errorBlock:^(NSError *error) {
         block(nil,error);
     }];
-    
-    
     arr_gift_id     = nil;
     arr_name        = nil;
     arr_nums        = nil;

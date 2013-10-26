@@ -17,6 +17,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #import "MyAddressViewController.h"
 #import "AddressInfo.h"
 #import "User.h"
+#import "HttpHelper.h"
+#import "Commodity.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -40,6 +42,10 @@ typedef NS_ENUM(NSInteger, PaymentType)
 @synthesize isCheck;
 @synthesize headerView;
 @synthesize payType;
+@synthesize commoditySumMoney;
+@synthesize giftSumMoney;
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -54,11 +60,6 @@ typedef NS_ENUM(NSInteger, PaymentType)
 
 - (void)viewDidLoad
 {
-//    AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//    AKTabBarController * tabBarController =  appDelegate.akTabBarController;
-//    UINavigationController * nav = [tabBarController.viewControllers objectAtIndex:3];
-//    NSLog(@"%@", [[nav.viewControllers objectAtIndex:0] class]);
-
     [super viewDidLoad];
     [self setLeftTitle:@"订单确认"];
     [self setBackItem:nil];
@@ -74,7 +75,7 @@ typedef NS_ENUM(NSInteger, PaymentType)
     [posForm addTarget:self action:@selector(postFormAction) forControlEvents:UIControlEventTouchUpInside];
     [posForm setTitle:@"提交订单" forState:UIControlStateNormal];
     UILabel * sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 150, 30)];
-    sumLabel.text = @"应付总额:￥4.2";
+    sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%d",commoditySumMoney];
     [sumLabel setBackgroundColor:[UIColor clearColor]];
     [footerView addSubview:imageview];
     [footerView addSubview:posForm];
@@ -90,6 +91,46 @@ typedef NS_ENUM(NSInteger, PaymentType)
 -(void)postFormAction
 {
     NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    NSInteger totalWeight = 0;
+    NSInteger totalCommodityNum = 0;
+    NSInteger totalPoint = 0;
+    NSMutableArray * commodityArray = [[NSMutableArray alloc]init];
+    for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+        Commodity * info = [dic objectForKey:@"commodity"];
+        NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
+        NSInteger tempWeight = tempCount*info.weight.integerValue;
+        totalWeight += tempWeight;
+        totalCommodityNum += tempCount;
+        totalPoint += info.score.integerValue;
+        [commodityArray addObject:dic];
+    }
+    
+    [HttpHelper postOrderWithUserInfo:nil
+                         deliveryType:deliveryTypeInfo
+                               Weight: [NSString stringWithFormat:@"%d",totalWeight]
+                                tostr:@""
+                           productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
+                              address:addressTypeInfo
+                    totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                         deliveryCost:@"0"
+                             getPoint:[NSString stringWithFormat:@"%d",totalPoint]
+                           totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                                 memo:@"请快点送货"
+                   withCommodityArray:commodityArray withCompletedBlock:^(id item, NSError *error) {
+                       if (error) {
+                           NSLog(@"%@",[error description]);
+                       }
+                       NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
+                       
+                       if ([str isEqualToString:@"1"]) {
+                           NSLog(@"提交订单成功");
+                       }else
+                       {
+                           NSLog(@"提交订单失败");
+                       }
+
+    }];
 }
 
 

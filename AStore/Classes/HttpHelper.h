@@ -10,6 +10,9 @@
 #import "AFNetworking.h"
 #define SERVER_URL @"http://www.shyl8.net/"
 #import "constants.h"
+@class DeliveryTypeInfo;
+@class AddressInfo;
+
 @interface HttpHelper : NSObject
 
 //获得所有分类
@@ -91,7 +94,19 @@
 
 
 //提交订单（商品）
-
++(void)postOrderWithUserInfo:(NSArray *)userData
+                deliveryType:(DeliveryTypeInfo *)deliveryType
+                      Weight:(NSString *)weight
+                       tostr:(NSString *)tostr
+                  productNum:(NSString *)numStr
+                     address:(AddressInfo *)addressInfo
+           totalProuctMomeny:(NSString *)productMoney
+                deliveryCost:(NSString *)deliveryCost
+                    getPoint:(NSString *)point
+                  totalMoney:(NSString *)money
+                        memo:(NSString *)memo
+          withCommodityArray:(NSArray *)array
+          withCompletedBlock:(void (^)(id item,NSError * error))block;
 //提交订单（赠品）
 
 

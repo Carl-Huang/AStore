@@ -116,9 +116,7 @@
     NSLog(@"%@",urlString);
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
     [manager POST:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSArray * results = (NSArray *)responseObject;
-        success(results);
-    
+        success((NSArray *)responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         ;
         failure(error);
@@ -501,5 +499,123 @@
         block (nil,error);
     }];
 
+}
+
++(void)postOrderWithUserInfo:(NSArray *)userData
+                deliveryType:(DeliveryTypeInfo *)deliveryType
+                      Weight:(NSString *)weight
+                       tostr:(NSString *)tostr
+                  productNum:(NSString *)numStr
+                     address:(AddressInfo *)addressInfo
+           totalProuctMomeny:(NSString *)productMoney
+                deliveryCost:(NSString *)deliveryCost
+                    getPoint:(NSString *)point
+                  totalMoney:(NSString *)money
+                        memo:(NSString *)memo
+          withCommodityArray:(NSArray *)commodityDic
+          withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSDictionary *userInfo = [User getUserInfo];
+ 
+    NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_2=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&ost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
+                          [userInfo objectForKey:DMemberId],
+                          deliveryType.dt_id,
+                          weight,
+                          tostr,                //商品名称列表，多个商品用,分隔格式如下：
+                                                //商品1（规格）（数量）
+                                                //例如：
+                                                //女式洞洞鞋1165（三色可选）(蓝色、38)(1)
+
+                          numStr,               //商品总数量
+                          addressInfo.name,
+                          addressInfo.area,
+                          addressInfo.addr,
+                          @"任意时间段",
+                          addressInfo.mobile,
+                          addressInfo.tel,
+                          productMoney,         //商品总额
+                          deliveryCost,         //配送费用
+                          @"0",                 //消耗积分：商品为0，赠品才需要
+                          point,                //可得总积分=可得积分*数量
+                          money,                //总金额
+                          memo];                //备注
+    
+    NSString * product_id_str   = [[NSString alloc]init];
+    NSString * arr_bn_str       = [[NSString alloc]init];
+    NSString * arr_name_str     = [[NSString alloc]init];
+    NSString * arr_cost_str     = [[NSString alloc]init];
+    NSString * arr_price_str    = [[NSString alloc]init];
+    NSString * arr_amount_str   = [[NSString alloc]init];
+    NSString * arr_nums_str     = [[NSString alloc]init];
+    NSString * arr_score_str    = [[NSString alloc]init];
+    
+    
+    for (int i = 0;i< [commodityDic count]; i++) {
+        NSDictionary * dic = [commodityDic objectAtIndex:i];
+        //单一商品的数量
+        NSInteger count =[[dic objectForKey:@"count"]integerValue];
+
+        Commodity * commodityInfo = [dic objectForKey:@"commodity"];
+        
+        product_id_str = [product_id_str stringByAppendingString:commodityInfo.product_id];
+        
+        arr_bn_str = [arr_bn_str stringByAppendingString:commodityInfo.bn];
+       
+        arr_name_str = [arr_name_str stringByAppendingString:commodityInfo.name];
+        
+        arr_cost_str = [arr_cost_str stringByAppendingString:commodityInfo.cost];
+        
+        arr_price_str = [arr_price_str stringByAppendingString:commodityInfo.price];
+        
+        
+        //数量
+        NSString * countStr = [NSString stringWithFormat:@"%d",count];
+        arr_nums_str = [arr_nums_str stringByAppendingString:countStr];
+        
+        
+        //总积分
+        NSInteger totalScore = count * commodityInfo.score.integerValue;
+        NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];
+        arr_score_str = [arr_score_str stringByAppendingString:scoreStr];
+        
+        
+        //总额
+        NSInteger totalPrice = count * commodityInfo.price.integerValue;
+        NSString * priceStr = [NSString stringWithFormat:@"%d",totalPrice];
+        arr_amount_str = [arr_amount_str stringByAppendingString:priceStr];
+        
+        if (i != [commodityDic count]-1) {
+            product_id_str  = [product_id_str stringByAppendingString:@","];
+            arr_bn_str     = [arr_bn_str stringByAppendingString:@","];
+            arr_name_str    = [product_id_str stringByAppendingString:@","];
+            arr_cost_str    = [arr_cost_str stringByAppendingString:@","];
+            arr_price_str   = [arr_price_str stringByAppendingString:@","];
+            arr_nums_str    = [arr_nums_str stringByAppendingString:@","];
+            arr_score_str   = [arr_score_str stringByAppendingString:@","];
+            arr_amount_str  = [arr_amount_str stringByAppendingString:@","];
+
+        }
+    }
+
+    NSString *cmdStr2 = [NSString stringWithFormat:@"&&arr_product_id=%@&&arr_bn=%@&&arr_name=%@&&arr_cost=%@&&arr_price=%@&&arr_amount=%@&&arr_nums=%@&&arr_score=%@",product_id_str,arr_bn_str,arr_name_str,arr_cost_str,arr_price_str,arr_amount_str,arr_nums_str,arr_score_str];
+    
+    
+    NSString * postStr = [cmdStr1 stringByAppendingString:cmdStr2];
+    NSLog(@"postStr: %@",postStr);
+    
+    [HttpHelper postRequestWithCmdStr:postStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+         block(nil,error);
+    }];
+    
+    
+    product_id_str  = nil;
+    arr_bn_str      = nil;
+    arr_name_str    = nil;
+    arr_nums_str    = nil;
+    arr_cost_str    = nil;
+    arr_price_str   = nil;
+    arr_score_str   = nil;
 }
 @end

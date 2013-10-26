@@ -39,6 +39,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     BOOL isViewFirstShow;
     NSMutableDictionary * commodityDicInfo;
     NSMutableDictionary * presentDicInfo;
+    float commoditySumMoney;
+    float giftSumMoney;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
@@ -87,6 +89,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     isViewFirstShow = YES;
     commodityDicInfo = [[NSMutableDictionary alloc]init];
     presentDicInfo = [NSMutableDictionary dictionary];
+    giftSumMoney = 0.0;
+    commoditySumMoney = 0.0;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -307,6 +311,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         
         NSLog(@"%s",__func__);
         ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        [viewController setCommoditySumMoney:commoditySumMoney];
+        [viewController setGiftSumMoney:giftSumMoney];
+        
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedCommodityArray = [self getCommodityProduct];
@@ -441,8 +448,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         if (indexPath.row == 0) {
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
-            float sum = 0.0;
-            
             //算出总价格
             for (int i = 0;i < dataSource.count;i++) {
                 NSDictionary  * infoDic = [dataSource objectAtIndex:i];
@@ -451,12 +456,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 float price = [info.price floatValue];
                 if (isCommodityCheckout) {
                     if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-                        sum += price*num;
+                        commoditySumMoney += price*num;
                     }
                 }else
-                    sum = 0.0;
+                    commoditySumMoney = 0.0;
             }
-            headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
+            headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",commoditySumMoney];
             [headerCell setBlock:[self configureCloseAccountBlock]];
             [headerCell setSelected:isCommodityCheckout animated:YES];
             return headerCell;
@@ -473,7 +478,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             headerCell.sumLabel.text = @"积分:";
             
             //算出总积分
-            float sum = 0;
             for (int i = 0;i < giftArray.count;i++) {
                 NSDictionary  * infoDic = [giftArray objectAtIndex:i];
                 GetGiftInfo * info = [infoDic objectForKey:@"present"];
@@ -481,12 +485,12 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 float price = [info.point floatValue];
                 if (isGiftCheckout) {
                     if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-                        sum += price*num;
+                        giftSumMoney += price*num;
                     }
                 }else
-                    sum = 0.0;
+                    giftSumMoney = 0.0;
             }
-             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",sum];
+             headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",giftSumMoney];
             [headerCell setBlock:[self configureCloseAccountBlock]];
             [headerCell setSelected:isGiftCheckout animated:YES];
             return headerCell;

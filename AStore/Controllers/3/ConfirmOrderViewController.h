@@ -10,5 +10,6 @@
 
 @interface ConfirmOrderViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *confirmTable;
-
+@property (assign,nonatomic) NSInteger commoditySumMoney;
+@property (assign,nonatomic) NSInteger giftSumMoney;
 @end

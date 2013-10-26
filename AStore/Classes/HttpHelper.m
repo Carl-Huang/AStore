@@ -618,4 +618,100 @@
     arr_price_str   = nil;
     arr_score_str   = nil;
 }
+
+
++(void)postGiftOrderWithUserInfo:(NSArray *)userData
+                deliveryType:(DeliveryTypeInfo *)deliveryType
+                      Weight:(NSString *)weight
+                       tostr:(NSString *)tostr
+                  productNum:(NSString *)numStr
+                     address:(AddressInfo *)addressInfo
+           totalProuctMomeny:(NSString *)productMoney
+                deliveryCost:(NSString *)deliveryCost
+                    getPoint:(NSString *)point
+                  totalMoney:(NSString *)money
+                        memo:(NSString *)memo
+          withCommodityArray:(NSArray *)commodityDic
+          withCompletedBlock:(void (^)(id item,NSError * error))block
+{
+    NSDictionary *userInfo = [User getUserInfo];
+    
+    NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_2=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&ost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
+                          [userInfo objectForKey:DMemberId],
+                          deliveryType.dt_id,
+                          weight,
+                          tostr,                //商品名称列表，多个商品用,分隔格式如下：
+                          //商品1（规格）（数量）
+                          //例如：
+                          //女式洞洞鞋1165（三色可选）(蓝色、38)(1)
+                          
+                          numStr,               //商品总数量
+                          addressInfo.name,
+                          addressInfo.area,
+                          addressInfo.addr,
+                          @"任意时间段",
+                          addressInfo.mobile,
+                          addressInfo.tel,
+                          productMoney,         //商品总额
+                          deliveryCost,         //配送费用
+                          @"0",                 //消耗积分：商品为0，赠品才需要
+                          point,                //可得总积分=可得积分*数量
+                          money,                //总金额
+                          memo];                //备注
+    
+    NSString * arr_gift_id   = [[NSString alloc]init];
+    NSString * arr_name       = [[NSString alloc]init];
+    NSString * arr_point     = [[NSString alloc]init];
+    NSString * arr_nums     = [[NSString alloc]init];
+
+    
+    
+    for (int i = 0;i< [commodityDic count]; i++) {
+        NSDictionary * dic = [commodityDic objectAtIndex:i];
+        //单一商品的数量
+        NSInteger count =[[dic objectForKey:@"count"]integerValue];
+        
+        GetGiftInfo * giftInfo = [dic objectForKey:@"present"];
+        
+        arr_gift_id = [arr_gift_id stringByAppendingString:giftInfo.gift_id];
+        
+        arr_name = [arr_name stringByAppendingString:giftInfo.name];
+    
+        //数量
+        NSString * countStr = [NSString stringWithFormat:@"%d",count];
+        arr_nums = [arr_nums stringByAppendingString:countStr];
+
+        //总积分
+        NSInteger totalScore = count * giftInfo.point.integerValue;
+        NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];
+        arr_point = [arr_point stringByAppendingString:scoreStr];
+        
+        if (i != [commodityDic count]-1) {
+            arr_gift_id  = [arr_gift_id stringByAppendingString:@","];
+            arr_name     = [arr_name stringByAppendingString:@","];
+            arr_nums     = [arr_nums stringByAppendingString:@","];
+            arr_point    = [arr_point stringByAppendingString:@","];
+
+        }
+    }
+    
+    NSString *cmdStr2 = [NSString stringWithFormat:@"&&arr_gift_id=%@&&arr_name=%@&&arr_nums=%@&&arr_point=%@",arr_gift_id,arr_name,arr_nums,arr_point];
+    
+    
+    NSString * postStr = [cmdStr1 stringByAppendingString:cmdStr2];
+    NSLog(@"postStr: %@",postStr);
+    
+    [HttpHelper postRequestWithCmdStr:postStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
+    
+    
+    arr_gift_id     = nil;
+    arr_name        = nil;
+    arr_nums        = nil;
+    arr_point       = nil;
+
+}
 @end

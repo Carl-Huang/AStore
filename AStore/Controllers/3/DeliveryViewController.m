@@ -58,14 +58,9 @@ static NSString * const selectKey = @"selectKey";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-   
-    
+
     __weak DeliveryViewController * weakSelf = self;
     [HttpHelper getDeliveryTypeWithCompletedBlock:^(id item, NSError *error) {
-//        for (DeliveryTypeInfo * info in item) {
-//            NSLog(@"%@",info.dt_name);
-//            NSLog(@"%@",[self html:info.detail TrimWhiteSpace:YES]);
-//        }
         if (error) {
             NSLog(@"%@",[error description]);
         }
@@ -74,6 +69,13 @@ static NSString * const selectKey = @"selectKey";
             for (int i = 0; i< weakSelf.dataSourece.count; i++) {
                 [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
             }
+            NSInteger selectTag = -1;
+            selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectDeliveryTag"];
+            if (selectTag != -1) {
+                [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
+                 objc_setAssociatedObject(self, (__bridge const void *)(selectKey), [weakSelf.dataSourece objectAtIndex:selectTag], OBJC_ASSOCIATION_RETAIN);
+            }
+            
             [weakSelf.deliveryTable reloadData];
             
         }
@@ -120,6 +122,7 @@ static NSString * const selectKey = @"selectKey";
 - (IBAction)deliveryBtnAction:(id)sender {
     NSLog(@"%s",__func__);
     self.deliveryMethod = objc_getAssociatedObject(self, (__bridge const void *)(selectKey));
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark TableView
@@ -131,6 +134,8 @@ static NSString * const selectKey = @"selectKey";
     }
     //设置选中item的标志位为 1
     [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",indexPath.row]];
+    [[NSUserDefaults standardUserDefaults]setInteger:indexPath.row forKey:@"selectDeliveryTag"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
     
     //取出对应的信息
     DeliveryTypeInfo * info = [self.dataSourece objectAtIndex:indexPath.row];

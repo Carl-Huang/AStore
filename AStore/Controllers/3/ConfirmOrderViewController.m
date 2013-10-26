@@ -106,6 +106,9 @@ typedef NS_ENUM(NSInteger, PaymentType)
         [commodityArray addObject:dic];
     }
     
+
+    [myDelegate showLoginViewOnView:self.view];
+    __weak ConfirmOrderViewController * weakSelf = self;
     [HttpHelper postOrderWithUserInfo:nil
                          deliveryType:deliveryTypeInfo
                                Weight: [NSString stringWithFormat:@"%d",totalWeight]
@@ -125,12 +128,31 @@ typedef NS_ENUM(NSInteger, PaymentType)
                        
                        if ([str isEqualToString:@"1"]) {
                            NSLog(@"提交订单成功");
+                           [weakSelf cleanUserDefaulstSetting];
+                           //清除NSUserDefaults 数据
+                           
                        }else
                        {
                            NSLog(@"提交订单失败");
+                           [myDelegate removeLoadingViewWithView:nil];
+                           [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
+                           
                        }
 
     }];
+}
+
+-(void)cleanUserDefaulstSetting
+{
+    //DeliveryViewController
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectDeliveryTag"];
+    
+    //MyAddressViewController中的关键字
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectTag"];
+    
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
 }
 
 
@@ -295,5 +317,13 @@ typedef NS_ENUM(NSInteger, PaymentType)
         return 2;
     return  [self.dataSource count];
     
+}
+
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+    pAlert.delegate = self;
+    [pAlert show];
+    pAlert = nil;
 }
 @end

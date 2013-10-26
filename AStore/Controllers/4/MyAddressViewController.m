@@ -107,6 +107,13 @@ static NSString * cellIdentifier = @"addressCell";
             [dataSource addObject:address];
             [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
         }
+        NSInteger selectTag = -1;
+        selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
+        if (selectTag != -1) {
+            [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
+            selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
+        }
+        
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
         ;
@@ -274,6 +281,9 @@ static NSString * cellIdentifier = @"addressCell";
                 [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
             }
             [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",btn.tag]];
+            [[NSUserDefaults standardUserDefaults]setInteger:btn.tag forKey:@"selectTag"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            
             if ([btn.titleLabel.text isEqualToString:@"选择"]) {
                 [item1 setTitle:@"已选" forState:UIControlStateNormal];
             }else

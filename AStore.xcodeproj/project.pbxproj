@@ -79,6 +79,10 @@
 		4EC02AE9180A6BB1009C5AFD /* CommodityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EC02AE7180A6BB1009C5AFD /* CommodityViewController.xib */; };
 		4EE31C1E181263E700384992 /* AddAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE31C1D181263E700384992 /* AddAddressCell.m */; };
 		4EE31C20181263FB00384992 /* AddAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EE31C1F181263FB00384992 /* AddAddressCell.xib */; };
+		4EEA2F8E181C07F500E18EA0 /* confirmOrderInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8D181C07F500E18EA0 /* confirmOrderInfoCell.m */; };
+		4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */; };
+		4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */; };
+		4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
 		C32B1BC317F405F50089D6CC /* 个人中心icon-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */; };
 		C32B1BC417F405F50089D6CC /* 分类icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BBA17F405F50089D6CC /* 分类icon-n.png */; };
@@ -376,6 +380,12 @@
 		4EE31C1C181263E700384992 /* AddAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressCell.h; sourceTree = "<group>"; };
 		4EE31C1D181263E700384992 /* AddAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressCell.m; sourceTree = "<group>"; };
 		4EE31C1F181263FB00384992 /* AddAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddAddressCell.xib; sourceTree = "<group>"; };
+		4EEA2F8C181C07F500E18EA0 /* confirmOrderInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = confirmOrderInfoCell.h; sourceTree = "<group>"; };
+		4EEA2F8D181C07F500E18EA0 /* confirmOrderInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = confirmOrderInfoCell.m; sourceTree = "<group>"; };
+		4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = confirmOrderInfoCell.xib; sourceTree = "<group>"; };
+		4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderMemo.xib; sourceTree = "<group>"; };
+		4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderMemoCell.h; sourceTree = "<group>"; };
+		4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderMemoCell.m; sourceTree = "<group>"; };
 		C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-n.png"; sourceTree = "<group>"; };
 		C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-s.png"; sourceTree = "<group>"; };
 		C32B1BBA17F405F50089D6CC /* 分类icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "分类icon-n.png"; sourceTree = "<group>"; };
@@ -1061,6 +1071,12 @@
 				4EAEE3F317FE8913002857F1 /* ConfirmOrderViewController.h */,
 				4EAEE3F417FE8914002857F1 /* ConfirmOrderViewController.m */,
 				4EAEE3F517FE8915002857F1 /* ConfirmOrderViewController.xib */,
+				4EEA2F8C181C07F500E18EA0 /* confirmOrderInfoCell.h */,
+				4EEA2F8D181C07F500E18EA0 /* confirmOrderInfoCell.m */,
+				4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */,
+				4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */,
+				4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */,
+				4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */,
 				4EB7B21517FF393C0018AC58 /* HeaderView.xib */,
 				4EB7B21717FF3E9A0018AC58 /* HeaderView.h */,
 				4EB7B21817FF3E9A0018AC58 /* HeaderView.m */,
@@ -1340,6 +1356,8 @@
 				4EE31C20181263FB00384992 /* AddAddressCell.xib in Resources */,
 				4E00978B1813980900D4DE40 /* PresentCommodityViewController.xib in Resources */,
 				4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */,
+				4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */,
+				4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1440,6 +1458,8 @@
 				4E03EB801816823100D80E27 /* ProductStoreInfo.m in Sources */,
 				4E03EB831816825D00D80E27 /* GiftStoreInfo.m in Sources */,
 				4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */,
+				4EEA2F8E181C07F500E18EA0 /* confirmOrderInfoCell.m in Sources */,
+				4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -5,7 +5,10 @@
 //  Created by vedon on 10/3/13.
 //  Copyright (c) 2013 carl. All rights reserved.
 //
-static NSString * cellIdentifier = @"cellIdentifier";
+
+
+#define TableViewOffsetY    140
+
 #import "ConfirmOrderViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HeaderView.h"
@@ -19,16 +22,24 @@ static NSString * cellIdentifier = @"cellIdentifier";
 #import "User.h"
 #import "HttpHelper.h"
 #import "Commodity.h"
+#import "confirmOrderInfoCell.h"
+#import "ConfirmOrderMemoCell.h"
+#import <objc/runtime.h>
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
     OfflinePaymentType,
 };
-@interface ConfirmOrderViewController ()
+static NSString * const cellIdentifier = @"cellIdentifier";
+static NSString * const orderInfoCellIdentifier = @"orderInfoCellIdentifier";
+static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
+@interface ConfirmOrderViewController ()<UITextFieldDelegate>
 {
     
     DeliveryTypeInfo * deliveryTypeInfo; //配送方式
     AddressInfo * addressTypeInfo;       //个人地址信息
+    NSString * memoStr;
+    CGRect tableViewOriginFrame;
     
 }
 @property (strong ,nonatomic)NSArray * dataSource;
@@ -85,11 +96,28 @@ typedef NS_ENUM(NSInteger, PaymentType)
     sumLabel = nil;
     footerView = nil;
     
+    UINib * orderInfoCellNib = [UINib nibWithNibName:@"confirmOrderInfoCell" bundle:[NSBundle bundleForClass:[confirmOrderInfoCell class]]];
+    [self.confirmTable registerNib:orderInfoCellNib forCellReuseIdentifier:orderInfoCellIdentifier];
+    
+    UINib * orderMemoCellNib = [UINib nibWithNibName:@"ConfirmOrderMemo" bundle:[NSBundle bundleForClass:[ConfirmOrderMemoCell class]]];
+    [self.confirmTable registerNib:orderMemoCellNib forCellReuseIdentifier:orderMemoCellIdentifier];
+    tableViewOriginFrame = self.confirmTable.frame;
+    deliveryTypeInfo = nil;
+    addressTypeInfo = nil;
     // Do any additional setup after loading the view from its nib.
 }
 
 -(void)postFormAction
 {
+    if (addressTypeInfo ==nil) {
+        [self showAlertViewWithTitle:@"提示" message:@"请选择收货人地址"];
+        return;
+    }
+    if (deliveryTypeInfo==nil ) {
+        [self showAlertViewWithTitle:@"提示" message:@"请选择配送方式"];
+        return;
+    }
+   
     NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     NSInteger totalWeight = 0;
@@ -138,7 +166,6 @@ typedef NS_ENUM(NSInteger, PaymentType)
                            [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
                            
                        }
-
     }];
 }
 
@@ -253,7 +280,15 @@ typedef NS_ENUM(NSInteger, PaymentType)
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    if (indexPath.section ==1 ) {
+        if (indexPath.row == 2) {
+            return 100.0f;
+        }else if (indexPath.row == 3)
+        {
+            return 200;
+        }
+    }
+    return 50.0f;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -287,6 +322,30 @@ typedef NS_ENUM(NSInteger, PaymentType)
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    if (indexPath.section ==1) {
+        if (indexPath.row == 2) {
+            confirmOrderInfoCell * orderCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderInfoCellIdentifier];
+            
+            
+            return orderCell;
+            
+        }
+        if (indexPath.row ==3) {
+            ConfirmOrderMemoCell *memoCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderMemoCellIdentifier];
+            memoCell.memoTextField.delegate = self;
+            memoCell.memoTextField.returnKeyType = UIReturnKeyDone;
+            UIView * view= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+            [view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]];
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [btn setFrame:CGRectMake(260, 5, 80, 35)];
+            [btn setTitle:@"取消" forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(keyBoardAction:) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:btn];
+            objc_setAssociatedObject(btn, (__bridge const void *)@"textField", memoCell.memoTextField, OBJC_ASSOCIATION_RETAIN);
+            memoCell.memoTextField.inputAccessoryView = view;
+            return memoCell;
+        }
+    }
     UILabel * descriptionLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 5, 250, 40)];
     [descriptionLabel setBackgroundColor:[UIColor clearColor]];
     descriptionLabel.text = [self.dataSource objectAtIndex:indexPath.row+2*indexPath.section];
@@ -301,7 +360,20 @@ typedef NS_ENUM(NSInteger, PaymentType)
     imageview = nil;
     descriptionLabel = nil;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    
+    
     return cell;
+}
+
+-(void)keyBoardAction:(id)sender
+{
+    UIButton *btn = (UIButton *)sender;
+    UITextField * textField = objc_getAssociatedObject(btn, (__bridge const void *)@"textField");
+    [textField resignFirstResponder];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmTable setFrame:tableViewOriginFrame];
+    }];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -314,16 +386,40 @@ typedef NS_ENUM(NSInteger, PaymentType)
     if (section == 0) {
         return 2;
     }else if (section == 1)
-        return 2;
+        return 4;
     return  [self.dataSource count];
     
 }
 
 -(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
 {
-    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil,nil];
     pAlert.delegate = self;
     [pAlert show];
     pAlert = nil;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([string isEqualToString:@"\n"]) {
+        [textField resignFirstResponder];
+        return NO;
+    }
+    return  YES;
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmTable setFrame:CGRectOffset(self.confirmTable.frame, 0, -TableViewOffsetY)];
+    }];
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmTable setFrame:CGRectOffset(self.confirmTable.frame, 0, TableViewOffsetY)];
+    }];
+    memoStr = textField.text;
 }
 @end

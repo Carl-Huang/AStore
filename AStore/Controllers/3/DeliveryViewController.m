@@ -71,7 +71,7 @@ static NSString * const selectKey = @"selectKey";
             }
             NSInteger selectTag = -1;
             selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectDeliveryTag"];
-            if (selectTag != -1) {
+            if (selectTag != -1 && selectTag < [item count]) {
                 [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
                  objc_setAssociatedObject(self, (__bridge const void *)(selectKey), [weakSelf.dataSourece objectAtIndex:selectTag], OBJC_ASSOCIATION_RETAIN);
             }

@@ -109,7 +109,7 @@ static NSString * cellIdentifier = @"addressCell";
         }
         NSInteger selectTag = -1;
         selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
-        if (selectTag != -1) {
+        if (selectTag != -1 && selectTag <[items count]) {
             [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
             selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
         }

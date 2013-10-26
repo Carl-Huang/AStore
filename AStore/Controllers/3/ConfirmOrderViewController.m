@@ -7,7 +7,7 @@
 //
 
 
-#define TableViewOffsetY    140
+#define TableViewOffsetY    190
 
 #import "ConfirmOrderViewController.h"
 #import "UIViewController+LeftTitle.h"
@@ -39,8 +39,12 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     DeliveryTypeInfo * deliveryTypeInfo; //配送方式
     AddressInfo * addressTypeInfo;       //个人地址信息
     NSString * memoStr;
-    CGRect tableViewOriginFrame;
+    CGRect viewOriginFrame;
     
+    
+    NSInteger totalWeight;
+    NSInteger totalCommodityNum;
+    NSInteger totalPoint;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (assign ,nonatomic)BOOL isCheck;
@@ -101,9 +105,25 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
     UINib * orderMemoCellNib = [UINib nibWithNibName:@"ConfirmOrderMemo" bundle:[NSBundle bundleForClass:[ConfirmOrderMemoCell class]]];
     [self.confirmTable registerNib:orderMemoCellNib forCellReuseIdentifier:orderMemoCellIdentifier];
-    tableViewOriginFrame = self.confirmTable.frame;
+    viewOriginFrame = self.view.frame;
     deliveryTypeInfo = nil;
     addressTypeInfo = nil;
+    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    totalWeight = 0;
+    totalCommodityNum = 0;
+    totalPoint = 0;
+    NSMutableArray * commodityArray = [[NSMutableArray alloc]init];
+    for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+        Commodity * info = [dic objectForKey:@"commodity"];
+        NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
+        NSInteger tempWeight = tempCount*info.weight.integerValue;
+        totalWeight += tempWeight;
+        totalCommodityNum += tempCount;
+        totalPoint += info.score.integerValue;
+        [commodityArray addObject:dic];
+    }
+
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -120,21 +140,6 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
    
     NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSInteger totalWeight = 0;
-    NSInteger totalCommodityNum = 0;
-    NSInteger totalPoint = 0;
-    NSMutableArray * commodityArray = [[NSMutableArray alloc]init];
-    for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
-        Commodity * info = [dic objectForKey:@"commodity"];
-        NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
-        NSInteger tempWeight = tempCount*info.weight.integerValue;
-        totalWeight += tempWeight;
-        totalCommodityNum += tempCount;
-        totalPoint += info.score.integerValue;
-        [commodityArray addObject:dic];
-    }
-    
-
     [myDelegate showLoginViewOnView:self.view];
     __weak ConfirmOrderViewController * weakSelf = self;
     [HttpHelper postOrderWithUserInfo:nil
@@ -147,8 +152,8 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                          deliveryCost:@"0"
                              getPoint:[NSString stringWithFormat:@"%d",totalPoint]
                            totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
-                                 memo:@"请快点送货"
-                   withCommodityArray:commodityArray withCompletedBlock:^(id item, NSError *error) {
+                                 memo:memoStr
+                   withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
                        if (error) {
                            NSLog(@"%@",[error description]);
                        }
@@ -285,7 +290,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             return 100.0f;
         }else if (indexPath.row == 3)
         {
-            return 200;
+            return 160;
         }
     }
     return 50.0f;
@@ -325,8 +330,10 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     if (indexPath.section ==1) {
         if (indexPath.row == 2) {
             confirmOrderInfoCell * orderCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderInfoCellIdentifier];
-            
-            
+            orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+            orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
+            orderCell.deliveryCost.text = @"2";
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",2+commoditySumMoney];
             return orderCell;
             
         }
@@ -334,11 +341,12 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             ConfirmOrderMemoCell *memoCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderMemoCellIdentifier];
             memoCell.memoTextField.delegate = self;
             memoCell.memoTextField.returnKeyType = UIReturnKeyDone;
-            UIView * view= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+            UIView * view= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 35)];
             [view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [btn setFrame:CGRectMake(260, 5, 80, 35)];
+            [btn setFrame:CGRectMake(230,2, 80, 30)];
             [btn setTitle:@"取消" forState:UIControlStateNormal];
+            [btn setBackgroundImage:[UIImage imageNamed:@"加入购物车-红-bg"] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(keyBoardAction:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:btn];
             objc_setAssociatedObject(btn, (__bridge const void *)@"textField", memoCell.memoTextField, OBJC_ASSOCIATION_RETAIN);
@@ -372,7 +380,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     UITextField * textField = objc_getAssociatedObject(btn, (__bridge const void *)@"textField");
     [textField resignFirstResponder];
     [UIView animateWithDuration:0.3 animations:^{
-        [self.confirmTable setFrame:tableViewOriginFrame];
+        [self.view setFrame:viewOriginFrame];
     }];
 }
 
@@ -411,14 +419,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [UIView animateWithDuration:0.3 animations:^{
-        [self.confirmTable setFrame:CGRectOffset(self.confirmTable.frame, 0, -TableViewOffsetY)];
+        [self.view setFrame:CGRectOffset(self.view.frame, 0, -TableViewOffsetY)];
     }];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     [UIView animateWithDuration:0.3 animations:^{
-        [self.confirmTable setFrame:CGRectOffset(self.confirmTable.frame, 0, TableViewOffsetY)];
+        [self.view setFrame:CGRectOffset(self.view.frame, 0, TableViewOffsetY)];
     }];
     memoStr = textField.text;
 }

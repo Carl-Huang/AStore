@@ -153,6 +153,7 @@
 								<reference key="IBUITextColor" ref="447084931"/>
 								<reference key="IBUIHighlightedColor" ref="112303083"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="522625610"/>
 								<reference key="IBUIFont" ref="234226735"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -173,6 +174,7 @@
 								<reference key="IBUITextColor" ref="447084931"/>
 								<reference key="IBUIHighlightedColor" ref="112303083"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="522625610"/>
 								<reference key="IBUIFont" ref="234226735"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -193,6 +195,7 @@
 								<reference key="IBUITextColor" ref="447084931"/>
 								<reference key="IBUIHighlightedColor" ref="112303083"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="522625610"/>
 								<reference key="IBUIFont" ref="234226735"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -212,6 +215,7 @@
 								<reference key="IBUITextColor" ref="447084931"/>
 								<reference key="IBUIHighlightedColor" ref="112303083"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="522625610"/>
 								<reference key="IBUIFont" ref="234226735"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>

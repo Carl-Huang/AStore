@@ -25,6 +25,7 @@
 #import "confirmOrderInfoCell.h"
 #import "ConfirmOrderMemoCell.h"
 #import <objc/runtime.h>
+#import "GetGiftInfo.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -38,10 +39,10 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
     DeliveryTypeInfo * deliveryTypeInfo; //配送方式
     AddressInfo * addressTypeInfo;       //个人地址信息
+    
+    
     NSString * memoStr;
     CGRect viewOriginFrame;
-    
-    
     NSInteger totalWeight;
     NSInteger totalCommodityNum;
     NSInteger totalPoint;
@@ -69,10 +70,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         // Custom initialization
         dataSource = @[@"收货人信息",@"付款方式",@"配送方式",@"查看商品清单"];
         isCheck   = NO;
+        commoditySumMoney = 0;
+        giftSumMoney = 0;
 
     }
     return self;
 }
+
+
 
 - (void)viewDidLoad
 {
@@ -114,17 +119,27 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     totalWeight = 0;
     totalCommodityNum = 0;
     totalPoint = 0;
-    NSMutableArray * commodityArray = [[NSMutableArray alloc]init];
-    for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
-        Commodity * info = [dic objectForKey:@"commodity"];
-        NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
-        NSInteger tempWeight = tempCount*info.weight.integerValue;
-        totalWeight += tempWeight;
-        totalCommodityNum += tempCount;
-        totalPoint += info.score.integerValue;
-        [commodityArray addObject:dic];
-    }
+    if (commoditySumMoney !=0) {
+        for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+            Commodity * info = [dic objectForKey:@"commodity"];
+            NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
+            NSInteger tempWeight = tempCount*info.weight.integerValue;
+            totalWeight += tempWeight;
+            totalCommodityNum += tempCount;
+            totalPoint += info.score.integerValue;
+        }
 
+    }
+    if (giftSumMoney !=0) {
+        for (NSDictionary * dic in myDelegate.buiedPresentArray) {
+            GetGiftInfo * info = [dic objectForKey:@"present"];
+            NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
+            NSInteger tempWeight = tempCount*info.weight.integerValue;
+            totalWeight += tempWeight;
+            totalCommodityNum += tempCount;
+            totalPoint += info.storage.integerValue;
+        }
+    }
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -143,36 +158,72 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
     __weak ConfirmOrderViewController * weakSelf = self;
-    [HttpHelper postOrderWithUserInfo:nil
-                         deliveryType:deliveryTypeInfo
-                               Weight: [NSString stringWithFormat:@"%d",totalWeight]
-                                tostr:@""
-                           productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
-                              address:addressTypeInfo
-                    totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
-                         deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
-                             getPoint:[NSString stringWithFormat:@"%d",totalPoint]
-                           totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
-                                 memo:memoStr
-                   withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
-                       if (error) {
-                           NSLog(@"%@",[error description]);
-                       }
-                       NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
-                       
-                       if ([str isEqualToString:@"1"]) {
-                           NSLog(@"提交订单成功");
-                           [weakSelf cleanUserDefaulstSetting];
-                           //清除NSUserDefaults 数据
+    if (commoditySumMoney!=0) {
+        [HttpHelper postOrderWithUserInfo:nil
+                             deliveryType:deliveryTypeInfo
+                                   Weight: [NSString stringWithFormat:@"%d",totalWeight]
+                                    tostr:@""
+                               productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
+                                  address:addressTypeInfo
+                        totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                             deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
+                                 getPoint:[NSString stringWithFormat:@"%d",totalPoint]
+                               totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                                     memo:memoStr
+                       withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
+                           if (error) {
+                               NSLog(@"%@",[error description]);
+                           }
+                           NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
                            
-                       }else
-                       {
-                           NSLog(@"提交订单失败");
-                           [myDelegate removeLoadingViewWithView:nil];
-                           [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
-                           
-                       }
-    }];
+                           if ([str isEqualToString:@"1"]) {
+                               NSLog(@"提交订单成功");
+                               [weakSelf cleanUserDefaulstSetting];
+                               //清除NSUserDefaults 数据
+                               
+                           }else
+                           {
+                               NSLog(@"提交订单失败");
+                               [myDelegate removeLoadingViewWithView:nil];
+                               [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
+                               
+                           }
+                       }];
+
+    }
+    if (giftSumMoney!= 0) {
+        [HttpHelper postGiftOrderWithUserInfo:nil
+                                 deliveryType:deliveryTypeInfo
+                                       Weight:[NSString stringWithFormat:@"%d",totalWeight]
+                                        tostr:@""
+                                   productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
+                                      address:addressTypeInfo
+                            totalProuctMomeny:[NSString stringWithFormat:@"%d",giftSumMoney]
+                                 deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
+                                     getPoint:@"0"
+                                   totalMoney:@"0"
+                                         memo:memoStr
+                           withCommodityArray:myDelegate.buiedPresentArray withCompletedBlock:^(id item, NSError *error) {
+                               if (error) {
+                                   NSLog(@"%@",[error description]);
+                               }
+                               NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
+                               
+                               if ([str isEqualToString:@"1"]) {
+                                   NSLog(@"提交订单成功");
+                                   [weakSelf cleanUserDefaulstSetting];
+                                   //清除NSUserDefaults 数据
+                                   
+                               }else
+                               {
+                                   NSLog(@"提交订单失败");
+                                   [myDelegate removeLoadingViewWithView:nil];
+                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
+                                   
+                               }
+
+        }];
+    }
 }
 
 -(void)cleanUserDefaulstSetting
@@ -330,23 +381,9 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     }
     if (indexPath.section ==1) {
         if (indexPath.row == 2) {
-            confirmOrderInfoCell * orderCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderInfoCellIdentifier];
-            orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
-            if (commoditySumMoney > 36) {
-                orderCell.deliveryCost.text = @"0";
-                deliveryCost = 0;
-                 orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
-            }else
-            {
-                orderCell.deliveryCost.text = @"2";
-                deliveryCost =2;
-                 orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",2+commoditySumMoney];
-            }
-            orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
-            
-           
+             confirmOrderInfoCell * orderCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderInfoCellIdentifier];
+            orderCell = [self configureCell:orderCell];
             return orderCell;
-            
         }
         if (indexPath.row ==3) {
             ConfirmOrderMemoCell *memoCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderMemoCellIdentifier];
@@ -373,7 +410,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     if (indexPath.row+2*indexPath.section != 1) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    
+
     UIImageView * imageview = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"购买流程bg"]];
     [imageview setFrame:CGRectMake(8, 5, 310, 40)];
     [cell.contentView addSubview:imageview];
@@ -385,6 +422,42 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
     
     return cell;
+}
+
+-(confirmOrderInfoCell *)configureCell:(confirmOrderInfoCell *)orderCell
+{
+    if (commoditySumMoney!=0) {
+        orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+        if (commoditySumMoney > 36) {
+            orderCell.deliveryCost.text = @"0";
+            deliveryCost = 0;
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+        }else
+        {
+            orderCell.deliveryCost.text = @"2";
+            deliveryCost =2;
+            commoditySumMoney +=2;
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+        }
+        orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
+    }else if (giftSumMoney != 0)
+    {
+        orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
+        if (giftSumMoney > 36) {
+            orderCell.deliveryCost.text = @"0";
+            deliveryCost = 0;
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
+        }else
+        {
+            orderCell.deliveryCost.text = @"2";
+            deliveryCost =2;
+            giftSumMoney +=2;
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
+        }
+        orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
+        
+    }
+    return orderCell;
 }
 
 -(void)keyBoardAction:(id)sender

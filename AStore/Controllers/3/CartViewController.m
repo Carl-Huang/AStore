@@ -372,21 +372,45 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             [self.navigationController pushViewController:loginView animated:YES];
             loginView = nil;
             return ;
-//            [self.navigationController.view addSubview:loginView.view];
-//            [self.navigationController addChildViewController:loginView];
         }
 
         NSLog(@"%s",__func__);
         ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
         [viewController setCommoditySumMoney:commoditySumMoney];
-        [viewController setGiftSumMoney:giftSumMoney];
+        [viewController setGiftSumMoney:0];
         
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedCommodityArray = [self getCommodityProduct];
-        myDelegate.buiedPresentArray = [self getGiftProduct];
+//        myDelegate.buiedPresentArray = [self getGiftProduct];
         viewController = nil;
 
+    };
+    return block;
+}
+
+-(CloseAccountActionBlock)configureCloseAccountGiftBlock
+{
+    CloseAccountActionBlock block = ^()
+    {
+        if(![User isLogin])
+        {
+            LoginViewController * loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+            loginView.view.tag = 1;
+            [loginView setWeakViewController:self];
+            [self.navigationController pushViewController:loginView animated:YES];
+            loginView = nil;
+            return ;
+        }
+        
+        NSLog(@"%s",__func__);
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        [viewController setGiftSumMoney:giftSumMoney];
+        [viewController setCommoditySumMoney:0];
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedPresentArray = [self getGiftProduct];
+        viewController = nil;
     };
     return block;
 }
@@ -553,7 +577,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     giftSumMoney = 0.0;
             }
              headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",giftSumMoney];
-            [headerCell setBlock:[self configureCloseAccountBlock]];
+            [headerCell setBlock:[self configureCloseAccountGiftBlock]];
             [headerCell setSelected:isGiftCheckout animated:YES];
             return headerCell;
         }else

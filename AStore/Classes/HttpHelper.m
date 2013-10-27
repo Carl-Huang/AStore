@@ -656,11 +656,11 @@
                           @"任意时间段",
                           addressInfo.mobile,
                           addressInfo.tel,
-                          productMoney,         //商品总额
+                          @"",                  //赠品总额,默认为0？
                           deliveryCost,         //配送费用
-                          @"0",                 //消耗积分：商品为0，赠品才需要
+                          productMoney,         //消耗积分：商品为0，赠品才需要
                           point,                //可得总积分=可得积分*数量
-                          money,                //总金额
+                          money,                 //总金额,默认为0？
                           memo];                //备注
     
     NSString * arr_gift_id   = [[NSString alloc]init];

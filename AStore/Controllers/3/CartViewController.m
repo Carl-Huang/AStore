@@ -53,6 +53,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @implementation CartViewController
 @synthesize dataSource;
 @synthesize giftArray;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -602,6 +603,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                             [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
                         }else
                         {
+                            [self showAlertViewWithTitle:@"提示" message:@"库存量不足"];
                             return;
                         }
                     }
@@ -646,25 +648,21 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
                 //判断是否超过限量，或者超过对应赠品的库存量
-//                for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
-//                    if ([storeInfo.gift_id isEqualToString:info.gift_id]) {
-//                        if (info.limit_num.integerValue <= num && storeInfo.storage.integerValue <num) {
-//                            return;
-//                        }
-//                    }
-//                }
-//                num += 1;
-//                dic[@"count"] = [NSNumber numberWithInteger:num];
-//                [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
                 for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
                     if ([storeInfo.gift_id isEqualToString: info.gift_id]) {
-                        if (storeInfo.storage.integerValue > num &&info.limit_num.integerValue > num) {
+                        if (storeInfo.storage.integerValue <= num) {
+                            [self showAlertViewWithTitle:@"提示" message:@"库存量不足"];
+                            return;
+                        }else if(info.limit_num.integerValue <= num)
+                        {
+                            [self showAlertViewWithTitle:@"提示" message:@"超过限额"];
+                            return;
+                        }else
+                        {
                             num += 1;
                             dic[@"count"] = [NSNumber numberWithInteger:num];
                             [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
-                        }else
-                        {
-                            return;
+                            
                         }
                     }
                 }
@@ -680,4 +678,11 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
 }
 
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil,nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+}
 @end

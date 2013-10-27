@@ -45,6 +45,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     NSInteger totalWeight;
     NSInteger totalCommodityNum;
     NSInteger totalPoint;
+    NSInteger deliveryCost;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (assign ,nonatomic)BOOL isCheck;
@@ -149,7 +150,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                            productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
                               address:addressTypeInfo
                     totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
-                         deliveryCost:@"0"
+                         deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
                              getPoint:[NSString stringWithFormat:@"%d",totalPoint]
                            totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
                                  memo:memoStr
@@ -331,9 +332,19 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         if (indexPath.row == 2) {
             confirmOrderInfoCell * orderCell = [self.confirmTable dequeueReusableCellWithIdentifier:orderInfoCellIdentifier];
             orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+            if (commoditySumMoney > 36) {
+                orderCell.deliveryCost.text = @"0";
+                deliveryCost = 0;
+                 orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+            }else
+            {
+                orderCell.deliveryCost.text = @"2";
+                deliveryCost =2;
+                 orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",2+commoditySumMoney];
+            }
             orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
-            orderCell.deliveryCost.text = @"2";
-            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",2+commoditySumMoney];
+            
+           
             return orderCell;
             
         }

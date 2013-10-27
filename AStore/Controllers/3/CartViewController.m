@@ -120,8 +120,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         for (int i = 0;  i<giftArray.count; i++) {
             [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
         }
-        [self.cartTable reloadData];
+        
     }
+    [self.cartTable reloadData];
 }
 
 -(void)getStoreInfo
@@ -421,8 +422,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     if (indexPath.row != 0) {
         if (indexPath.section == 0) {
             BOOL bo = [[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue];
+            bo = !bo;
             NSString *key = [NSString stringWithFormat:@"%d",indexPath.row];
-            NSNumber * ber =[NSNumber numberWithBool:!bo];
+            NSNumber * ber =[NSNumber numberWithBool:bo];
             commodityDicInfo[key] = ber;
         }
         if (indexPath.section == 1) {
@@ -532,6 +534,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     CartCell * cell = [self.cartTable dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            commoditySumMoney = 0.0;
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
             //算出总价格
@@ -560,6 +563,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }else if(indexPath.section == 1)
     {
         if (indexPath.row == 0) {
+            giftSumMoney = 0.0;
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"积分:";
             

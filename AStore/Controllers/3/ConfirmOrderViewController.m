@@ -151,6 +151,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 
 -(void)postFormAction
 {
+    NSLog(@"%s",__func__);
     if (addressTypeInfo ==nil) {
         [self showAlertViewWithTitle:@"提示" message:@"请选择收货人地址"];
         return;
@@ -159,8 +160,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         [self showAlertViewWithTitle:@"提示" message:@"请选择配送方式"];
         return;
     }
-   
-    NSLog(@"%s",__func__);
+
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
     __weak ConfirmOrderViewController * weakSelf = self;

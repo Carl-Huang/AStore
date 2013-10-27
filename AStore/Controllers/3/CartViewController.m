@@ -20,6 +20,8 @@
 #import "UIImageView+AFNetworking.h"
 #import "NSMutableArray+SaveCustomiseData.h"
 #import "GetGiftInfo.h"
+#import "ProductStoreInfo.h"
+#import "GiftStoreInfo.h"
 typedef NS_ENUM(NSInteger, ActionType)
 {
     PlusAction = 1,
@@ -41,6 +43,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     NSMutableDictionary * presentDicInfo;
     float commoditySumMoney;
     float giftSumMoney;
+    NSMutableArray * productIdStoreArray;
+    NSMutableArray * giftIdStoreArray;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
@@ -91,6 +95,13 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     presentDicInfo = [NSMutableDictionary dictionary];
     giftSumMoney = 0.0;
     commoditySumMoney = 0.0;
+    
+    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+    self.dataSource  = myDelegate.commodityArray;
+    self.giftArray = myDelegate.presentArray;
+    
+    //获取商品,赠品 对应的库存量
+    [self getStoreInfo];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -98,10 +109,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
-    self.dataSource  = myDelegate.commodityArray;
-    self.giftArray = myDelegate.presentArray;
     
+
     if (isViewFirstShow) {
         isViewFirstShow = NO;
         for (int i = 0;  i<dataSource.count; i++) {
@@ -114,6 +123,52 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
 }
 
+-(void)getStoreInfo
+{
+    productIdStoreArray = [NSMutableArray array];
+    
+    for (int i = 0; i < [self.dataSource count]; i++) {
+        NSDictionary * dic = [dataSource objectAtIndex:i];
+        Commodity * info = [dic objectForKey:@"commodity"];
+        [productIdStoreArray addObject:info.product_id];
+    }
+    [HttpHelper getProductStoreWithProductId:productIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"%@",[error description]);
+            return ;
+        }
+        [productIdStoreArray removeAllObjects];
+        productIdStoreArray =item;
+        if ([productIdStoreArray count]) {
+            for (ProductStoreInfo * info in productIdStoreArray) {
+                NSLog(@"%@: %@",info.product_id,info.store);
+            }
+        }
+    }];
+    
+    
+    giftIdStoreArray = [NSMutableArray array];
+    for (int i = 0; i < [self.giftArray count]; i++) {
+        NSDictionary * dic = [giftArray objectAtIndex:i];
+        GetGiftInfo * info = [dic objectForKey:@"present"];
+        [giftIdStoreArray addObject:info.gift_id];
+    }
+    [HttpHelper getGiftStoreWithGiftId:giftIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"%@",[error description]);
+            return ;
+        }
+        [giftIdStoreArray removeAllObjects];
+        giftIdStoreArray =item;
+        if ([giftIdStoreArray count]) {
+            for (GiftStoreInfo * info in giftIdStoreArray) {
+                NSLog(@"%@: %@",info.gift_id,info.storage);
+            }
+        }
+    }];
+}
 
 -(void)deleteItem
 {
@@ -514,6 +569,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(void)alterCommodityNumWithId:(NSString * )productId withAction:(NSInteger)action
 {
+    commoditySumMoney = 0.0;
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     for (int i = 0;i<[self.dataSource count];i++) {
         NSMutableDictionary * dic = [[self.dataSource objectAtIndex:i]mutableCopy];
@@ -538,13 +594,20 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                num += 1;
-                dic[@"count"] = [NSNumber numberWithInteger:num];
-                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                for (ProductStoreInfo * storeInfo in productIdStoreArray) {
+                    if ([storeInfo.product_id isEqualToString: info.product_id]) {
+                        if (storeInfo.store.integerValue > num) {
+                            num += 1;
+                            dic[@"count"] = [NSNumber numberWithInteger:num];
+                            [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                        }else
+                        {
+                            return;
+                        }
+                    }
+                }
             }
             [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
-            
-            
             //更新table
             [self.cartTable beginUpdates];
             [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
@@ -557,6 +620,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(void)alterPresentNumWithId:(NSString * )productId withAction:(NSInteger)action
 {
+    giftSumMoney = 0.0;
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     for (int i = 0;i<[self.giftArray count];i++) {
         NSMutableDictionary * dic = [[self.giftArray objectAtIndex:i]mutableCopy];
@@ -581,12 +645,29 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                if (info.limit_num.integerValue <= num) {
-                    return;
+                //判断是否超过限量，或者超过对应赠品的库存量
+//                for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
+//                    if ([storeInfo.gift_id isEqualToString:info.gift_id]) {
+//                        if (info.limit_num.integerValue <= num && storeInfo.storage.integerValue <num) {
+//                            return;
+//                        }
+//                    }
+//                }
+//                num += 1;
+//                dic[@"count"] = [NSNumber numberWithInteger:num];
+//                [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
+                for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
+                    if ([storeInfo.gift_id isEqualToString: info.gift_id]) {
+                        if (storeInfo.storage.integerValue > num &&info.limit_num.integerValue > num) {
+                            num += 1;
+                            dic[@"count"] = [NSNumber numberWithInteger:num];
+                            [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
+                        }else
+                        {
+                            return;
+                        }
+                    }
                 }
-                num += 1;
-                dic[@"count"] = [NSNumber numberWithInteger:num];
-                [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
             }
             [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
             

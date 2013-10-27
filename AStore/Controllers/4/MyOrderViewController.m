@@ -133,12 +133,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //获取对应订单id的订单详情
+    
     GetOrderInfo * orderInfo = [orderInfoArray objectAtIndex:indexPath.row];
     OrderDetailViewController * viewController = [[OrderDetailViewController alloc]initWithNibName:@"OrderDetailViewController" bundle:nil];
     [viewController setOrderId:orderInfo.order_id];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
-//    CommodityInfoCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

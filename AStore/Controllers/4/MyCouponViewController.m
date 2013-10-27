@@ -83,8 +83,8 @@
     NSString *cmdStr = [NSString stringWithFormat:@"getcpns=%@",memberId];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[CouponInfo class] successBlock:^(NSArray *items) {
-        for (CouponInfo * address in items) {
-            [commoditiesArray addObject:address];
+        if ([items count]) {
+            commoditiesArray = items;
         }
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {

@@ -94,14 +94,14 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     if ([info isKindOfClass:[GetOrderGoodInfo class]]) {
         GetOrderGoodInfo * goodInfo = info;
         cell.name.text = goodInfo.Name;
-        cell.cost.text = goodInfo.price;
-        cell.quantity.text = goodInfo.nums;
+        cell.cost.text = [NSString stringWithFormat:@"销售价 : %@",goodInfo.price];
+        cell.quantity.text = [NSString stringWithFormat:@"数量 : %@",goodInfo.nums];
     }else if ([info isKindOfClass:[GetOrderGiftInfo class]])
     {
         GetOrderGiftInfo *giftInfo = info;
         cell.name.text = giftInfo.Name;
-        cell.cost.text = giftInfo.point;
-        cell.quantity.text = giftInfo.nums;
+        cell.cost.text = [NSString stringWithFormat:@"消耗积分 : %@",giftInfo.point];
+        cell.quantity.text = [NSString stringWithFormat:@"数量 : %@",giftInfo.nums];
     }
     
     return cell;

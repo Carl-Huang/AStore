@@ -96,7 +96,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     [posForm addTarget:self action:@selector(postFormAction) forControlEvents:UIControlEventTouchUpInside];
     [posForm setTitle:@"提交订单" forState:UIControlStateNormal];
     UILabel * sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 150, 30)];
-    sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%d",commoditySumMoney];
+    if (commoditySumMoney !=0) {
+        sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%d",commoditySumMoney];
+    }else
+    {
+        //赠品,hardcode 运费为2;
+         sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%d",2];
+    }
+    
     [sumLabel setBackgroundColor:[UIColor clearColor]];
     [footerView addSubview:imageview];
     [footerView addSubview:posForm];
@@ -137,7 +144,6 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             NSInteger tempWeight = tempCount*info.weight.integerValue;
             totalWeight += tempWeight;
             totalCommodityNum += tempCount;
-            totalPoint += info.storage.integerValue;
         }
     }
     // Do any additional setup after loading the view from its nib.
@@ -201,7 +207,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                             totalProuctMomeny:[NSString stringWithFormat:@"%d",giftSumMoney]
                                  deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
                                      getPoint:@"0"
-                                   totalMoney:@"0"
+                                   totalMoney:[NSString stringWithFormat:@"%d",deliveryCost]
                                          memo:memoStr
                            withCommodityArray:myDelegate.buiedPresentArray withCompletedBlock:^(id item, NSError *error) {
                                if (error) {
@@ -442,20 +448,13 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
     }else if (giftSumMoney != 0)
     {
+        orderCell.deliveryCost.text = @"2";
+        deliveryCost =2;
+        giftSumMoney +=2;
+        orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",deliveryCost];
         orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
-        if (giftSumMoney > 36) {
-            orderCell.deliveryCost.text = @"0";
-            deliveryCost = 0;
-            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
-        }else
-        {
-            orderCell.deliveryCost.text = @"2";
-            deliveryCost =2;
-            giftSumMoney +=2;
-            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
-        }
         orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
-        
+        orderCell.cost.text = @"抵扣积分:";
     }
     return orderCell;
 }

@@ -656,9 +656,9 @@
                           @"任意时间段",
                           addressInfo.mobile,
                           addressInfo.tel,
-                          @"",                  //赠品总额,默认为0？
+                          @"0",                  //赠品总额,默认为0？
                           deliveryCost,         //配送费用
-                          productMoney,         //消耗积分：商品为0，赠品才需要
+                          productMoney,         //hardcode 运费为2块
                           point,                //可得总积分=可得积分*数量
                           money,                 //总金额,默认为0？
                           memo];                //备注

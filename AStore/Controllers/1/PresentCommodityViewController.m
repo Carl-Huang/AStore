@@ -165,7 +165,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             return 1;
             break;
         case 1:
-            return 5;
+            return 3;
             break;
         default:
             return 1;
@@ -214,16 +214,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
             cell.textLabel.text = str;
         }else if(row == 2)
         {
-            
+            cell.textLabel.text = comodityInfo.intro;
         }else if(row == 3)
         {
             NSString * tempStr = @"截止时间: ";
             NSString * str = [tempStr stringByAppendingString:comodityInfo.limit_end_time];
             cell.textLabel.text = str;
-
         }else if(row == 4)
         {
-            cell.textLabel.text = comodityInfo.intro;
+            
         }
         
     }

@@ -48,8 +48,11 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [HttpHelper getArticalListWithSuccessBlock:^(NSArray *commoditys) {
-        dataSource = commoditys;
-        [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        if ([commoditys count]) {
+            dataSource = commoditys;
+            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        }
+        
     } withErrorBlock:^(NSError *error) {
         [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
         NSLog(@"%@",[error description]);

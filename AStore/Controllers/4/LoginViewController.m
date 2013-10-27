@@ -14,9 +14,12 @@
 #import "User.h"
 #import "AppDelegate.h"
 #import "userInfo.h"
+#import "CartViewController.h"
 @interface LoginViewController () <UITextFieldDelegate>
 {
     userInfo * userinfo;
+    BOOL isAlertViewShouldShow;
+    
 }
 @property (nonatomic,retain) UITextField * usernameField;
 @property (nonatomic,retain) UITextField * passwordField;
@@ -24,7 +27,7 @@
 @end
 
 @implementation LoginViewController
-
+@synthesize weakViewController;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -38,23 +41,35 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"登陆"];
-    
     UIView * bgView = [UIView new];
     bgView.backgroundColor = [UIColor clearColor];
     [_tableView setBackgroundView:bgView];
+    isAlertViewShouldShow = YES;
 }
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    isAlertViewShouldShow = NO;
+    [super viewWillDisappear:YES];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
+    if ([weakViewController isKindOfClass:[CartViewController class]]) {
+        [self setBackItem:nil];
+    }
     if ([User isLogin]) {
         NSArray * viewcontrollerArrar = self.navigationController.viewControllers;
         for (UIViewController * controlller  in viewcontrollerArrar) {
             if ([controlller isKindOfClass:[LoginViewController class]]) {
                 NSLog(@"LoginViewController removeFormParentView");
-                [controlller.view removeFromSuperview];
-                [controlller removeFromParentViewController];
+                [self.navigationController popViewControllerAnimated:YES];
+//                [controlller.view removeFromSuperview];
+//                [controlller removeFromParentViewController];
             }
         }
     }
+    [super viewWillAppear:YES];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -204,6 +219,13 @@
 
 -(void)pushToUserCenterViewController
 {
+    if ([weakViewController isKindOfClass:[CartViewController class]]) {
+        NSLog(@"CartViewController");
+        [userInfo archivingUserInfo:userinfo];
+        [User saveUserInfo:_usernameField.text password:_passwordField.text memberId:userinfo.member_id];
+        [self.navigationController popToViewController:weakViewController animated:YES];
+        return;
+    }
     [userInfo archivingUserInfo:userinfo];
     [User saveUserInfo:_usernameField.text password:_passwordField.text memberId:userinfo.member_id];
     UserCenterViewController * viewController = [[UserCenterViewController alloc]initWithNibName:@"UserCenterViewController" bundle:nil];
@@ -218,9 +240,10 @@
 
 -(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
 {
-    UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [pAlert show];
-    pAlert = nil;
-    
+    if (isAlertViewShouldShow) {
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [pAlert show];
+        pAlert = nil;
+    }
 }
 @end

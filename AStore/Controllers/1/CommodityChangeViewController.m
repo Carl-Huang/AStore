@@ -50,9 +50,12 @@
         [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
             if (error) {
                 NSLog(@"%@",[error description]);
-            }else
+            }else if([item count])
+            {
                 dataSource = item;
-            [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                 [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+            }
+           
         }];
 
     }

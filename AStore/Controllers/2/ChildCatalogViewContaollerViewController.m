@@ -72,9 +72,11 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [myDelegate  showLoginViewOnView:self.view];
         
         [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-            dataSource = commoditys;
-            [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
-            NSLog(@"%@",commoditys);
+            if ([commoditys count]) {
+                dataSource = commoditys;
+                [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
+//                NSLog(@"%@",commoditys);
+            }
         } withErrorBlock:^(NSError *error) {
             [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
         }];

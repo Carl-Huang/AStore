@@ -101,20 +101,23 @@ static NSString * cellIdentifier = @"addressCell";
     NSString *cmdStr = [NSString stringWithFormat:@"getAddrs=%@",memberId];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
-        [weakSelf.dataSource removeAllObjects];
-        for (int i = 0;i< [items count];i++) {
-            AddressInfo * address  = [items objectAtIndex:i];
-            [dataSource addObject:address];
-            [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+        if ([items count]) {
+            [weakSelf.dataSource removeAllObjects];
+            for (int i = 0;i< [items count];i++) {
+                AddressInfo * address  = [items objectAtIndex:i];
+                [dataSource addObject:address];
+                [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+            }
+            NSInteger selectTag = -1;
+            selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
+            if (selectTag != -1 && selectTag <[items count]) {
+                [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
+                selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
+            }
+            
+            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
         }
-        NSInteger selectTag = -1;
-        selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
-        if (selectTag != -1 && selectTag <[items count]) {
-            [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
-            selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
-        }
-        
-        [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+       
     } errorBlock:^(NSError *error) {
         ;
         if (error) {
@@ -243,15 +246,16 @@ static NSString * cellIdentifier = @"addressCell";
                 NSLog(@"%@",[error description]);
             }
             NSArray * array = item;
-            for (NSDictionary * dic in array) {
-                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
-                    NSLog(@"删除地址成功");
-                }else
-                {
-                    NSLog(@"删除地址失败");
+            if ([array count]) {
+                for (NSDictionary * dic in array) {
+                    if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                        NSLog(@"删除地址成功");
+                    }else
+                    {
+                        NSLog(@"删除地址失败");
+                    }
                 }
             }
-            
         }];
         [self.dataSource removeObjectAtIndex:indexPath.row];
         [self.addressTable reloadData];

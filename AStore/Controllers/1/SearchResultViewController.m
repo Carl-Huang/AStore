@@ -60,7 +60,10 @@
     //根据title获取相关内容
     [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
         dataSource = commoditys;
-        [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        if ([dataSource count]) {
+            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        }
+     
     } withErrorBlock:^(NSError *error) {
         [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
         NSLog(@"%@",[error description]);

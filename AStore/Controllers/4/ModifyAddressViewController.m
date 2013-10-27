@@ -109,7 +109,10 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 {
     __weak ModifyAddressViewController * weakSelf = self;
     [HttpHelper getRegionWithSuccessBlock:^(NSArray * array) {
-        [weakSelf getRegionTyepWithDataArray:array];
+        if ([array count]) {
+            [weakSelf getRegionTyepWithDataArray:array];
+        }
+     
     } failedBlock:^(NSError *error) {
         ;
     }];
@@ -276,15 +279,17 @@ static NSString * const cellIdentifier = @"cellIdentifier";
                 NSLog(@"%@",[error description]);
             }
             NSArray * array = item;
-            for (NSDictionary * dic in array) {
-                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
-                    NSLog(@"添加地址成功");
-                    [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
-                }else
-                {
-                    NSLog(@"添加地址失败");
-                    [weakSelf hideprocessingView];
-                    [weakSelf showAlertViewWithTitle:@"提示" message:@"添加地址失败"];
+            if ([array count]) {
+                for (NSDictionary * dic in array) {
+                    if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                        NSLog(@"添加地址成功");
+                        [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
+                    }else
+                    {
+                        NSLog(@"添加地址失败");
+                        [weakSelf hideprocessingView];
+                        [weakSelf showAlertViewWithTitle:@"提示" message:@"添加地址失败"];
+                    }
                 }
             }
         }];
@@ -297,18 +302,19 @@ static NSString * const cellIdentifier = @"cellIdentifier";
                 NSLog(@"%@",[error description]);
             }
             NSArray * array = item;
-            for (NSDictionary * dic in array) {
-                if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
-                    NSLog(@"更新地址成功");
-                    [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
-                }else
-                {
-                    NSLog(@"更新地址失败");
-                    [weakSelf hideprocessingView];
-                    [weakSelf showAlertViewWithTitle:@"提示" message:@"更新地址失败"];
+            if ([array count]) {
+                for (NSDictionary * dic in array) {
+                    if ([[dic objectForKey:RequestStatusKey]integerValue] == 1) {
+                        NSLog(@"更新地址成功");
+                        [weakSelf performSelectorOnMainThread:@selector(hideProcessingViewAndBackToParentView) withObject:nil waitUntilDone:NO];
+                    }else
+                    {
+                        NSLog(@"更新地址失败");
+                        [weakSelf hideprocessingView];
+                        [weakSelf showAlertViewWithTitle:@"提示" message:@"更新地址失败"];
+                    }
                 }
             }
-
         }];
     }
     

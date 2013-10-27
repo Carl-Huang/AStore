@@ -26,9 +26,6 @@
     //储存购物车的商品或赠品
     commodityArray  = [[NSMutableArray alloc]init];
     presentArray    = [[NSMutableArray alloc]init];
-    //储存购买的商品或赠品
-//    buiedCommodityArray = [[NSMutableArray alloc]init];
-//    buiedPresentArray = [[NSMutableArray alloc]init];
     
     if ([NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"]) {
         self.commodityArray  = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"CommodityArray"];
@@ -37,7 +34,6 @@
         self.presentArray  = (NSMutableArray *)[NSMutableArray unarchivingObjArrayWithKey:@"PresentArray"];
     }
 
-//    self.commodityArray = (NSMutableArray *)[Commodity unarchivingCommodityArray];
     [self customUI];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -55,8 +51,6 @@
     UserCenterViewController * userViewController = [[UserCenterViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:userViewController];
     //用户登陆界面
-//    LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
-//    UINavigationController * nav_d = [[UINavigationController alloc] initWithRootViewController:loginViewController];
     _akTabBarController.viewControllers = [NSMutableArray arrayWithObjects:nav_a,nav_b,nav_c,nav_d,nil];
     [_akTabBarController setBackgroundImageName:@"未选中bg"];
     [_akTabBarController setSelectedBackgroundImageName:@"选中bg"];

@@ -317,15 +317,19 @@
     NSLog(@"CmdStr : %@",cmdStr);
     [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray * resultInfo)
      {
-         NSString * str = [[resultInfo objectAtIndex:0]objectForKey:RequestStatusKey];
-         successBlock(str);
+         if ([resultInfo count]) {
+             NSString * str = [[resultInfo objectAtIndex:0]objectForKey:RequestStatusKey];
+              successBlock(str);
+             if ([str isEqualToString:@"1"]) {
+                 NSLog(@"注册成功");
+                 //写入plish
+                 [User deleteUserInfo];
+                 [User saveUserInfo:name password:pwd memberId:@"0000"];
+             }
 
-         if ([str isEqualToString:@"1"]) {
-             NSLog(@"注册成功");
-             //写入plish
-             [User deleteUserInfo];
-             [User saveUserInfo:name password:pwd memberId:@"0000"];
          }
+        
+
      } errorBlock:^(NSError * error)
      {
          failedBlock(error);

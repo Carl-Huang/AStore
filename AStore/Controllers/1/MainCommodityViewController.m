@@ -64,7 +64,7 @@ static NSString * cellIdentifier = @"cellidentifier";
 {
     if (dataSource == nil) {
         [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-            if (commoditys) {
+            if ([commoditys count]) {
                 dataSource = commoditys;
                 [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             }

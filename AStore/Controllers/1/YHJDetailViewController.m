@@ -57,10 +57,13 @@
     //根据title获取相关内容
     [HttpHelper getCommodityWithSaleTab:self.title withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
         dataSource = commoditys;
-        for (Commodity * info in dataSource) {
-            [Commodity printCommodityInfo:info];
+//        for (Commodity * info in dataSource) {
+//            [Commodity printCommodityInfo:info];
+//        }
+        if ([dataSource count]) {
+            [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
         }
-        [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+     
     } withErrorBlock:^(NSError *error) {
         [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
         NSLog(@"%@",[error description]);

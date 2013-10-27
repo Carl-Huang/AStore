@@ -107,16 +107,22 @@
                 NSLog(@"%s",__func__);
                 if (!isFetchFoodDataSuccess) {
                     [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                        recommandFootData = commoditys;
-                        isFetchFoodDataSuccess = YES;
+                        if ([commoditys count]) {
+                            recommandFootData = commoditys;
+                            isFetchFoodDataSuccess = YES;
+                        }
+                        
                     } withErrorBlock:^(NSError *error) {
                         NSLog(@"获取热门食品失败 %@", [error description]);
                     }];
                 }
                 if (!isFetchStuffDataSuccess) {
                     [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-                        recommandCommodityData = commoditys;
-                        isFetchStuffDataSuccess = YES;
+                        if ([commoditys count]) {
+                            recommandCommodityData = commoditys;
+                            isFetchStuffDataSuccess = YES;
+
+                        }
                     } withErrorBlock:^(NSError *error) {
                         NSLog(@"获取热门日用品失败 %@", [error description]);
                     }];

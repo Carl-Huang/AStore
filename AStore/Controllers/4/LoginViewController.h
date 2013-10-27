@@ -10,6 +10,7 @@
 
 @interface LoginViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) UIViewController * weakViewController;
 - (IBAction)loginAction:(id)sender;
 - (IBAction)registerAction:(id)sender;
 

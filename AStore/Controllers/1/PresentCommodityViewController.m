@@ -275,18 +275,21 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [HttpHelper userLoginWithName:textField.text pwd:textField2.text completedBlock:^(id items) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
-        for (NSDictionary * dic in items) {
-            if ([dic count]==1) {
-                NSLog(@"登陆失败");
-                [prompt show];
-            }else
-            {
-                NSLog(@"登陆成功");
-                [User saveUserInfo:textField.text password:textField2.text memberId:@"0000"];
-                //TODO:去到订单页面
-                
+        if ([items count]) {
+            for (NSDictionary * dic in items) {
+                if ([dic count]==1) {
+                    NSLog(@"登陆失败");
+                    [prompt show];
+                }else
+                {
+                    NSLog(@"登陆成功");
+                    [User saveUserInfo:textField.text password:textField2.text memberId:@"0000"];
+                    //TODO:去到订单页面
+                    
+                }
             }
         }
+
     } failedBlock:^(NSError *error) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];

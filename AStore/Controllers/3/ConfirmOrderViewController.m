@@ -7,7 +7,7 @@
 //
 
 
-#define TableViewOffsetY    190
+#define TableViewOffsetY    205
 
 #import "ConfirmOrderViewController.h"
 #import "UIViewController+LeftTitle.h"
@@ -347,6 +347,8 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             [btn setFrame:CGRectMake(230,2, 80, 30)];
             [btn setTitle:@"取消" forState:UIControlStateNormal];
             [btn setBackgroundImage:[UIImage imageNamed:@"加入购物车-红-bg"] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
             [btn addTarget:self action:@selector(keyBoardAction:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:btn];
             objc_setAssociatedObject(btn, (__bridge const void *)@"textField", memoCell.memoTextField, OBJC_ASSOCIATION_RETAIN);

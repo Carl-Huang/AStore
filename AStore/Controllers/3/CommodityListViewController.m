@@ -166,10 +166,7 @@ static NSString * cellIdentifier = @"commodityListCell";
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             ;
         }];
-//        cell.productName.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductName];
-//        cell.productPrice.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductPrice];
-//        cell.productQuantity.text = [[giftArray objectAtIndex:indexPath.row]objectForKey:ProductNumber];
-//        cell.productImage.image =[UIImage imageNamed:[[giftArray objectAtIndex:indexPath.row]objectForKey:ProductImage]];
+
     }
     
     

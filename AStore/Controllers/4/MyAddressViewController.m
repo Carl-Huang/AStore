@@ -107,13 +107,17 @@ static NSString * cellIdentifier = @"addressCell";
                 AddressInfo * address  = [items objectAtIndex:i];
                 [dataSource addObject:address];
                 [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+                if (address.def_addr.integerValue == 1) {
+                    [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",i]];
+                    selectAddressInfo = [weakSelf.dataSource objectAtIndex:i];
+                }
             }
-            NSInteger selectTag = -1;
-            selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
-            if (selectTag != -1 && selectTag <[items count]) {
-                [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
-                selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
-            }
+//            NSInteger selectTag = -1;
+//            selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectTag"];
+//            if (selectTag != -1 && selectTag <[items count]) {
+//                [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
+//                selectAddressInfo = [weakSelf.dataSource objectAtIndex:selectTag];
+//            }
             
             [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
         }
@@ -294,7 +298,26 @@ static NSString * cellIdentifier = @"addressCell";
             {
                 [item1 setTitle:@"选择" forState:UIControlStateNormal];
             }
-            weakSelf.selectAddressInfo =(AddressInfo *)item2;
+            AddressInfo * addressInfo = (AddressInfo *)item2;
+            [HttpHelper setUserDefaultAddress:addressInfo.addr_id memberId:memberId completedBlock:^(id responed, NSError *error) {
+                if (error) {
+                    NSLog(@"%@",[error description]);
+                    return ;
+                }
+                NSArray * array = responed;
+                if ([array count]) {
+                    for (NSDictionary * dic in array) {
+                        if ([[dic objectForKey:RequestStatusKey]integerValue] ==1) {
+                            NSLog(@"设置默认地址成功");
+                        }else
+                        {
+                            NSLog(@"设置默认地址失败");
+                        }
+                            
+                    }
+                }
+            }];
+            weakSelf.selectAddressInfo = addressInfo;
             [weakSelf.addressTable reloadData];
         }
         

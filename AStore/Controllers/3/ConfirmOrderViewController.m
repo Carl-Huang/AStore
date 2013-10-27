@@ -47,6 +47,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     NSInteger totalCommodityNum;
     NSInteger totalPoint;
     NSInteger deliveryCost;
+    NSString * memberIdStr;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (assign ,nonatomic)BOOL isCheck;
@@ -146,7 +147,28 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             totalCommodityNum += tempCount;
         }
     }
+    [self getUserDefaultAddress];
     // Do any additional setup after loading the view from its nib.
+}
+
+-(void)getUserDefaultAddress
+{
+    NSDictionary * localUserData = [User getUserInfo];
+    memberIdStr = [localUserData objectForKey:DMemberId];
+    NSString *cmdStr = [NSString stringWithFormat:@"getAddrs=%@",memberIdStr];
+    
+    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
+    [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
+        if ([items count]) {
+            for (AddressInfo * addressInfo  in items) {
+                if (addressInfo.def_addr.integerValue == 1) {
+                    addressTypeInfo = addressInfo;
+                }
+            }
+        }
+    } errorBlock:^(NSError *error) {
+        NSLog(@"%@",[error description]);
+    }];
 }
 
 -(void)postFormAction
@@ -168,7 +190,6 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         [HttpHelper postOrderWithUserInfo:nil
                              deliveryType:deliveryTypeInfo
                                    Weight: [NSString stringWithFormat:@"%d",totalWeight]
-                                    tostr:@""
                                productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
                                   address:addressTypeInfo
                         totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
@@ -195,7 +216,13 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                                
                            }
                        }];
+        //清除提交的商品
+        for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+            if ([myDelegate.commodityArray containsObject:dic]) {
+                [myDelegate.commodityArray removeObject:dic];
+            }
 
+        }
     }
     if (giftSumMoney!= 0) {
         [HttpHelper postGiftOrderWithUserInfo:nil
@@ -238,7 +265,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectDeliveryTag"];
     
     //MyAddressViewController中的关键字
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectTag"];
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectTag"];
     
     [[NSUserDefaults standardUserDefaults]synchronize];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -331,12 +358,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 -(void)pushMyAddressViewController
 {
     MyAddressViewController * viewController = [[MyAddressViewController alloc]initWithNibName:@"MyAddressViewController" bundle:nil];
-    NSDictionary * localUserData = [User getUserInfo];
-    NSString * str = [NSString stringWithFormat:@"%@",[localUserData objectForKey:@"area"]];
-    if (![str isEqualToString:@"<null>"]) {
-        NSLog(@"%@",str);
-    }
-    [viewController setMemberId:[localUserData objectForKey:DMemberId]];
+    [viewController setMemberId:memberIdStr];
     [viewController addObserver:self forKeyPath:@"selectAddressInfo" options:NSKeyValueObservingOptionNew context:NULL];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;

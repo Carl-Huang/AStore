@@ -83,6 +83,10 @@
 		4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */; };
 		4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */; };
 		4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */; };
+		C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3A181CBDFE0042032D /* TFHpple.m */; };
+		C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3C181CBDFE0042032D /* TFHppleElement.m */; };
+		C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3E181CBDFE0042032D /* XPathQuery.m */; };
+		C3051F43181CBE1F0042032D /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3051F42181CBE1F0042032D /* libxml2.2.dylib */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
 		C32B1BC317F405F50089D6CC /* 个人中心icon-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */; };
 		C32B1BC417F405F50089D6CC /* 分类icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BBA17F405F50089D6CC /* 分类icon-n.png */; };
@@ -386,6 +390,13 @@
 		4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderMemo.xib; sourceTree = "<group>"; };
 		4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderMemoCell.h; sourceTree = "<group>"; };
 		4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderMemoCell.m; sourceTree = "<group>"; };
+		C3051F39181CBDFE0042032D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
+		C3051F3A181CBDFE0042032D /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
+		C3051F3B181CBDFE0042032D /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
+		C3051F3C181CBDFE0042032D /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
+		C3051F3D181CBDFE0042032D /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
+		C3051F3E181CBDFE0042032D /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
+		C3051F42181CBE1F0042032D /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-n.png"; sourceTree = "<group>"; };
 		C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-s.png"; sourceTree = "<group>"; };
 		C32B1BBA17F405F50089D6CC /* 分类icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "分类icon-n.png"; sourceTree = "<group>"; };
@@ -613,6 +624,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3051F43181CBE1F0042032D /* libxml2.2.dylib in Frameworks */,
 				C3845CE617F3F63600DED3C5 /* QuartzCore.framework in Frameworks */,
 				C3845C9E17F3D8D400DED3C5 /* SystemConfiguration.framework in Frameworks */,
 				C3845C9C17F3D8C900DED3C5 /* MobileCoreServices.framework in Frameworks */,
@@ -733,9 +745,23 @@
 			path = Lib/ACPScrollMenu;
 			sourceTree = "<group>";
 		};
+		C3051F38181CBDFE0042032D /* TFHpple */ = {
+			isa = PBXGroup;
+			children = (
+				C3051F39181CBDFE0042032D /* TFHpple.h */,
+				C3051F3A181CBDFE0042032D /* TFHpple.m */,
+				C3051F3B181CBDFE0042032D /* TFHppleElement.h */,
+				C3051F3C181CBDFE0042032D /* TFHppleElement.m */,
+				C3051F3D181CBDFE0042032D /* XPathQuery.h */,
+				C3051F3E181CBDFE0042032D /* XPathQuery.m */,
+			);
+			path = TFHpple;
+			sourceTree = "<group>";
+		};
 		C342179D17F1E1F500B42F5E = {
 			isa = PBXGroup;
 			children = (
+				C3051F42181CBE1F0042032D /* libxml2.2.dylib */,
 				C34217AF17F1E1F500B42F5E /* AStore */,
 				C34217A817F1E1F500B42F5E /* Frameworks */,
 				C34217A717F1E1F500B42F5E /* Products */,
@@ -854,6 +880,7 @@
 		C3C9991317F2CDB900043727 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				C3051F38181CBDFE0042032D /* TFHpple */,
 				4EB4CB3B18091C430059DA10 /* UIKit+AFNetworking */,
 				C383C101180651440047AAD4 /* MBProgressHUD.h */,
 				C383C102180651440047AAD4 /* MBProgressHUD.m */,
@@ -1460,6 +1487,9 @@
 				4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */,
 				4EEA2F8E181C07F500E18EA0 /* confirmOrderInfoCell.m in Sources */,
 				4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */,
+				C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */,
+				C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */,
+				C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1539,10 +1569,13 @@
 		C34217CA17F1E1F600B42F5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1553,10 +1586,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Xtreme Programming Group, Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xtreme Programming Group, Inc.";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "C6BDE67B-336C-41BD-A253-255A10F2C54E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6BDE67B-336C-41BD-A253-255A10F2C54E";

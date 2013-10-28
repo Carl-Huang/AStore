@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ChildCatalogViewContaollerViewController : UITableViewController
-@property (strong ,nonatomic) NSArray  * dataSource;
+@property (strong ,nonatomic) NSMutableArray  * dataSource;
 @property (strong ,nonatomic) NSString * cat_id;
 @property (strong ,nonatomic) NSString * cat_name;
 

@@ -159,14 +159,6 @@
     [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
 
-//获取首页兑换商品
-+ (void)getGifCommodityWithSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
-{
-    NSString * route = @"youjian.php";
-    NSString * urlString = [NSString stringWithFormat:@"%@%@?getGift=\"&start=0&count=5",SERVER_URL,route];
-    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
-}
-
 //搜索商品
 + (void)searchCommodityWithKeyworkd:(NSString *)keyword withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
 {
@@ -385,10 +377,10 @@
     }];
 }
 
-+(void)getGiftWithCompleteBlock:(void (^)(id, NSError *))block
++(void)getGiftStart:(NSInteger)start count:(NSInteger )count WithCompleteBlock:(void (^)(id, NSError *))block
 {
     //获取赠品
-    NSString * giftStr = [NSString stringWithFormat:@"getGift=1&&start=0&&count=30"];
+    NSString * giftStr = [NSString stringWithFormat:@"getGift=1&&start=%@&&count=%@",[NSString stringWithFormat:@"%d",start],[NSString stringWithFormat:@"%d",count]];
     giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
     [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
         block(items,nil);

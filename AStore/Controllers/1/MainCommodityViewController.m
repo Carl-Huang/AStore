@@ -18,6 +18,8 @@ static NSString * cellIdentifier = @"cellidentifier";
 @interface MainCommodityViewController ()
 {
     BOOL isAlertViewCanShow;
+    NSInteger start;
+    NSInteger count;
 }
 @end
 
@@ -45,7 +47,7 @@ static NSString * cellIdentifier = @"cellidentifier";
     
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
-
+    dataSource = [NSMutableArray array];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -62,10 +64,12 @@ static NSString * cellIdentifier = @"cellidentifier";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    if (dataSource == nil) {
-        [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+    start = 0;
+    count = 5;
+    if ([dataSource count]==0) {
+        [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             if ([commoditys count]) {
-                dataSource = commoditys;
+                [dataSource addObjectsFromArray:commoditys];
                 [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             }
         } withErrorBlock:^(NSError *error) {
@@ -137,6 +141,30 @@ static NSString * cellIdentifier = @"cellidentifier";
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
 
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    __weak MainCommodityViewController * weakSelf= self;
+    CGFloat offsetY=0.0;
+    offsetY = scrollView.contentOffset.y;
+    NSInteger contentHeight = scrollView.contentSize.height;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    
+    if (offsetY >= boundary)
+    {
+        start +=count + 1;
+        count +=10;
+        //执行再次加载新的数据
+        [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+            if ([commoditys count]) {
+                [dataSource addObjectsFromArray:commoditys];
+                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+            }
+        } withErrorBlock:^(NSError *error) {
+            ;
+        }];
+    }
 }
 
 @end

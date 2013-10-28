@@ -50,7 +50,7 @@
     int index = btn.tag - 1;
     NSString * title = [_catalogArr objectAtIndex:index];
     YHJDetailViewController * searchResult = [[YHJDetailViewController alloc] init];
-    searchResult.lTitle = title;
+    [searchResult setLTitle:title];
     [self.navigationController pushViewController:searchResult animated:YES];
     searchResult = nil;
 }

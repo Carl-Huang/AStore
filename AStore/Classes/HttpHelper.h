@@ -76,7 +76,7 @@
 //设置默认地址
 +(void)setUserDefaultAddress:(NSString *)addressId memberId:(NSString *)memberId completedBlock:(void (^)(id responed,NSError * error))block;
 //获取赠品
-+(void)getGiftWithCompleteBlock:(void (^)(id item,NSError * error))block;
++(void)getGiftStart:(NSInteger)start count:(NSInteger)count WithCompleteBlock:(void (^)(id, NSError *))block;
 
 
 //获取订单

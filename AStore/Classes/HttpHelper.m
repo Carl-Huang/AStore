@@ -722,4 +722,99 @@
     }];
 
 }
+
+
++ (void)getAdsWithURL:(NSString *)urlString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure
+{
+    if(urlString == nil) return ;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSData * htmlData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
+        
+        if(!htmlData)
+        {
+            NSLog(@"The html content is nil");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(failure)
+                {
+                    NSError * error = [NSError errorWithDomain:@"The html content is nil." code:0 userInfo:nil];
+                    failure(error);
+                }
+            });
+            
+            return ;
+        }
+        
+        TFHpple * xParse = [[TFHpple alloc] initWithHTMLData:htmlData];
+        NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"focus\"]/script"];
+        
+        if([elements count] == 0)
+        {
+            NSLog(@"Could not found the elements.");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(failure)
+                {
+                    NSError * error = [NSError errorWithDomain:@"Could not found the elements." code:0 userInfo:nil];
+                    failure(error);
+                }
+            });
+            
+            return ;
+        }
+        
+        
+        
+        TFHppleElement * element = [elements objectAtIndex:0];
+//        NSLog(@"%@",element.raw);
+        NSArray * tmp = [element.raw componentsSeparatedByString:@"vars:"];
+        NSString * content = [tmp objectAtIndex:1];
+        content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"]]>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</script>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"});" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"{" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"}" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"\"" withString:@"'"];
+        content = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
+        tmp = [content componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+        
+        NSString * imagesString = [[[tmp objectAtIndex:0] stringByReplacingOccurrencesOfString:@"bcastr_flie:" withString:@""] stringByReplacingOccurrencesOfString:@"'" withString:@""];
+        NSString * urlsString = [[[tmp objectAtIndex:1] stringByReplacingOccurrencesOfString:@"bcastr_link:" withString:@""] stringByReplacingOccurrencesOfString:@"'" withString:@""];
+        
+        NSArray * images = [imagesString componentsSeparatedByString:@"|"];
+        NSArray * urls = [urlsString componentsSeparatedByString:@"|"];
+        
+        if(images.count != urls.count)
+        {
+            NSLog(@"Something error.");
+            return ;
+        }
+        
+        NSMutableArray * items = [NSMutableArray arrayWithCapacity:images.count];
+        
+        for(int i = 0; i < images.count; i++)
+        {
+            if([[images objectAtIndex:i] length] == 0 || [[urls objectAtIndex:i] length] == 0)
+            {
+                continue;
+            }
+            NSDictionary * dic = [NSDictionary dictionaryWithObjects:@[[images objectAtIndex:i],[SERVER_URL stringByAppendingString:[urls objectAtIndex:i]]] forKeys:@[@"image",@"url"]];
+            [items addObject:dic];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(success)
+            {
+                success(items);
+            }
+        });
+        
+    });
+}
+
+
 @end

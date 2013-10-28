@@ -14,7 +14,12 @@
 #import "AppDelegate.h"
 #import "PresentCommodityViewController.h"
 @interface CommodityChangeViewController ()
-@property (strong ,nonatomic) NSArray * dataSource;
+{
+    NSInteger start;
+    NSInteger count;
+    
+}
+@property (strong ,nonatomic) NSMutableArray * dataSource;
 @end
 
 @implementation CommodityChangeViewController
@@ -38,21 +43,25 @@
     
     UINib * cellNib = [UINib nibWithNibName:@"CommodityEXCell" bundle:[NSBundle bundleForClass:[CommodityEXCell class]]];
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityEXCell"];
+    dataSource = [NSMutableArray array];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    if (dataSource == nil) {
+    start = 0;
+    count = 10;
+    if ([dataSource count] == 0) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate showLoginViewOnView:self.view];
         __weak CommodityChangeViewController * weakSelf = self;
         
-        [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
+        [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
             if (error) {
                 NSLog(@"%@",[error description]);
             }else if([item count])
             {
-                dataSource = item;
+                [dataSource addObjectsFromArray:item];
+//                dataSource = item;
                  [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             }
            
@@ -135,4 +144,29 @@
     viewController = nil;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    __weak CommodityChangeViewController * weakSelf= self;
+    CGFloat offsetY=0.0;
+    offsetY = scrollView.contentOffset.y;
+    NSInteger contentHeight = scrollView.contentSize.height;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    
+    if (offsetY >= boundary)
+    {
+        start +=count + 1;
+        count +=10;
+        //执行再次加载新的数据
+        [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }else if([item count])
+            {
+                [dataSource addObjectsFromArray:item];
+                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+            }
+            
+        }];
+    }
+}
 @end

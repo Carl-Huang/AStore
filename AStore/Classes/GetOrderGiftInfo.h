@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface GetOrderGiftInfo : NSObject
-@property (strong, nonatomic) NSString * Name;
+@property (strong, nonatomic) NSString * name;
 @property (strong, nonatomic) NSString * point;
 @property (strong, nonatomic) NSString * nums;
 @end

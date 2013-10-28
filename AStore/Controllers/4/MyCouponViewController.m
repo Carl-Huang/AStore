@@ -25,11 +25,11 @@
 {
     BOOL isAlertViewCanShow;
 }
-@property (strong ,nonatomic)NSMutableArray * commoditiesArray;
+@property (strong ,nonatomic)NSMutableArray * couponArray;
 @end
 
 @implementation MyCouponViewController
-@synthesize commoditiesArray;
+@synthesize couponArray;
 @synthesize memberId;
  static NSString * cellIdentifier = @"commodityInfoCell";
 
@@ -37,7 +37,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        commoditiesArray = [[NSMutableArray alloc]init];
+        
         // Custom initialization
     }
     return self;
@@ -54,6 +54,7 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
     isAlertViewCanShow = YES;
+    couponArray = [NSMutableArray array];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -83,8 +84,8 @@
     NSString *cmdStr = [NSString stringWithFormat:@"getcpns=%@",memberId];
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[CouponInfo class] successBlock:^(NSArray *items) {
-        for (CouponInfo * address in items) {
-            [commoditiesArray addObject:address];
+        if ([items count]) {
+            [couponArray addObjectsFromArray:items];
         }
         [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
     } errorBlock:^(NSError *error) {
@@ -121,34 +122,34 @@
 {
     return 80.0;
 }
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return  30.0;
+//}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return  30.0;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIImageView * imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"分类背景"]];
-    [imageView setContentMode:UIViewContentModeScaleToFill];
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, 120, 35)];
-    [label setBackgroundColor:[UIColor clearColor]];
-    [label setTextColor:[UIColor blackColor]];
-    [label setFont:[UIFont systemFontOfSize:20]];
-    UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
-    [headerView setBackgroundColor:[UIColor clearColor]];
-    label.text = @"购买的商品";
-    [headerView addSubview:imageView];
-    [headerView addSubview:label];
-    imageView = nil;
-    label = nil;
-    return headerView;
-}
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIImageView * imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"分类背景"]];
+//    [imageView setContentMode:UIViewContentModeScaleToFill];
+//    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, 120, 35)];
+//    [label setBackgroundColor:[UIColor clearColor]];
+//    [label setTextColor:[UIColor blackColor]];
+//    [label setFont:[UIFont systemFontOfSize:20]];
+//    UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+//    [headerView setBackgroundColor:[UIColor clearColor]];
+//    label.text = @"购买的商品";
+//    [headerView addSubview:imageView];
+//    [headerView addSubview:label];
+//    imageView = nil;
+//    label = nil;
+//    return headerView;
+//}
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [commoditiesArray count];
+    return [couponArray count];
 }
 
 
@@ -161,14 +162,13 @@
 {
     CouponCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-    cell.orderNum.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VCouponNum];
-    cell.validityTime.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VValidityTime];
-    cell.couponStatus.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VCouponStatus];
-    cell.couponName.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VCouponName];
-    cell.canUseTime.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VCanUseTime];
-    cell.userMethod.text = [[commoditiesArray objectAtIndex:indexPath.row]objectForKey:VUseMethod];
-    
+    CouponInfo *info = [couponArray objectAtIndex:indexPath.row];
+    cell.orderNum.text = info.cpns_id;
+    cell.validityTime.text = info.pmt_time_begin;
+    cell.couponStatus.text = info.memc_enabled;
+    cell.couponName.text = info.cpns_name;
+    cell.canUseTime.text = info.pmt_time_end;
+    cell.userMethod.text = info.pmt_describe;
     cell.backgroundColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

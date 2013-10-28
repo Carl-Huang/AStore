@@ -18,6 +18,7 @@
 #import "AppDelegate.h"
 #import "GetOrderInfo.h"
 #import "GetGiftInfo.h"
+#import "OrderDetailViewController.h"
 @interface MyOrderViewController ()<UIAlertViewDelegate>
 {
     BOOL isAlertViewCanShow;
@@ -63,10 +64,7 @@
     NSDictionary * userInfoDic = [User getUserInfo];
     NSLog(@"OrderView userInfo :%@",userInfoDic);
     //获取订单
-    NSString * cmdStr = [NSString stringWithFormat:@"getOrders=%@",[userInfoDic objectForKey:DMemberId]];
-    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
-    NSLog(@"cmdStr :%@",cmdStr);
-    
+    NSString * cmdStr = [NSString stringWithFormat:@"%@",[userInfoDic objectForKey:DMemberId]];
     [HttpHelper getOrderWithMemberId:cmdStr withCompletedBlock:^(id item, NSError *error) {
         if (error) {
             NSLog(@"%@",[error description]);
@@ -83,19 +81,19 @@
         
     }];
     
-    //获取赠品
-    [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
-        if (error) {
-            NSLog(@"%@",[error description]);
-        }
-        if ([item count]) {
-            giftArray = item;
-            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
-        }else
-        {
-            NSLog(@"赠品订单为空");
-        }
-    }];
+//    //获取赠品
+//    [HttpHelper getGiftWithCompleteBlock:^(id item, NSError *error) {
+//        if (error) {
+//            NSLog(@"%@",[error description]);
+//        }
+//        if ([item count]) {
+//            giftArray = item;
+//            [self performSelectorOnMainThread:@selector(reloadTableview) withObject:nil waitUntilDone:YES];
+//        }else
+//        {
+//            NSLog(@"赠品订单为空");
+//        }
+//    }];
     
 }
 
@@ -134,7 +132,15 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    CommodityInfoCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    //获取对应订单id的订单详情
+    
+
+    GetOrderInfo * orderInfo = [orderInfoArray objectAtIndex:indexPath.row];
+    OrderDetailViewController * viewController = [[OrderDetailViewController alloc]initWithNibName:@"OrderDetailViewController" bundle:nil];
+    [viewController setOrderInfo:orderInfo];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -183,7 +189,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -196,7 +202,9 @@
         cell.orderTime.text         = orderInfo.acttime;
         cell.orderStatus.text       = orderInfo.status;
         cell.commodityName.text     = orderInfo.tostr;
-        cell.commodityMoneySum.text = orderInfo.cost_item;
+        float floatString = [orderInfo.cost_item floatValue];
+        NSString * priceStr = [NSString stringWithFormat:@"￥%0.1f",floatString];
+        cell.commodityMoneySum.text = priceStr;
         cell.sum.text = @"总金额:";
     }else if(indexPath.section == 1)
     {

@@ -68,11 +68,15 @@ static NSString * const selectKey = @"selectKey";
             weakSelf.dataSourece = item;
             for (int i = 0; i< weakSelf.dataSourece.count; i++) {
                 [selectItemsDic setObject:[NSNumber numberWithInt:0] forKey:[NSString stringWithFormat:@"%d",i]];
+                //TODO:地址默认选项
+                
+                
             }
             NSInteger selectTag = -1;
             selectTag = [[NSUserDefaults standardUserDefaults]integerForKey:@"selectDeliveryTag"];
             if (selectTag != -1 && selectTag < [item count]) {
                 [selectItemsDic setObject:[NSNumber numberWithInt:1] forKey:[NSString stringWithFormat:@"%d",selectTag]];
+                self.deliveryMethod = [weakSelf.dataSourece objectAtIndex:selectTag];
                  objc_setAssociatedObject(self, (__bridge const void *)(selectKey), [weakSelf.dataSourece objectAtIndex:selectTag], OBJC_ASSOCIATION_RETAIN);
             }
             

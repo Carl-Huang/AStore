@@ -76,8 +76,10 @@
 //删除地址
 +(void)deleteAddressWithAddressId:(NSString *)addId completedBlock:(void (^)(id item,NSError * error))block;
 
+//设置默认地址
++(void)setUserDefaultAddress:(NSString *)addressId memberId:(NSString *)memberId completedBlock:(void (^)(id responed,NSError * error))block;
 //获取赠品
-+(void)getGiftWithCompleteBlock:(void (^)(id item,NSError * error))block;
++(void)getGiftStart:(NSInteger)start count:(NSInteger)count WithCompleteBlock:(void (^)(id, NSError *))block;
 
 
 //获取订单
@@ -100,7 +102,6 @@
 +(void)postOrderWithUserInfo:(NSArray *)userData
                 deliveryType:(DeliveryTypeInfo *)deliveryType
                       Weight:(NSString *)weight
-                       tostr:(NSString *)tostr
                   productNum:(NSString *)numStr
                      address:(AddressInfo *)addressInfo
            totalProuctMomeny:(NSString *)productMoney

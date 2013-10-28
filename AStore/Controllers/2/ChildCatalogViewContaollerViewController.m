@@ -23,6 +23,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 @interface ChildCatalogViewContaollerViewController ()<UIAlertViewDelegate>
 {
     BOOL isAlertViewCanShow;
+    NSInteger start;
+    NSInteger count;
 }
 
 
@@ -41,7 +43,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     if (self) {
         // Custom initialization
         cat_id = [[NSString alloc]init];
-        dataSource = [[NSArray alloc]init];
+        
     }
     return self;
 }
@@ -54,7 +56,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self setBackItem:nil];
     UINib *cellNib = [UINib nibWithNibName:@"ChildCatalogInfoCell" bundle:[NSBundle bundleForClass:[ChildCatalogInfoCell class]]];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
-    
+    dataSource = [NSMutableArray array];
     [self fetchDataFromServer];
     isAlertViewCanShow = YES;
 }
@@ -67,18 +69,19 @@ static NSString * cellIdentifier = @"cellIdentifier";
 //根据相应的cat_id从服务器获取资料
 -(void)fetchDataFromServer
 {
-    if (dataSource == nil) {
+    start = 0;
+    count = 10;
+    if ([dataSource count]==0) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate  showLoginViewOnView:self.view];
         
-        [HttpHelper getCommodityWithSaleTab:cat_id withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             if ([commoditys count]) {
-                dataSource = commoditys;
+                [dataSource addObjectsFromArray:commoditys];
                 [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
-//                NSLog(@"%@",commoditys);
             }
         } withErrorBlock:^(NSError *error) {
-            [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
+//            [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
         }];
     }
 }
@@ -185,6 +188,31 @@ static NSString * cellIdentifier = @"cellIdentifier";
             [self.navigationController popViewControllerAnimated:YES];
         default:
             break;
+    }
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    __weak ChildCatalogViewContaollerViewController * weakSelf= self;
+    CGFloat offsetY=0.0;
+    offsetY = scrollView.contentOffset.y;
+    NSInteger contentHeight = scrollView.contentSize.height;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    
+    if (offsetY >= boundary)
+    {
+        start +=count + 1;
+        count +=10;
+        //执行再次加载新的数据
+        [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+            if ([commoditys count]) {
+                [dataSource addObjectsFromArray:commoditys];
+                [weakSelf performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
+                //                NSLog(@"%@",commoditys);
+            }
+        } withErrorBlock:^(NSError *error) {
+//            [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
+        }];
     }
 }
 @end

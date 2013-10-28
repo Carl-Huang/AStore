@@ -17,6 +17,10 @@
 		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
 		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
 		4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */; };
+		4E22C702181CF412009256AB /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E22C700181CF412009256AB /* OrderDetailViewController.m */; };
+		4E22C703181CF412009256AB /* OrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E22C701181CF412009256AB /* OrderDetailViewController.xib */; };
+		4E22C706181CF8BF009256AB /* OrderDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E22C705181CF8BF009256AB /* OrderDetailCell.m */; };
+		4E22C708181CF8D2009256AB /* OrderDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E22C707181CF8D2009256AB /* OrderDetailCell.xib */; };
 		4E4AD2481812922B00726E60 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E4AD2471812922B00726E60 /* Region.m */; };
 		4EA9637B18051D9B00E9B54B /* userInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA9637A18051D9B00E9B54B /* userInfo.m */; };
 		4EAD6C831807C7AB00B3F887 /* GetOrderInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD6C821807C7AB00B3F887 /* GetOrderInfo.m */; };
@@ -281,6 +285,12 @@
 		4E0656661815722700AB6216 /* GetOrderGiftInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGiftInfo.m; sourceTree = "<group>"; };
 		4E1189951815031300081C01 /* NSMutableArray+SaveCustomiseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+SaveCustomiseData.h"; sourceTree = "<group>"; };
 		4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+SaveCustomiseData.m"; sourceTree = "<group>"; };
+		4E22C6FF181CF412009256AB /* OrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailViewController.h; sourceTree = "<group>"; };
+		4E22C700181CF412009256AB /* OrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailViewController.m; sourceTree = "<group>"; };
+		4E22C701181CF412009256AB /* OrderDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderDetailViewController.xib; sourceTree = "<group>"; };
+		4E22C704181CF8BF009256AB /* OrderDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailCell.h; sourceTree = "<group>"; };
+		4E22C705181CF8BF009256AB /* OrderDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailCell.m; sourceTree = "<group>"; };
+		4E22C707181CF8D2009256AB /* OrderDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderDetailCell.xib; sourceTree = "<group>"; };
 		4E4AD2461812922B00726E60 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		4E4AD2471812922B00726E60 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		4EA9637918051D9B00E9B54B /* userInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userInfo.h; sourceTree = "<group>"; };
@@ -1144,6 +1154,12 @@
 				4EBB3EF417FD4CFC00BF1B47 /* MyOrderViewController.h */,
 				4EBB3EF517FD4CFC00BF1B47 /* MyOrderViewController.m */,
 				4EBB3EF617FD4CFC00BF1B47 /* MyOrderViewController.xib */,
+				4E22C6FF181CF412009256AB /* OrderDetailViewController.h */,
+				4E22C700181CF412009256AB /* OrderDetailViewController.m */,
+				4E22C701181CF412009256AB /* OrderDetailViewController.xib */,
+				4E22C704181CF8BF009256AB /* OrderDetailCell.h */,
+				4E22C705181CF8BF009256AB /* OrderDetailCell.m */,
+				4E22C707181CF8D2009256AB /* OrderDetailCell.xib */,
 				4EAEE3DA17FE2246002857F1 /* CommodityInfoCell.h */,
 				4EAEE3DB17FE2247002857F1 /* CommodityInfoCell.m */,
 				4EAEE3DC17FE2247002857F1 /* CommodityInfoCell.xib */,
@@ -1385,6 +1401,8 @@
 				4E00979018139CC600D4DE40 /* PresentCommodityDesViewController.xib in Resources */,
 				4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */,
 				4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */,
+				4E22C703181CF412009256AB /* OrderDetailViewController.xib in Resources */,
+				4E22C708181CF8D2009256AB /* OrderDetailCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1490,6 +1508,8 @@
 				C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */,
 				C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */,
 				C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */,
+				4E22C702181CF412009256AB /* OrderDetailViewController.m in Sources */,
+				4E22C706181CF8BF009256AB /* OrderDetailCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

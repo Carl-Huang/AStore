@@ -159,14 +159,6 @@
     [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
 
-//获取首页兑换商品
-+ (void)getGifCommodityWithSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
-{
-    NSString * route = @"youjian.php";
-    NSString * urlString = [NSString stringWithFormat:@"%@%@?getGift=\"&start=0&count=5",SERVER_URL,route];
-    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
-}
-
 //搜索商品
 + (void)searchCommodityWithKeyworkd:(NSString *)keyword withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
 {
@@ -385,10 +377,10 @@
     }];
 }
 
-+(void)getGiftWithCompleteBlock:(void (^)(id, NSError *))block
++(void)getGiftStart:(NSInteger)start count:(NSInteger )count WithCompleteBlock:(void (^)(id, NSError *))block
 {
     //获取赠品
-    NSString * giftStr = [NSString stringWithFormat:@"getGift=1&&start=0&&count=30"];
+    NSString * giftStr = [NSString stringWithFormat:@"getGift=1&&start=%@&&count=%@",[NSString stringWithFormat:@"%d",start],[NSString stringWithFormat:@"%d",count]];
     giftStr = [SERVER_URL_Prefix stringByAppendingString:giftStr];
     [HttpHelper requestWithString:giftStr withClass:[GetGiftInfo class] successBlock:^(NSArray *items) {
         block(items,nil);
@@ -508,7 +500,6 @@
 +(void)postOrderWithUserInfo:(NSArray *)userData
                 deliveryType:(DeliveryTypeInfo *)deliveryType
                       Weight:(NSString *)weight
-                       tostr:(NSString *)tostr
                   productNum:(NSString *)numStr
                      address:(AddressInfo *)addressInfo
            totalProuctMomeny:(NSString *)productMoney
@@ -520,29 +511,7 @@
           withCompletedBlock:(void (^)(id item,NSError * error))block
 {
     NSDictionary *userInfo = [User getUserInfo];
- 
-    NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_2=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&ost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
-                          [userInfo objectForKey:DMemberId],
-                          deliveryType.dt_id,
-                          weight,
-                          tostr,                //商品名称列表，多个商品用,分隔格式如下：
-                                                //商品1（规格）（数量）
-                                                //例如：
-                                                //女式洞洞鞋1165（三色可选）(蓝色、38)(1)
-
-                          numStr,               //商品总数量
-                          addressInfo.name,
-                          addressInfo.area,
-                          addressInfo.addr,
-                          @"任意时间段",
-                          addressInfo.mobile,
-                          addressInfo.tel,
-                          productMoney,         //商品总额
-                          deliveryCost,         //配送费用
-                          @"0",                 //消耗积分：商品为0，赠品才需要
-                          point,                //可得总积分=可得积分*数量
-                          money,                //总金额
-                          memo];                //备注
+    
     
     NSString * product_id_str   = [[NSString alloc]init];
     NSString * arr_bn_str       = [[NSString alloc]init];
@@ -553,10 +522,10 @@
     NSString * arr_nums_str     = [[NSString alloc]init];
     NSString * arr_score_str    = [[NSString alloc]init];
     
-    
+    NSString *tostr = @"";
     for (int i = 0;i< [commodityDic count]; i++) {
         NSDictionary * dic = [commodityDic objectAtIndex:i];
-        //单一商品的数量
+        //商品的数量
         NSInteger count =[[dic objectForKey:@"count"]integerValue];
 
         Commodity * commodityInfo = [dic objectForKey:@"commodity"];
@@ -576,7 +545,7 @@
         NSString * countStr = [NSString stringWithFormat:@"%d",count];
         arr_nums_str = [arr_nums_str stringByAppendingString:countStr];
         
-        
+        tostr = [NSString stringWithFormat:@"%@%@",arr_name_str,countStr];
         //总积分
         NSInteger totalScore = count * commodityInfo.score.integerValue;
         NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];
@@ -591,16 +560,40 @@
         if (i != [commodityDic count]-1) {
             product_id_str  = [product_id_str stringByAppendingString:@","];
             arr_bn_str     = [arr_bn_str stringByAppendingString:@","];
-            arr_name_str    = [product_id_str stringByAppendingString:@","];
+            arr_name_str    = [arr_name_str stringByAppendingString:@","];
             arr_cost_str    = [arr_cost_str stringByAppendingString:@","];
             arr_price_str   = [arr_price_str stringByAppendingString:@","];
             arr_nums_str    = [arr_nums_str stringByAppendingString:@","];
             arr_score_str   = [arr_score_str stringByAppendingString:@","];
             arr_amount_str  = [arr_amount_str stringByAppendingString:@","];
+            tostr = [tostr stringByAppendingString:@","];
 
         }
     }
 
+    NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_1=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&cost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
+                          [userInfo objectForKey:DMemberId],
+                          deliveryType.dt_id,
+                          weight,
+                          tostr,                //商品名称列表，多个商品用,分隔格式如下：
+                          //商品1（规格）（数量）
+                          //例如：
+                          //女式洞洞鞋1165（三色可选）(蓝色、38)(1)
+                          
+                          numStr,               //商品总数量
+                          addressInfo.name,
+                          addressInfo.area,
+                          addressInfo.addr,
+                          @"任意时间段",
+                          addressInfo.mobile,
+                          addressInfo.tel,
+                          productMoney,         //商品总额
+                          deliveryCost,         //配送费用
+                          @"0",                 //消耗积分：商品为0，赠品才需要
+                          point,                //可得总积分=可得积分*数量
+                          money,                //总金额
+                          memo];                //备注
+    
     NSString *cmdStr2 = [NSString stringWithFormat:@"&&arr_product_id=%@&&arr_bn=%@&&arr_name=%@&&arr_cost=%@&&arr_price=%@&&arr_amount=%@&&arr_nums=%@&&arr_score=%@",product_id_str,arr_bn_str,arr_name_str,arr_cost_str,arr_price_str,arr_amount_str,arr_nums_str,arr_score_str];
     
     
@@ -656,11 +649,11 @@
                           @"任意时间段",
                           addressInfo.mobile,
                           addressInfo.tel,
-                          productMoney,         //商品总额
+                          @"0",                  //赠品总额,默认为0？
                           deliveryCost,         //配送费用
-                          @"0",                 //消耗积分：商品为0，赠品才需要
+                          productMoney,         //hardcode 运费为2块
                           point,                //可得总积分=可得积分*数量
-                          money,                //总金额
+                          money,                 //总金额,默认为0？
                           memo];                //备注
     
     NSString * arr_gift_id   = [[NSString alloc]init];
@@ -714,6 +707,19 @@
     arr_name        = nil;
     arr_nums        = nil;
     arr_point       = nil;
+
+}
+
++(void)setUserDefaultAddress:(NSString *)addressId memberId:(NSString *)memberId completedBlock:(void (^)(id responed,NSError * error))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"setAddrs=%@&&mid=%@",addressId,memberId];
+//    cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
+    NSLog(@"%@",cmdStr);
+    [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {
+        block(resultInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
 
 }
 @end

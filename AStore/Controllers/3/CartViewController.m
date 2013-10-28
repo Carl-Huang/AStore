@@ -20,6 +20,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "NSMutableArray+SaveCustomiseData.h"
 #import "GetGiftInfo.h"
+#import "ProductStoreInfo.h"
+#import "GiftStoreInfo.h"
+
 typedef NS_ENUM(NSInteger, ActionType)
 {
     PlusAction = 1,
@@ -41,6 +44,8 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     NSMutableDictionary * presentDicInfo;
     float commoditySumMoney;
     float giftSumMoney;
+    NSMutableArray * productIdStoreArray;
+    NSMutableArray * giftIdStoreArray;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
@@ -49,6 +54,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 @implementation CartViewController
 @synthesize dataSource;
 @synthesize giftArray;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -91,17 +97,49 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     presentDicInfo = [NSMutableDictionary dictionary];
     giftSumMoney = 0.0;
     commoditySumMoney = 0.0;
-    // Do any additional setup after loading the view from its nib.
-}
-
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     self.dataSource  = myDelegate.commodityArray;
     self.giftArray = myDelegate.presentArray;
     
+    //获取商品,赠品 对应的库存量
+    [self getStoreInfo];
+    
+    //注册一个通知，当商品，或赠品提交后更新tableivew 中cell的选中状态
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCommodityCellStatus:) name:CommodityCellStatus object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updatePresentCellStatus:) name:PresentCellStatus object:nil];
+    // Do any additional setup after loading the view from its nib.
+}
+
+-(void)updateCommodityCellStatus:(NSNotification *)notification
+{
+    //更新cell的状态
+    for (int i = 0; i < [self.dataSource count];i++) {
+        if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            NSLog(@"removeObj at index :%d",i);
+            NSString * key = [NSString stringWithFormat:@"%d",i+1];
+            [commodityDicInfo removeObjectForKey:key];
+        }
+    }
+}
+
+-(void)updatePresentCellStatus:(NSNotification *)notification
+{
+    //更新cell的状态
+    for (int i = 0; i < [self.dataSource count];i++) {
+        if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            NSLog(@"removeObj at index :%d",i);
+            NSString * key = [NSString stringWithFormat:@"%d",i+1];
+            [presentDicInfo removeObjectForKey:key];
+        }
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+
     if (isViewFirstShow) {
         isViewFirstShow = NO;
         for (int i = 0;  i<dataSource.count; i++) {
@@ -110,10 +148,62 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         for (int i = 0;  i<giftArray.count; i++) {
             [presentDicInfo setObject:[NSNumber numberWithBool:YES] forKey:[NSString stringWithFormat:@"%d",i+1]];
         }
-        [self.cartTable reloadData];
+        
     }
+    [self.cartTable reloadData];
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+-(void)getStoreInfo
+{
+    productIdStoreArray = [NSMutableArray array];
+    
+    for (int i = 0; i < [self.dataSource count]; i++) {
+        NSDictionary * dic = [dataSource objectAtIndex:i];
+        Commodity * info = [dic objectForKey:@"commodity"];
+        [productIdStoreArray addObject:info.product_id];
+    }
+    [HttpHelper getProductStoreWithProductId:productIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"%@",[error description]);
+            return ;
+        }
+        [productIdStoreArray removeAllObjects];
+        productIdStoreArray =item;
+        if ([productIdStoreArray count]) {
+            for (ProductStoreInfo * info in productIdStoreArray) {
+                NSLog(@"%@: %@",info.product_id,info.store);
+            }
+        }
+    }];
+    
+    
+    giftIdStoreArray = [NSMutableArray array];
+    for (int i = 0; i < [self.giftArray count]; i++) {
+        NSDictionary * dic = [giftArray objectAtIndex:i];
+        GetGiftInfo * info = [dic objectForKey:@"present"];
+        [giftIdStoreArray addObject:info.gift_id];
+    }
+    [HttpHelper getGiftStoreWithGiftId:giftIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+        ;
+        if (error) {
+            NSLog(@"%@",[error description]);
+            return ;
+        }
+        [giftIdStoreArray removeAllObjects];
+        giftIdStoreArray =item;
+        if ([giftIdStoreArray count]) {
+            for (GiftStoreInfo * info in giftIdStoreArray) {
+                NSLog(@"%@: %@",info.gift_id,info.storage);
+            }
+        }
+    }];
+}
 
 -(void)deleteItem
 {
@@ -316,21 +406,44 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             [self.navigationController pushViewController:loginView animated:YES];
             loginView = nil;
             return ;
-//            [self.navigationController.view addSubview:loginView.view];
-//            [self.navigationController addChildViewController:loginView];
         }
 
         NSLog(@"%s",__func__);
         ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
         [viewController setCommoditySumMoney:commoditySumMoney];
-        [viewController setGiftSumMoney:giftSumMoney];
+        [viewController setGiftSumMoney:0];
         
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedCommodityArray = [self getCommodityProduct];
-        myDelegate.buiedPresentArray = [self getGiftProduct];
         viewController = nil;
 
+    };
+    return block;
+}
+
+-(CloseAccountActionBlock)configureCloseAccountGiftBlock
+{
+    CloseAccountActionBlock block = ^()
+    {
+        if(![User isLogin])
+        {
+            LoginViewController * loginView = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+            loginView.view.tag = 1;
+            [loginView setWeakViewController:self];
+            [self.navigationController pushViewController:loginView animated:YES];
+            loginView = nil;
+            return ;
+        }
+        
+        NSLog(@"%s",__func__);
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        [viewController setGiftSumMoney:giftSumMoney];
+        [viewController setCommoditySumMoney:0];
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedPresentArray = [self getGiftProduct];
+        viewController = nil;
     };
     return block;
 }
@@ -341,8 +454,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     if (indexPath.row != 0) {
         if (indexPath.section == 0) {
             BOOL bo = [[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]]boolValue];
+            bo = !bo;
             NSString *key = [NSString stringWithFormat:@"%d",indexPath.row];
-            NSNumber * ber =[NSNumber numberWithBool:!bo];
+            NSNumber * ber =[NSNumber numberWithBool:bo];
             commodityDicInfo[key] = ber;
         }
         if (indexPath.section == 1) {
@@ -452,6 +566,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     CartCell * cell = [self.cartTable dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            commoditySumMoney = 0.0;
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"总额:";
             //算出总价格
@@ -480,6 +595,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }else if(indexPath.section == 1)
     {
         if (indexPath.row == 0) {
+            giftSumMoney = 0.0;
             CartCellHeader *headerCell = [self.cartTable dequeueReusableCellWithIdentifier:cellHeaderIdentifier];
             headerCell.sumLabel.text = @"积分:";
             
@@ -497,7 +613,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     giftSumMoney = 0.0;
             }
              headerCell.moneyValue.text = [NSString stringWithFormat:@"%.1f",giftSumMoney];
-            [headerCell setBlock:[self configureCloseAccountBlock]];
+            [headerCell setBlock:[self configureCloseAccountGiftBlock]];
             [headerCell setSelected:isGiftCheckout animated:YES];
             return headerCell;
         }else
@@ -514,6 +630,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(void)alterCommodityNumWithId:(NSString * )productId withAction:(NSInteger)action
 {
+    commoditySumMoney = 0.0;
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     for (int i = 0;i<[self.dataSource count];i++) {
         NSMutableDictionary * dic = [[self.dataSource objectAtIndex:i]mutableCopy];
@@ -538,13 +655,21 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                num += 1;
-                dic[@"count"] = [NSNumber numberWithInteger:num];
-                [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                for (ProductStoreInfo * storeInfo in productIdStoreArray) {
+                    if ([storeInfo.product_id isEqualToString: info.product_id]) {
+                        if (storeInfo.store.integerValue > num) {
+                            num += 1;
+                            dic[@"count"] = [NSNumber numberWithInteger:num];
+                            [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
+                        }else
+                        {
+                            [self showAlertViewWithTitle:@"提示" message:@"库存量不足"];
+                            return;
+                        }
+                    }
+                }
             }
             [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
-            
-            
             //更新table
             [self.cartTable beginUpdates];
             [self.cartTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
@@ -557,6 +682,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 
 -(void)alterPresentNumWithId:(NSString * )productId withAction:(NSInteger)action
 {
+    giftSumMoney = 0.0;
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     for (int i = 0;i<[self.giftArray count];i++) {
         NSMutableDictionary * dic = [[self.giftArray objectAtIndex:i]mutableCopy];
@@ -581,12 +707,25 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                if (info.limit_num.integerValue <= num) {
-                    return;
+                //判断是否超过限量，或者超过对应赠品的库存量
+                for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
+                    if ([storeInfo.gift_id isEqualToString: info.gift_id]) {
+                        if (storeInfo.storage.integerValue <= num) {
+                            [self showAlertViewWithTitle:@"提示" message:@"库存量不足"];
+                            return;
+                        }else if(info.limit_num.integerValue <= num)
+                        {
+                            [self showAlertViewWithTitle:@"提示" message:@"超过限额"];
+                            return;
+                        }else
+                        {
+                            num += 1;
+                            dic[@"count"] = [NSNumber numberWithInteger:num];
+                            [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
+                            
+                        }
+                    }
                 }
-                num += 1;
-                dic[@"count"] = [NSNumber numberWithInteger:num];
-                [myDelegate.presentArray replaceObjectAtIndex:i withObject:dic];
             }
             [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
             
@@ -599,4 +738,11 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }
 }
 
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+{
+        UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil,nil];
+        pAlert.delegate = self;
+        [pAlert show];
+        pAlert = nil;
+}
 @end

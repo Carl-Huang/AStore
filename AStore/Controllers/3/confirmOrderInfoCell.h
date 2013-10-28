@@ -13,5 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *getPoint;
 @property (weak, nonatomic) IBOutlet UILabel *deliveryCost;
 @property (weak, nonatomic) IBOutlet UILabel *totalMoney;
+@property (weak, nonatomic) IBOutlet UILabel *cost;
+@property (weak, nonatomic) IBOutlet UILabel *sumCost;
 
 @end

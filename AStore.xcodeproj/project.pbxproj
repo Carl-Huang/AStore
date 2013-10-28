@@ -91,6 +91,7 @@
 		C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3C181CBDFE0042032D /* TFHppleElement.m */; };
 		C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3E181CBDFE0042032D /* XPathQuery.m */; };
 		C3051F43181CBE1F0042032D /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3051F42181CBE1F0042032D /* libxml2.2.dylib */; };
+		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
 		C32B1BC317F405F50089D6CC /* 个人中心icon-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */; };
 		C32B1BC417F405F50089D6CC /* 分类icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BBA17F405F50089D6CC /* 分类icon-n.png */; };
@@ -407,6 +408,8 @@
 		C3051F3D181CBDFE0042032D /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
 		C3051F3E181CBDFE0042032D /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		C3051F42181CBE1F0042032D /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
+		4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5_32.h"; sourceTree = "<group>"; };
+		4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5_32.m"; sourceTree = "<group>"; };
 		C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-n.png"; sourceTree = "<group>"; };
 		C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-s.png"; sourceTree = "<group>"; };
 		C32B1BBA17F405F50089D6CC /* 分类icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "分类icon-n.png"; sourceTree = "<group>"; };
@@ -1196,6 +1199,8 @@
 				4EB788A21803D54C00DAF3E5 /* User.m */,
 				4E1189951815031300081C01 /* NSMutableArray+SaveCustomiseData.h */,
 				4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */,
+				4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */,
+				4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1510,6 +1515,7 @@
 				C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */,
 				4E22C702181CF412009256AB /* OrderDetailViewController.m in Sources */,
 				4E22C706181CF8BF009256AB /* OrderDetailCell.m in Sources */,
+				4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

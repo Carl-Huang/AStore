@@ -26,6 +26,7 @@
 #import "ConfirmOrderMemoCell.h"
 #import <objc/runtime.h>
 #import "GetGiftInfo.h"
+#import "NSMutableArray+SaveCustomiseData.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -280,6 +281,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             }
         }
     }
+    [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
     [[NSNotificationCenter defaultCenter]postNotificationName:CommodityCellStatus object:nil];
     
 
@@ -309,6 +311,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             }
         }
     }
+    [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
     [[NSNotificationCenter defaultCenter]postNotificationName:PresentCellStatus object:nil];
 }
 

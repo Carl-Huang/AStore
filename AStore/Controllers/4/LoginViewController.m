@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "userInfo.h"
 #import "CartViewController.h"
+#import "NSString+MD5_32.h"
 @interface LoginViewController () <UITextFieldDelegate>
 {
     userInfo * userinfo;
@@ -196,7 +197,7 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
     
-    [HttpHelper getUserInfoWithUserName:_usernameField.text pwd:_passwordField.text completedBlock:^(id item, NSError *error) {
+    [HttpHelper getUserInfoWithUserName:_usernameField.text pwd:[NSString md5:_passwordField.text] completedBlock:^(id item, NSError *error) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
         if (error) {

@@ -16,6 +16,7 @@
 #import "User.h"
 #import "UserCenterViewController.h"
 #import "AppDelegate.h"
+#import "NSString+MD5_32.h"
 @interface RegisterViewController () <UITextFieldDelegate>
 {
     NSInteger tableViewOriY;
@@ -115,7 +116,7 @@
     [self.emailField resignFirstResponder];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
-    [HttpHelper userRegisterWithName:self.usernameField.text pwd:self.passwordField.text email:self.emailField.text completedBlock:^(id items) {
+    [HttpHelper userRegisterWithName:self.usernameField.text pwd:[NSString md5:self.passwordField.text] email:self.emailField.text completedBlock:^(id items) {
         NSString * str = (NSString * )items;
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];

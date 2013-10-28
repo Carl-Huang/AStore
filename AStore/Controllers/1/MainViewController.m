@@ -56,6 +56,14 @@
 {
     [super viewDidLoad];
     
+    
+    
+    [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/" withSuccessBlock:^(NSArray *items) {
+        NSLog(@"%@",items);
+    } errorBlock:^(NSError *error) {
+        
+    }];
+    
     UIImage * logo = [UIImage imageNamed:@"logo"];
     UIImageView * logoView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, logo.size.width, logo.size.height)];
     logoView.image = logo;

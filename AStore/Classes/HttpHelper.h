@@ -51,6 +51,12 @@
 + (void)requestWithString:(NSString *)urlString withClass:(Class)class successBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
 
 
+
+
++ (void)getAdsWithURL:(NSString *)urlString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
+
+
+
 //Added by vedon <<<<<<<<<<<<<<<<<<<
 //提取图片的url
 +(NSString *)extractImageURLWithStr:(NSString *)str;

@@ -12,19 +12,26 @@
 #import "GetOrderGoodInfo.h"
 #import "OrderDetailCell.h"
 #import "GetOrderGiftInfo.h"
+#import "GetOrderInfo.h"
+typedef NS_ENUM(NSInteger, OrderType)
+{
+    GoodOrderType = 1,
+    GiftOrderType = 2,
+};
 static NSString * const cellIdentifier = @"cellIdentifier";
 @interface OrderDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
-
+{
+    OrderType type;
+}
 @end
 
 @implementation OrderDetailViewController
-@synthesize orderId;
+@synthesize orderInfo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        orderId =nil;
     }
     return self;
 }
@@ -42,10 +49,14 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    //获取订单详细信息
+    
+    //居然根据金额来判断是要获取订单详情，还是赠品详情！！！
+    NSInteger money = orderInfo.cost_item.integerValue;
     __weak OrderDetailViewController *weakSelf = self;
-    if (orderId) {
-        [HttpHelper getOrderDetailWithOrderId:orderId withCompletedBlock:^(id item, NSError *error) {
+    if (money > 2) {
+        //获取订单详细信息
+        type = GoodOrderType;
+        [HttpHelper getOrderDetailWithOrderId:orderInfo.order_id withCompletedBlock:^(id item, NSError *error) {
             if (error) {
                 NSLog(@"%@",[error description]);
             }
@@ -55,8 +66,23 @@ static NSString * const cellIdentifier = @"cellIdentifier";
                 [weakSelf.orderDetailTableview reloadData];
             }
         }];
+    }else
+    {
+        //获取赠品详细信息
+        type = GiftOrderType;
+        [HttpHelper getOrderDetailWithGiftId:orderInfo.order_id withCompletedBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }
+            NSArray * array = item;
+            if ([array count]) {
+                self.dataSource = array;
+                [weakSelf.orderDetailTableview reloadData];
+            }
 
+        }];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -83,7 +109,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100.0f;
+    return 65.0f;
 }
 
 
@@ -93,13 +119,15 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     id info = [self.dataSource objectAtIndex:indexPath.row];
     if ([info isKindOfClass:[GetOrderGoodInfo class]]) {
         GetOrderGoodInfo * goodInfo = info;
-        cell.name.text = goodInfo.Name;
-        cell.cost.text = [NSString stringWithFormat:@"销售价 : %@",goodInfo.price];
+        cell.name.text = goodInfo.name;
+        float floatString = [goodInfo.price floatValue];
+        NSString * priceStr = [NSString stringWithFormat:@"￥%0.1f",floatString];
+        cell.cost.text = [NSString stringWithFormat:@"销售价 : %@",priceStr];
         cell.quantity.text = [NSString stringWithFormat:@"数量 : %@",goodInfo.nums];
     }else if ([info isKindOfClass:[GetOrderGiftInfo class]])
     {
         GetOrderGiftInfo *giftInfo = info;
-        cell.name.text = giftInfo.Name;
+        cell.name.text = giftInfo.name;
         cell.cost.text = [NSString stringWithFormat:@"消耗积分 : %@",giftInfo.point];
         cell.quantity.text = [NSString stringWithFormat:@"数量 : %@",giftInfo.nums];
     }

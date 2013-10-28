@@ -55,5 +55,7 @@
 #define VUserInfo           @"vuserInfo"
 #define VServerUserInfo     @"serverUserInfo"
 
-
+//更新购物车中cell的状态
+#define CommodityCellStatus @"CommodityCellStatus"
+#define PresentCellStatus   @"PresentCellStatus"
 #endif

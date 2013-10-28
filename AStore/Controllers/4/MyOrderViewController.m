@@ -134,9 +134,10 @@
 {
     //获取对应订单id的订单详情
     
+
     GetOrderInfo * orderInfo = [orderInfoArray objectAtIndex:indexPath.row];
     OrderDetailViewController * viewController = [[OrderDetailViewController alloc]initWithNibName:@"OrderDetailViewController" bundle:nil];
-    [viewController setOrderId:orderInfo.order_id];
+    [viewController setOrderInfo:orderInfo];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
 
@@ -201,7 +202,9 @@
         cell.orderTime.text         = orderInfo.acttime;
         cell.orderStatus.text       = orderInfo.status;
         cell.commodityName.text     = orderInfo.tostr;
-        cell.commodityMoneySum.text = orderInfo.cost_item;
+        float floatString = [orderInfo.cost_item floatValue];
+        NSString * priceStr = [NSString stringWithFormat:@"￥%0.1f",floatString];
+        cell.commodityMoneySum.text = priceStr;
         cell.sum.text = @"总金额:";
     }else if(indexPath.section == 1)
     {

@@ -22,6 +22,7 @@
 #import "GetGiftInfo.h"
 #import "ProductStoreInfo.h"
 #import "GiftStoreInfo.h"
+
 typedef NS_ENUM(NSInteger, ActionType)
 {
     PlusAction = 1,
@@ -103,9 +104,36 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     
     //获取商品,赠品 对应的库存量
     [self getStoreInfo];
+    
+    //注册一个通知，当商品，或赠品提交后更新tableivew 中cell的选中状态
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCommodityCellStatus:) name:CommodityCellStatus object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updatePresentCellStatus:) name:PresentCellStatus object:nil];
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void)updateCommodityCellStatus:(NSNotification *)notification
+{
+    //更新cell的状态
+    for (int i = 0; i < [self.dataSource count];i++) {
+        if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            NSLog(@"removeObj at index :%d",i);
+            NSString * key = [NSString stringWithFormat:@"%d",i+1];
+            [commodityDicInfo removeObjectForKey:key];
+        }
+    }
+}
+
+-(void)updatePresentCellStatus:(NSNotification *)notification
+{
+    //更新cell的状态
+    for (int i = 0; i < [self.dataSource count];i++) {
+        if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            NSLog(@"removeObj at index :%d",i);
+            NSString * key = [NSString stringWithFormat:@"%d",i+1];
+            [presentDicInfo removeObjectForKey:key];
+        }
+    }
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -123,6 +151,11 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         
     }
     [self.cartTable reloadData];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 -(void)getStoreInfo
@@ -383,7 +416,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedCommodityArray = [self getCommodityProduct];
-//        myDelegate.buiedPresentArray = [self getGiftProduct];
         viewController = nil;
 
     };

@@ -5,8 +5,8 @@
 //  Created by vedon on 10/3/13.
 //  Copyright (c) 2013 carl. All rights reserved.
 //
-
-
+#define FailedPostTag       1001
+#define SuccessfullyPostTag 1002
 #define TableViewOffsetY    205
 
 #import "ConfirmOrderViewController.h"
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, PaymentType)
 static NSString * const cellIdentifier = @"cellIdentifier";
 static NSString * const orderInfoCellIdentifier = @"orderInfoCellIdentifier";
 static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
-@interface ConfirmOrderViewController ()<UITextFieldDelegate>
+@interface ConfirmOrderViewController ()<UITextFieldDelegate,UIAlertViewDelegate>
 {
     
     DeliveryTypeInfo * deliveryTypeInfo; //配送方式
@@ -89,7 +89,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
     UIImageView * imageview = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"分类背景"]];
     imageview.contentMode = UIViewContentModeScaleToFill;
-    UIView * footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 330, 320, 50)];
+    UIView * footerView = nil;
+    if (!IS_SCREEN_4_INCH) {
+         footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 330, 320, 50)];
+    }else
+    {
+        footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 415, 320, 50)];
+    }
+   
     [footerView setBackgroundColor:[UIColor clearColor]];
     UIButton * posForm = [UIButton buttonWithType:UIButtonTypeCustom];
     [posForm setFrame:CGRectMake(230, 5, 80, 30)];
@@ -175,11 +182,11 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 {
     NSLog(@"%s",__func__);
     if (addressTypeInfo ==nil) {
-        [self showAlertViewWithTitle:@"提示" message:@"请选择收货人地址"];
+        [self showAlertViewWithTitle:@"提示" message:@"请选择收货人地址" tag:0];
         return;
     }
     if (deliveryTypeInfo==nil ) {
-        [self showAlertViewWithTitle:@"提示" message:@"请选择配送方式"];
+        [self showAlertViewWithTitle:@"提示" message:@"请选择配送方式" tag:0];
         return;
     }
 
@@ -205,25 +212,18 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                            
                            if ([str isEqualToString:@"1"]) {
                                NSLog(@"提交订单成功");
-                               [weakSelf cleanUserDefaulstSetting];
-                               //清除NSUserDefaults 数据
+                               [weakSelf cleanCommodityData];
+                               [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单成功" tag:SuccessfullyPostTag];
                                
                            }else
                            {
                                NSLog(@"提交订单失败");
                                [myDelegate removeLoadingViewWithView:nil];
-                               [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
+                               [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败" tag:FailedPostTag];
                                
                            }
                        }];
-        //清除提交的商品
-        for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
-            if ([myDelegate.commodityArray containsObject:dic]) {
-                [myDelegate.commodityArray removeObject:dic];
             }
-
-        }
-    }
     if (giftSumMoney!= 0) {
         [HttpHelper postGiftOrderWithUserInfo:nil
                                  deliveryType:deliveryTypeInfo
@@ -244,32 +244,72 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                                
                                if ([str isEqualToString:@"1"]) {
                                    NSLog(@"提交订单成功");
-                                   [weakSelf cleanUserDefaulstSetting];
-                                   //清除NSUserDefaults 数据
+                                   [weakSelf cleanPresentData];
+                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单成功" tag:SuccessfullyPostTag];
                                    
                                }else
                                {
                                    NSLog(@"提交订单失败");
                                    [myDelegate removeLoadingViewWithView:nil];
-                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败"];
+                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败" tag:FailedPostTag];
                                    
                                }
 
         }];
+       
     }
+  
 }
 
--(void)cleanUserDefaulstSetting
+-(void)cleanCommodityData
+{
+    //DeliveryViewController
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectDeliveryTag"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [myDelegate removeLoadingViewWithView:nil];
+
+    //清除提交的商品
+    for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+        Commodity * removeCommodityObj = dic[@"commodity"];
+        for (int i = 0;i <[myDelegate.commodityArray count]; i++) {
+            NSDictionary *commodityDic = [myDelegate.commodityArray objectAtIndex:i];
+            Commodity * info = commodityDic[@"commodity"];
+            if ([info.product_id isEqualToString:removeCommodityObj.product_id]) {
+                [myDelegate.commodityArray removeObjectAtIndex:i];
+            }
+        }
+    }
+    [[NSNotificationCenter defaultCenter]postNotificationName:CommodityCellStatus object:nil];
+    
+
+}
+-(void)cleanPresentData
 {
     //DeliveryViewController
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectDeliveryTag"];
     
-    //MyAddressViewController中的关键字
-//    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"selectTag"];
-    
     [[NSUserDefaults standardUserDefaults]synchronize];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate removeLoadingViewWithView:nil];
+    //清除提交的赠品
+    for (NSDictionary * dic in myDelegate.buiedPresentArray) {
+        if ([myDelegate.presentArray containsObject:dic]) {
+            [myDelegate.presentArray removeObject:dic];
+        }
+        
+    }
+    for (NSDictionary * dic in myDelegate.buiedPresentArray) {
+        GetGiftInfo * removePresentObj = dic[@"present"];
+        for (int i = 0;i <[myDelegate.presentArray count]; i++) {
+            NSDictionary *presentDic = [myDelegate.presentArray objectAtIndex:i];
+            GetGiftInfo * info = presentDic[@"present"];
+            if ([info.gift_id isEqualToString:removePresentObj.gift_id]) {
+                [myDelegate.presentArray removeObjectAtIndex:i];
+            }
+        }
+    }
+    [[NSNotificationCenter defaultCenter]postNotificationName:PresentCellStatus object:nil];
 }
 
 
@@ -506,10 +546,13 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
 }
 
--(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr
+-(void)showAlertViewWithTitle:(NSString * )titleStr message:(NSString *)messageStr tag:(NSInteger )tag
 {
     UIAlertView *pAlert = [[UIAlertView alloc] initWithTitle:titleStr message:messageStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil,nil];
     pAlert.delegate = self;
+    if (tag!= 0 ) {
+        pAlert.tag =tag;
+    }
     [pAlert show];
     pAlert = nil;
 }
@@ -536,5 +579,19 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         [self.view setFrame:CGRectOffset(self.view.frame, 0, TableViewOffsetY)];
     }];
     memoStr = textField.text;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            if (alertView.tag == SuccessfullyPostTag) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            break;
+            
+        default:
+            break;
+    }
 }
 @end

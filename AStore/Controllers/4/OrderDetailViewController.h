@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class GetOrderInfo;
 @interface OrderDetailViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *orderDetailTableview;
 @property (strong ,nonatomic) NSArray * dataSource;
-@property (strong ,nonatomic) NSString * orderId;
+@property (strong ,nonatomic) GetOrderInfo * orderInfo;
 @end

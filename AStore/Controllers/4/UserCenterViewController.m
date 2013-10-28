@@ -221,8 +221,7 @@
     [userInfo removeUserInfo];
     [NSMutableArray removeObjArrayWithkey:@"CommodityArray"];
     [NSMutableArray removeObjArrayWithkey:@"PresentArray"];
-    
-    
+
 //    NSArray *ary = self.navigationController.viewControllers;
 //    for (UIViewController *viewcontroller in ary) {
 //        if ([ary isKindOfClass:[LoginViewController class]]) {

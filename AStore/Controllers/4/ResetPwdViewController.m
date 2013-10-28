@@ -12,6 +12,7 @@
 #import "User.h"
 #import "HttpHelper.h"
 #import "AppDelegate.h"
+#import "NSString+MD5_32.h"
 @interface ResetPwdViewController () <UITextFieldDelegate>
 {
     BOOL isAlertViewCanShow;
@@ -205,7 +206,7 @@
         [self showAlertViewWithTitle:@"提示" message:@"密码不能包括特殊字符"];
     }else
     {
-        NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&Uname=%@",self.nPwdField.text,userName];
+        NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&Uname=%@",[NSString md5:self.nPwdField.text],userName];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate  showLoginViewOnView:self.view];
         [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {

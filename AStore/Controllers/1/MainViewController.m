@@ -29,6 +29,7 @@
 #import "MainCommodityViewController.h"
 #import "Commodity.h"
 #import "CommodityViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface MainViewController ()<UITextFieldDelegate>
 {
@@ -38,6 +39,7 @@
     NSThread * fetchDataThread;
     BOOL isFetchFoodDataSuccess;
     BOOL isFetchStuffDataSuccess;
+    NSMutableArray * imagesArray;
 }
 @end
 
@@ -55,11 +57,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    imagesArray = [NSMutableArray array];
     
     
     [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/" withSuccessBlock:^(NSArray *items) {
         NSLog(@"%@",items);
+
+        if ([items count]) {
+            for (NSDictionary *dic in items) {
+                UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
+                NSURL *url = [NSURL URLWithString:[dic objectForKey:@"image"]];
+                NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+                __weak UIImageView * weakImageView = imageView;
+                __weak MainViewController * weakSelf =self;
+                [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    [weakImageView setImage:image];
+                    [weakSelf configureImagesArrayWithObj:@{@"FecthImage": image,@"url":dic[@"url"]}];
+                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                    NSLog(@"%@",[error description]);
+                }];
+            }
+            
+        }
     } errorBlock:^(NSError *error) {
         
     }];
@@ -102,6 +121,12 @@
     isFetchStuffDataSuccess = NO;
     fetchDataThread = [[NSThread alloc]initWithTarget:self selector:@selector(fetchDataThreadMethod) object:nil];
     [fetchDataThread start];
+}
+
+-(void)configureImagesArrayWithObj:(NSDictionary *)dic
+{
+    [imagesArray addObject:dic];
+    [self.tableView reloadData];
 }
 
 -(void)fetchDataThreadMethod
@@ -226,7 +251,12 @@
         view1.backgroundColor = [UIColor grayColor];
         UIView * view2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
         view2.backgroundColor = [UIColor blueColor];
-        CustomScrollView * scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:@[view1,view2]];
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (NSDictionary *dic in imagesArray) {
+            UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+            [tempArray addObject:imageview];
+        }
+        CustomScrollView * scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
         UITableViewCell * cell_1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ScrollCell"];
         [cell_1.contentView addSubview:scrollView];
         return cell_1;
@@ -289,6 +319,7 @@
     }
     return nil;
 }
+
 
 -(MainCell3ConfigureBlock )configureCell3Block
 {

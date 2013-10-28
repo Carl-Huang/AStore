@@ -16,6 +16,8 @@
 		4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */; };
 		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
 		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
+		4E0C267A181EB83800E7E911 /* AdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0C2678181EB83800E7E911 /* AdViewController.m */; };
+		4E0C267B181EB83800E7E911 /* AdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E0C2679181EB83800E7E911 /* AdViewController.xib */; };
 		4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */; };
 		4E22C702181CF412009256AB /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E22C700181CF412009256AB /* OrderDetailViewController.m */; };
 		4E22C703181CF412009256AB /* OrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E22C701181CF412009256AB /* OrderDetailViewController.xib */; };
@@ -87,11 +89,11 @@
 		4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */; };
 		4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */; };
 		4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */; };
+		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
 		C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3A181CBDFE0042032D /* TFHpple.m */; };
 		C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3C181CBDFE0042032D /* TFHppleElement.m */; };
 		C3051F41181CBDFE0042032D /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3E181CBDFE0042032D /* XPathQuery.m */; };
 		C3051F43181CBE1F0042032D /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3051F42181CBE1F0042032D /* libxml2.2.dylib */; };
-		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
 		C32B1BC217F405F50089D6CC /* 个人中心icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */; };
 		C32B1BC317F405F50089D6CC /* 个人中心icon-s.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */; };
 		C32B1BC417F405F50089D6CC /* 分类icon-n.png in Resources */ = {isa = PBXBuildFile; fileRef = C32B1BBA17F405F50089D6CC /* 分类icon-n.png */; };
@@ -284,6 +286,9 @@
 		4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGoodInfo.m; sourceTree = "<group>"; };
 		4E0656651815722700AB6216 /* GetOrderGiftInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGiftInfo.h; sourceTree = "<group>"; };
 		4E0656661815722700AB6216 /* GetOrderGiftInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGiftInfo.m; sourceTree = "<group>"; };
+		4E0C2677181EB83800E7E911 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
+		4E0C2678181EB83800E7E911 /* AdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdViewController.m; sourceTree = "<group>"; };
+		4E0C2679181EB83800E7E911 /* AdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdViewController.xib; sourceTree = "<group>"; };
 		4E1189951815031300081C01 /* NSMutableArray+SaveCustomiseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+SaveCustomiseData.h"; sourceTree = "<group>"; };
 		4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+SaveCustomiseData.m"; sourceTree = "<group>"; };
 		4E22C6FF181CF412009256AB /* OrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailViewController.h; sourceTree = "<group>"; };
@@ -401,6 +406,8 @@
 		4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderMemo.xib; sourceTree = "<group>"; };
 		4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderMemoCell.h; sourceTree = "<group>"; };
 		4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderMemoCell.m; sourceTree = "<group>"; };
+		4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5_32.h"; sourceTree = "<group>"; };
+		4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5_32.m"; sourceTree = "<group>"; };
 		C3051F39181CBDFE0042032D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
 		C3051F3A181CBDFE0042032D /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		C3051F3B181CBDFE0042032D /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
@@ -408,8 +415,6 @@
 		C3051F3D181CBDFE0042032D /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
 		C3051F3E181CBDFE0042032D /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
 		C3051F42181CBE1F0042032D /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
-		4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5_32.h"; sourceTree = "<group>"; };
-		4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5_32.m"; sourceTree = "<group>"; };
 		C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-n.png"; sourceTree = "<group>"; };
 		C32B1BB917F405F50089D6CC /* 个人中心icon-s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "个人中心icon-s.png"; sourceTree = "<group>"; };
 		C32B1BBA17F405F50089D6CC /* 分类icon-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "分类icon-n.png"; sourceTree = "<group>"; };
@@ -1038,6 +1043,9 @@
 				C3845CD117F3F03000DED3C5 /* MainViewController.h */,
 				C3845CD217F3F03000DED3C5 /* MainViewController.m */,
 				C3845CD317F3F03000DED3C5 /* MainViewController.xib */,
+				4E0C2677181EB83800E7E911 /* AdViewController.h */,
+				4E0C2678181EB83800E7E911 /* AdViewController.m */,
+				4E0C2679181EB83800E7E911 /* AdViewController.xib */,
 				4EB6C1CC180C50F60098E6F1 /* MainCommodityViewController.h */,
 				4EB6C1CD180C50F70098E6F1 /* MainCommodityViewController.m */,
 				4EB6C1CE180C50F70098E6F1 /* MainCommodityViewController.xib */,
@@ -1408,6 +1416,7 @@
 				4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */,
 				4E22C703181CF412009256AB /* OrderDetailViewController.xib in Resources */,
 				4E22C708181CF8D2009256AB /* OrderDetailCell.xib in Resources */,
+				4E0C267B181EB83800E7E911 /* AdViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1516,6 +1525,7 @@
 				4E22C702181CF412009256AB /* OrderDetailViewController.m in Sources */,
 				4E22C706181CF8BF009256AB /* OrderDetailCell.m in Sources */,
 				4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */,
+				4E0C267A181EB83800E7E911 /* AdViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1612,7 +1622,6 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

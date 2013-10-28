@@ -206,7 +206,7 @@
         [self showAlertViewWithTitle:@"提示" message:@"密码不能包括特殊字符"];
     }else
     {
-        NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&Uname=%@",[NSString md5:self.nPwdField.text],userName];
+        NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&uname=%@",[NSString md5:self.nPwdField.text],userName];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate  showLoginViewOnView:self.view];
         [HttpHelper postRequestWithCmdStr:cmdStr SuccessBlock:^(NSArray *resultInfo) {

@@ -63,7 +63,7 @@
     imagesArray = [NSMutableArray array];
     scrollView = nil;
     
-    [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/" withSuccessBlock:^(NSArray *items) {
+    [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/" withNodeClass:@"focus" withSuccessBlock:^(NSArray *items) {
         NSLog(@"%@",items);
 
         if ([items count]) {

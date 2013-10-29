@@ -53,7 +53,7 @@
 
 
 
-+ (void)getAdsWithURL:(NSString *)urlString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
++ (void)getAdsWithURL:(NSString *)urlString withNodeClass:(NSString *)clsString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure;
 
 
 

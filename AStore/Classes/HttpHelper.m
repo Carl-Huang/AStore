@@ -724,7 +724,7 @@
 }
 
 
-+ (void)getAdsWithURL:(NSString *)urlString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure
++ (void)getAdsWithURL:(NSString *)urlString withNodeClass:(NSString *)clsString withSuccessBlock:(void (^)(NSArray * items))success errorBlock:(void (^)(NSError * error))failure
 {
     if(urlString == nil) return ;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -747,7 +747,8 @@
         }
         
         TFHpple * xParse = [[TFHpple alloc] initWithHTMLData:htmlData];
-        NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"focus\"]/script"];
+        NSString * xpath = [NSString stringWithFormat:@"//div[@class=\"%@\"]/script",clsString];
+        NSArray * elements = [xParse searchWithXPathQuery:xpath];
         
         if([elements count] == 0)
         {

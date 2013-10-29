@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface YHJViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UILabel *tmpLabel;
 
 - (IBAction)showCatalogController:(id)sender;
 

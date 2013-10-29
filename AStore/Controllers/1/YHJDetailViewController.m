@@ -13,6 +13,7 @@
 #import "Commodity.h"
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
+#import "CommodityViewController.h"
 @interface YHJDetailViewController ()
 {
     NSInteger start;
@@ -76,6 +77,12 @@
 
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
+}
+
 -(void)refreshTableView
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -130,7 +137,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    Commodity * info = [dataSource objectAtIndex:indexPath.row];
+    [Commodity printCommodityInfo:info];
+    CommodityViewController *viewController = [[CommodityViewController alloc]initWithNibName:@"CommodityViewController" bundle:nil];
+    [viewController setComodityInfo:info];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView

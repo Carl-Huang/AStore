@@ -9,7 +9,17 @@
 #import "TZMarketViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "CustomScrollView.h"
+#import "TZCommodityViewController.h"
+#import "HttpHelper.h"
+#import "CustomScrollView.h"
+#import "UIImageView+AFNetworking.h"
+#import "AdViewController.h"
+#define TABLE_CELL_HEIGHT_1 124
 @interface TZMarketViewController ()
+{
+    CustomScrollView * scrollView;
+    NSMutableArray * imagesArray;
+}
 @property (nonatomic,retain) NSArray * dataSource;
 @end
 
@@ -30,13 +40,46 @@
     [self setLeftTitle:@"跳蚤市场"];
     [self setBackItem:nil];
     
+    imagesArray = [NSMutableArray array];
+    scrollView = nil;
+    
+    [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/?page-xyhd.html" withNodeClass:@"mainColumn pageMain" withSuccessBlock:^(NSArray *items) {
+        NSLog(@"%@",items);
+        
+        if ([items count]) {
+            for (NSDictionary *dic in items) {
+                UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
+                NSURL *url = [NSURL URLWithString:[dic objectForKey:@"image"]];
+                NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+                __weak UIImageView * weakImageView = imageView;
+                __weak TZMarketViewController * weakSelf =self;
+                [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    [weakImageView setImage:image];
+                    [weakSelf configureImagesArrayWithObj:@{@"FecthImage": image,@"url":dic[@"url"]}];
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                    NSLog(@"%@",[error description]);
+                }];
+            }
+            
+        }
+    } errorBlock:^(NSError *error) {
+        
+    }];
+    
     UIView * view1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 108)];
     view1.backgroundColor = [UIColor grayColor];
-    UIView * view2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 108)];
-    view2.backgroundColor = [UIColor blueColor];
-    CustomScrollView * scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 108) withViews:@[view1,view2]];
+//    UIView * view2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 108)];
+//    view2.backgroundColor = [UIColor blueColor];
+//    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 108) withViews:@[view1,view2]];
     
-    [_tableView setTableHeaderView:scrollView];
+    [_tableView setTableHeaderView:view1];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,6 +91,45 @@
 - (void)viewDidUnload {
     [self setTableView:nil];
     [super viewDidUnload];
+}
+
+
+
+-(void)configureImagesArrayWithObj:(NSDictionary *)dic
+{
+    [imagesArray addObject:dic];
+    NSMutableArray * tempArray = [NSMutableArray array];
+    for (int i = 0 ;i < [imagesArray count];i++) {
+        NSDictionary *dic = [imagesArray objectAtIndex:i];
+        UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
+        [imageview addGestureRecognizer:tapGesture];
+        imageview.userInteractionEnabled = YES;
+        imageview.tag = i;
+        [tempArray addObject:imageview];
+    }
+    
+    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
+    
+    [self.tableView setTableHeaderView:scrollView];
+}
+
+
+
+-(void)pushToAdViewcontroller:(UIGestureRecognizer *)recon
+{
+    NSLog(@"%s",__func__);
+    UIImageView * tempImg = (UIImageView *)recon.view;
+    NSDictionary * dic = [imagesArray objectAtIndex:tempImg.tag];
+    NSLog(@"%@",dic[@"url"]);
+    //    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+    //        NSString * str = item;
+    //
+    //    }];
+    AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
+    [viewController setRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dic[@"url"]]]];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
 }
 
 
@@ -87,7 +169,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSString * title = [_dataSource objectAtIndex:indexPath.row];
+    TZCommodityViewController * controller = [[TZCommodityViewController alloc] initWithNibName:nil bundle:nil];
+    controller.lTitle = title;
+    controller.searchStr = title;
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 

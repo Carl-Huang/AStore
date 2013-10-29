@@ -816,5 +816,45 @@
     });
 }
 
-
++(void)getSpecificUrlContentOfAdUrl:(NSString *)urlStr completedBlock:(void (^)(id item ,NSError *error))block
+{
+    
+    if(urlStr == nil) return ;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSData * htmlData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+        
+        if(!htmlData)
+        {
+            NSLog(@"The html content is nil");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                    NSError * error = [NSError errorWithDomain:@"The html content is nil." code:0 userInfo:nil];
+                    block(nil,error);
+            });
+            
+            return ;
+        }
+        
+        TFHpple * xParse = [[TFHpple alloc] initWithHTMLData:htmlData];
+        NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"ArticleDetailsWrap\"]/script"];
+        
+        if([elements count] == 0)
+        {
+            NSLog(@"Could not found the elements.");
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSError * error = [NSError errorWithDomain:@"Could not found the elements." code:0 userInfo:nil];
+                block(nil,error);
+            });
+            
+            return ;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+           block(elements,nil);
+        });
+     
+        
+    });
+}
 @end

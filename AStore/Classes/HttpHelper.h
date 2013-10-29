@@ -132,5 +132,7 @@
               withCommodityArray:(NSArray *)commodityDic
               withCompletedBlock:(void (^)(id item,NSError * error))block;
 
+
++(void)getSpecificUrlContentOfAdUrl:(NSString *)urlStr completedBlock:(void (^)(id item ,NSError *error))block;
 //EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

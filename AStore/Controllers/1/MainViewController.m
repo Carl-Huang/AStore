@@ -12,6 +12,8 @@
 #define TABLE_CELL_HEIGHT_4 94
 #define TABLE_CELL_HEIGHT_5 145
 #define TABLE_CELL_HEIGHT_6 145
+//#define ImageViewTagPrefix   
+
 
 #import "MainViewController.h"
 #import "NoticeListViewController.h"
@@ -30,7 +32,7 @@
 #import "Commodity.h"
 #import "CommodityViewController.h"
 #import "UIImageView+AFNetworking.h"
-
+#import "AdViewController.h"
 @interface MainViewController ()<UITextFieldDelegate>
 {
     UITextField * searchField;
@@ -40,6 +42,7 @@
     BOOL isFetchFoodDataSuccess;
     BOOL isFetchStuffDataSuccess;
     NSMutableArray * imagesArray;
+    CustomScrollView * scrollView;
 }
 @end
 
@@ -58,7 +61,7 @@
 {
     [super viewDidLoad];
     imagesArray = [NSMutableArray array];
-    
+    scrollView = nil;
     
     [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/" withSuccessBlock:^(NSArray *items) {
         NSLog(@"%@",items);
@@ -126,9 +129,37 @@
 -(void)configureImagesArrayWithObj:(NSDictionary *)dic
 {
     [imagesArray addObject:dic];
+    NSMutableArray * tempArray = [NSMutableArray array];
+    for (int i = 0 ;i < [imagesArray count];i++) {
+        NSDictionary *dic = [imagesArray objectAtIndex:i];
+        UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
+        [imageview addGestureRecognizer:tapGesture];
+        imageview.userInteractionEnabled = YES;
+        imageview.tag = i;
+        [tempArray addObject:imageview];
+    }
+
+    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
+
     [self.tableView reloadData];
 }
 
+-(void)pushToAdViewcontroller:(UIGestureRecognizer *)recon
+{
+    NSLog(@"%s",__func__);
+    UIImageView * tempImg = (UIImageView *)recon.view;
+    NSDictionary * dic = [imagesArray objectAtIndex:tempImg.tag];
+    NSLog(@"%@",dic[@"url"]);
+//    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+//        NSString * str = item;
+//        
+//    }];
+    AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
+    [viewController setRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dic[@"url"]]]];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+}
 -(void)fetchDataThreadMethod
 {
     while (!isFetchFoodDataSuccess||!isFetchStuffDataSuccess) {
@@ -251,14 +282,10 @@
         view1.backgroundColor = [UIColor grayColor];
         UIView * view2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
         view2.backgroundColor = [UIColor blueColor];
-        NSMutableArray * tempArray = [NSMutableArray array];
-        for (NSDictionary *dic in imagesArray) {
-            UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
-            [tempArray addObject:imageview];
-        }
-        CustomScrollView * scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
         UITableViewCell * cell_1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ScrollCell"];
-        [cell_1.contentView addSubview:scrollView];
+        if (scrollView) {
+            [cell_1.contentView addSubview:scrollView];
+        }
         return cell_1;
         
     }

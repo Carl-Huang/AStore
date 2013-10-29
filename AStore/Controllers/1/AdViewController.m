@@ -30,6 +30,8 @@
     [self setBackItem:nil];
     
     [self.adWebView loadRequest:request];
+    self.adWebView.userInteractionEnabled = YES;
+    self.adWebView.scalesPageToFit = YES;
     // Do any additional setup after loading the view from its nib.
 }
 

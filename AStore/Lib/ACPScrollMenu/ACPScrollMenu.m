@@ -56,7 +56,7 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 	ACPItem *menuItem = menuItems[0];
 	_scrollView.contentSize = CGSizeMake(kScrollViewFirstWidth * 2 + (kScrollViewItemMarginWidth * (menuItemsArrayCount - 1)) + menuItem.frame.size.width * menuItemsArrayCount, self.frame.size.height);
-    
+    _scrollView.delegate = self;
 	// Do not show scrollIndicator
 	_scrollView.showsHorizontalScrollIndicator = NO;
 	_scrollView.showsVerticalScrollIndicator = NO;
@@ -64,13 +64,43 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 	_scrollView.backgroundColor = [UIColor clearColor];
 	[_scrollView setUserInteractionEnabled:YES];
 	[self addSubview:_scrollView];
-    
-	self.menuArray = menuItems;
+    self.menuArray = [NSMutableArray array];
+	[self.menuArray addObjectsFromArray:menuItems];
 	[self setMenu];
-    
-    
 	_animationType = ACPZoomOut;
 }
+
+-(void)updateScorllMenuItem:(NSArray *)array
+{
+    NSLog(@"%s",__func__);    
+    [self.menuArray removeAllObjects];
+    [self.menuArray addObjectsFromArray:array];
+    NSArray *viewsToRemove = [_scrollView subviews];
+    for (UIView *v in viewsToRemove) [v removeFromSuperview];
+    ACPItem * menuItem = [self.menuArray objectAtIndex:0];
+    _scrollView.contentSize = CGSizeMake(kScrollViewFirstWidth * 2 + (kScrollViewItemMarginWidth * (self.menuArray.count - 1)) + menuItem.frame.size.width * self.menuArray.count, self.frame.size.height);
+    int i = 0;
+	for (ACPItem *menuItem in _menuArray) {
+		menuItem.tag = 1000 + i;
+		menuItem.center = CGPointMake(menuItem.frame.size.width / 2 + kScrollViewFirstWidth + kScrollViewItemMarginWidth * i + menuItem.frame.size.width * i, self.frame.size.height / 2);
+		menuItem.delegate = self;
+		[_scrollView addSubview:menuItem];
+        
+		i++;
+	}
+
+//    for (ACPItem *menuItem in _menuArray) {
+//		menuItem.tag = 1000 + itemCount;
+//		menuItem.center = CGPointMake(menuItem.frame.size.width / 2 + kScrollViewFirstWidth + kScrollViewItemMarginWidth * itemCount + menuItem.frame.size.width * itemCount, self.frame.size.height / 2);
+//		menuItem.delegate = self;
+//		[_scrollView addSubview:menuItem];
+//        
+//		itemCount++;
+//	}
+
+}
+
+
 
 - (void)setMenu {
 	int i = 0;
@@ -82,6 +112,7 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
         
 		i++;
 	}
+    itemCount = i;
 }
 
 
@@ -196,4 +227,18 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 	self.backgroundColor = color;
 }
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    CGFloat contentOffsetX = scrollView.contentOffset.x+scrollView.frame.size.width;
+    if (contentOffsetX > scrollView.contentSize.width +80) {
+        NSLog(@"should update interface");
+        if ([self.delegate respondsToSelector:@selector(updateScrollItems)]) {
+            [self.delegate updateScrollItems];
+        }
+    }
+
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    }
 @end

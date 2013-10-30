@@ -20,8 +20,11 @@
 {
     if (dataSource !=_dataSource) {
         dataSource = nil;
-        dataSource = [[NSArray alloc]initWithArray:_dataSource];
+        dataSource = [[NSMutableArray alloc]initWithArray:_dataSource];
         itemDic = [NSMutableDictionary dictionary];
+        start = 11;
+        count = 5;
+        firstUpdate = YES;
     }
 }
 
@@ -46,14 +49,32 @@
             ACPItem *item = [[ACPItem alloc]initACPItem:image iconImage:nil andLabel:priceStr];
             [itemDic setObject:item forKey:[NSString stringWithFormat:@"%d",i]];
             if ([itemDic count] == [dataSource count]) {
-                [self performSelectorOnMainThread:@selector(addPicToScrollView) withObject:nil waitUntilDone:NO];
+                
+                if (firstUpdate) {
+                    [self performSelectorOnMainThread:@selector(addPicToScrollView) withObject:nil waitUntilDone:NO];
+                }else
+                {
+                    [self performSelectorOnMainThread:@selector(updateScrollViewItem) withObject:nil waitUntilDone:NO];
+                }
+
             }
             weakImageView = nil;
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
             ;
         }];
-    }}
+    }
+}
 
+-(void)updateScrollViewItem
+{
+    for (int i =0; i<[dataSource count]; i++) {
+        [array addObject:[itemDic objectForKey:[NSString stringWithFormat:@"%d",i]]];
+    }
+    if ([array count]) {
+        [self.customiseScrollView updateScorllMenuItem:array];
+    }
+
+}
 -(void)addPicToScrollView
 {
     for (int i =0; i<[dataSource count]; i++) {
@@ -83,5 +104,21 @@
 - (void)scrollMenu:(ACPItem *)menu didSelectIndex:(NSInteger)selectedIndex {
 	NSLog(@"Item %d", selectedIndex);
     self.block([dataSource objectAtIndex:selectedIndex]);
+}
+
+-(void)updateScrollItems
+{
+    NSLog(@"%s",__func__);
+    firstUpdate = NO;
+    __weak MainCell6 * weakSelf = self;
+    [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        if ([commoditys count]) {
+            [weakSelf.dataSource addObjectsFromArray:commoditys];
+            [weakSelf updateScrollView];
+
+        }
+    } withErrorBlock:^(NSError *error) {
+        NSLog(@"获取热门日用品失败 %@", [error description]);
+    }];
 }
 @end

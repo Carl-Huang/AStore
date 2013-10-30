@@ -212,10 +212,11 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else if (indexPath.section == 1)
     {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"商品信息";
+            cell.textLabel.text = @"商品详情";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else
         {
+            [cell.textLabel setNumberOfLines:2];
             cell.textLabel.text = comodityInfo.brief;
         }
         

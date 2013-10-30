@@ -120,7 +120,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80.0;
+    return 130.0;
 }
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -163,12 +163,22 @@
     CouponCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
     CouponInfo *info = [couponArray objectAtIndex:indexPath.row];
-    cell.orderNum.text = info.cpns_id;
-    cell.validityTime.text = info.pmt_time_begin;
-    cell.couponStatus.text = info.memc_enabled;
+    cell.orderNum.text = info.memc_code;
     cell.couponName.text = info.cpns_name;
-    cell.canUseTime.text = info.pmt_time_end;
+    if ([info.memc_enabled isEqualToString:@"true"]) {
+        cell.couponStatus.text = @"可用";
+    }else
+    {
+         cell.couponStatus.text = @"还未开始或过期";
+    }
+    
+    //有效时间
+    cell.validityTime.text = info.pmt_time_begin;
+
+    
+    //使用方法
     cell.userMethod.text = info.pmt_describe;
+
     cell.backgroundColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

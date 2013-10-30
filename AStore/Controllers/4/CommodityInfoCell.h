@@ -16,4 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *orderTime;
 @property (weak, nonatomic) IBOutlet UILabel *orderStatus;
 @property (weak, nonatomic) IBOutlet UILabel *sum;
+@property (weak, nonatomic) IBOutlet UILabel *totalMoney;
+@property (weak, nonatomic) IBOutlet UILabel *deliveryCost;
+@property (weak, nonatomic) IBOutlet UILabel *getPoint;
+@property (weak, nonatomic) IBOutlet UILabel *consumePoint;
+@property (weak, nonatomic) IBOutlet UILabel *deliveryTime;
 @end

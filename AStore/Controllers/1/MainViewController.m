@@ -372,7 +372,6 @@
         NSLog(@"%@",titleStr);
         MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
         [viewController setTitleStr:titleStr];
-        //15 表示食品
         [viewController setTabId:@"57"];
         [self.navigationController pushViewController:viewController animated:YES];
         viewController = nil;

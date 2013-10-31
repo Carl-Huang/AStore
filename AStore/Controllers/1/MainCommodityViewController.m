@@ -18,6 +18,7 @@ static NSString * cellIdentifier = @"cellidentifier";
 @interface MainCommodityViewController ()
 {
     BOOL isAlertViewCanShow;
+    BOOL isUpdateItem;
     NSInteger start;
     NSInteger count;
 }
@@ -48,6 +49,7 @@ static NSString * cellIdentifier = @"cellidentifier";
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  showLoginViewOnView:self.view];
     dataSource = [NSMutableArray array];
+    isUpdateItem = NO;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -153,18 +155,27 @@ static NSString * cellIdentifier = @"cellidentifier";
     
     if (offsetY >= boundary)
     {
-        start +=count + 1;
-        count +=10;
+       
+        if (!isUpdateItem) {
+            start +=count + 1;
+            count +=10;
+            isUpdateItem = YES;
+            [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+                if ([commoditys count]) {
+                    [dataSource addObjectsFromArray:commoditys];
+                    [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                }
+            } withErrorBlock:^(NSError *error) {
+                ;
+            }];
+             [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
+        }
         //执行再次加载新的数据
-        [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
-            if ([commoditys count]) {
-                [dataSource addObjectsFromArray:commoditys];
-                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-            }
-        } withErrorBlock:^(NSError *error) {
-            ;
-        }];
     }
 }
 
+-(void)resetUpdateStatus
+{
+    isUpdateItem = NO;
+}
 @end

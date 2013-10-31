@@ -15,7 +15,12 @@
 #import "AppDelegate.h"
 #import "CommodityViewController.h"
 @interface SearchResultViewController ()
-@property (strong ,nonatomic) NSArray * dataSource;
+{
+    NSInteger start;
+    NSInteger count;
+    BOOL isUpdateItem;
+}
+@property (strong ,nonatomic) NSMutableArray * dataSource;
 @end
 
 @implementation SearchResultViewController
@@ -26,7 +31,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        dataSource = [[NSArray alloc]init];
+        dataSource = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -41,6 +46,7 @@
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityCell"];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
+    isUpdateItem = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,11 +63,12 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    
+    start = 0;
+    count = 5;
     [self.noResultView setHidden:YES];
     //根据title获取相关内容
-    [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        dataSource = commoditys;
+    [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+        [dataSource addObjectsFromArray:commoditys];
         if ([dataSource count]) {
             [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
         }
@@ -145,5 +152,39 @@
     viewController = nil;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    __weak SearchResultViewController * weakSelf= self;
+    CGFloat offsetY=0.0;
+    offsetY = scrollView.contentOffset.y;
+    NSInteger contentHeight = scrollView.contentSize.height;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    
+    if (offsetY >= boundary)
+    {
+       
+        //执行再次加载新的数据
+        if (!isUpdateItem) {
+            start +=count + 1;
+            count +=5;
+            isUpdateItem = YES;
+            [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+                [dataSource addObjectsFromArray:commoditys];
+                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                
+            } withErrorBlock:^(NSError *error) {
+                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                NSLog(@"%@",[error description]);
+                
+            }];
+            [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
+        }
+    
+    }
+}
 
+-(void)resetUpdateStatus
+{
+    isUpdateItem = NO;
+}
 @end

@@ -25,6 +25,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     BOOL isAlertViewCanShow;
     NSInteger start;
     NSInteger count;
+    BOOL isUpdateItem;
 }
 
 
@@ -59,6 +60,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     dataSource = [NSMutableArray array];
     [self fetchDataFromServer];
     isAlertViewCanShow = YES;
+    isUpdateItem = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -201,18 +203,27 @@ static NSString * cellIdentifier = @"cellIdentifier";
     
     if (offsetY >= boundary)
     {
-        start +=count + 1;
-        count +=10;
-        //执行再次加载新的数据
-        [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
-            if ([commoditys count]) {
-                [dataSource addObjectsFromArray:commoditys];
-                [weakSelf performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
-                //                NSLog(@"%@",commoditys);
-            }
-        } withErrorBlock:^(NSError *error) {
-//            [self showAlertViewWithTitle:@"提示" message:@"获取列表失败，是否重新获取"];
-        }];
+        if (!isUpdateItem) {
+            isUpdateItem = YES;
+            start +=count + 1;
+            count +=10;
+            //执行再次加载新的数据
+            [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+                if ([commoditys count]) {
+                    [dataSource addObjectsFromArray:commoditys];
+                    [weakSelf performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
+                    //                NSLog(@"%@",commoditys);
+                }
+            } withErrorBlock:^(NSError *error) {
+            }];
+            [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
+
+        }
     }
+}
+
+-(void)resetUpdateStatus
+{
+    isUpdateItem = NO;
 }
 @end

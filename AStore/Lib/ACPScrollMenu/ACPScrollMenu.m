@@ -238,7 +238,5 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
     }
 
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    }
+
 @end

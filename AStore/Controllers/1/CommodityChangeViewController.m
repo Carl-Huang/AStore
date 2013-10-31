@@ -17,7 +17,7 @@
 {
     NSInteger start;
     NSInteger count;
-    
+    BOOL   isUpdateItem;
 }
 @property (strong ,nonatomic) NSMutableArray * dataSource;
 @end
@@ -44,6 +44,7 @@
     UINib * cellNib = [UINib nibWithNibName:@"CommodityEXCell" bundle:[NSBundle bundleForClass:[CommodityEXCell class]]];
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityEXCell"];
     dataSource = [NSMutableArray array];
+    isUpdateItem = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -154,19 +155,27 @@
     
     if (offsetY >= boundary)
     {
-        start +=count + 1;
-        count +=10;
-        //执行再次加载新的数据
-        [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
-            if (error) {
-                NSLog(@"%@",[error description]);
-            }else if([item count])
-            {
-                [dataSource addObjectsFromArray:item];
-                [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-            }
-            
-        }];
+        if (!isUpdateItem) {
+            isUpdateItem = YES;
+            start +=count + 1;
+            count +=10;
+            //执行再次加载新的数据
+            [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
+                if (error) {
+                    NSLog(@"%@",[error description]);
+                }else if([item count])
+                {
+                    [dataSource addObjectsFromArray:item];
+                    [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                }
+                
+            }];
+            [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
+        }
     }
+}
+-(void)resetUpdateStatus
+{
+    isUpdateItem = NO;
 }
 @end

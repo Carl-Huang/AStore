@@ -18,6 +18,7 @@
 {
     NSInteger start;
     NSInteger count;
+    BOOL isUpdateItem;
 }
 @property (strong ,nonatomic) NSMutableArray * dataSource;
 @end
@@ -46,6 +47,7 @@
     [myDelegate showLoginViewOnView:self.view];
     start = 0;
     count = 5;
+    isUpdateItem = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -155,6 +157,9 @@
     
     if (offsetY >= boundary)
     {
+        if (!isUpdateItem) {
+            isUpdateItem  = YES;
+        }
         start +=count + 1;
         count +=10;
         //执行再次加载新的数据
@@ -166,7 +171,11 @@
             [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             NSLog(@"%@",[error description]);
         }];
+         [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
     }
 }
-
+-(void)resetUpdateStatus
+{
+    isUpdateItem = NO;
+}
 @end

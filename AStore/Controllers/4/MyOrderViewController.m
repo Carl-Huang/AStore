@@ -206,7 +206,18 @@
         [timeStr insertString:@"." atIndex:7];
         
         cell.orderTime.text         = timeStr;
-        cell.orderStatus.text       = orderInfo.status;
+        
+        NSString * statusStr = nil;
+        if ([orderInfo.status isEqualToString:@"dead"]) {
+            statusStr = @"撤销";
+        }else if([orderInfo.status isEqualToString:@"finish"])
+        {
+            statusStr = @"完成";
+        }else if([orderInfo.status isEqualToString:@"active"])
+        {
+            statusStr = @"正在进行";
+        }
+        cell.orderStatus.text       = statusStr;
         cell.commodityName.text     = orderInfo.tostr;
         
         strFloat = orderInfo.final_amount.integerValue;
@@ -230,6 +241,7 @@
        
         cell.commodityMoneySum.text = formatStr;
         cell.sum.text = @"总金额:";
+        cell.deliveryTime.text = orderInfo.shipping;
     }else if(indexPath.section == 1)
     {
 //        GetGiftInfo * gitfInfo = [giftArray objectAtIndex:indexPath.row];

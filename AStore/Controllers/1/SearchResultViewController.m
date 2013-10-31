@@ -57,6 +57,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    
     [self.noResultView setHidden:YES];
     //根据title获取相关内容
     [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
@@ -76,6 +77,8 @@
 -(void)refreshTableView
 {
     if ([dataSource count]== 0) {
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate removeLoadingViewWithView:nil];
         NSLog(@"没有找到商品");
         [self.noResultView setHidden:NO];
     }else

@@ -225,6 +225,7 @@
 {
     [searchField resignFirstResponder];
     SearchResultViewController * searchResultController = [[SearchResultViewController alloc] initWithNibName:nil bundle:nil];
+    [searchResultController setSearchStr:searchField.text];
     searchResultController.lTitle = @"搜索结果";
     [self.navigationController pushViewController:searchResultController animated:YES];
     searchResultController = nil;

@@ -61,6 +61,9 @@
             NSMutableArray * childCats = [NSMutableArray array];
             for (NSDictionary * cat in results)
             {
+                if ([[cat objectForKey:@"parent_id"] isEqualToString:@"69"]) {
+                    NSLog(@"%@",[cat objectForKey:@"cat_name"]);
+                }
                 if([[cat objectForKey:@"parent_id"] intValue] == parentID)
                 {
                     [childCats addObject:cat];

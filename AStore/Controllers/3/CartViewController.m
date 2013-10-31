@@ -73,7 +73,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     [newItemBtn setFrame:CGRectMake(0, 0, newItemImg.size.width, newItemImg.size.height)];
     [newItemBtn setBackgroundImage:newItemImg forState:UIControlStateNormal];
     [newItemBtn setTitle:@"删除" forState:UIControlStateNormal];
-    [newItemBtn addTarget:self action:@selector(deleteItem) forControlEvents:UIControlEventTouchUpInside];
+    [newItemBtn addTarget:self action:@selector(deleteItemAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem * newItem = [[UIBarButtonItem alloc] initWithCustomView:newItemBtn];
     self.navigationItem.rightBarButtonItem = newItem;
     newItem = nil;
@@ -102,8 +102,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     self.dataSource  = myDelegate.commodityArray;
     self.giftArray = myDelegate.presentArray;
     
-    //获取商品,赠品 对应的库存量
-    [self getStoreInfo];
+  
     
     //注册一个通知，当商品，或赠品提交后更新tableivew 中cell的选中状态
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateCommodityCellStatus:) name:CommodityCellStatus object:nil];
@@ -139,7 +138,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 {
     [super viewWillAppear:animated];
     
-
+    //获取商品,赠品 对应的库存量
+    [self getStoreInfo];
+    
     if (isViewFirstShow) {
         isViewFirstShow = NO;
         for (int i = 0;  i<dataSource.count; i++) {
@@ -205,21 +206,30 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     }];
 }
 
--(void)deleteItem
+-(void)deleteItemAction
 {
-    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     NSLog(@"%s",__func__);
-//    for (int i = 0; i < [self.dataSource count];i++)
-//    {
-//        if (![[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-//            [myDelegate.commodityArray removeObjectAtIndex:i];
-//        }
-//    }
-    self.dataSource = nil;
-    [myDelegate.commodityArray removeAllObjects];
-    [myDelegate.presentArray removeAllObjects];
-    [NSMutableArray removeObjArrayWithkey:@"CommodityArray"];
-    [NSMutableArray removeObjArrayWithkey:@"PresentArray"];
+    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+
+    //清理选中的商品或者
+    for (int i = 0; i < [self.dataSource count];i++) {
+        if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [myDelegate.commodityArray removeObjectAtIndex:i];
+            [commodityDicInfo setObject:[NSNumber numberWithBool:NO] forKey:[NSString stringWithFormat:@"%d",i+1]];
+        }
+    }
+    for (int i = 0; i < [self.giftArray count];i++) {
+        if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [myDelegate.presentArray removeObjectAtIndex:i];
+            [presentDicInfo setObject:[NSNumber numberWithBool:NO] forKey:[NSString stringWithFormat:@"%d",i+1]];
+        }
+    }
+    
+    //写回本地数据
+    [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
+    [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
+    
+    //刷新tableview
     [self.cartTable reloadData];
 }
 
@@ -646,7 +656,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 if (num == 1) {
                     //当货物数量到0件时，删除该数据
                     [myDelegate.commodityArray removeObjectAtIndex:i];
-                     [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
+                     [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"PresentArray"];
                     [self.cartTable reloadData];
                     return;
                 }else
@@ -656,7 +666,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     dic[@"count"] = [NSNumber numberWithInteger:num];
                     [myDelegate.commodityArray replaceObjectAtIndex:i withObject:dic];
                 }
-                               
+                
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];

@@ -22,4 +22,15 @@
             result[12], result[13], result[14], result[15]
             ]; 
 }
+
++(NSString *)convertTimeToStr:(NSTimeInterval)time
+{
+    //time 是毫秒级的数字
+    NSDate *date = [[NSDate alloc]initWithTimeIntervalSinceNow:time/1000.0];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy.MM.dd";
+    NSString *strTime = [dateFormatter stringFromDate:date];
+    dateFormatter = nil;
+    return strTime;
+}
 @end

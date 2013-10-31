@@ -21,6 +21,7 @@
 #import "CouponInfo.h"
 #import "HttpHelper.h"
 #import "AppDelegate.h"
+#import "NSString+MD5_32.h"
 @interface MyCouponViewController ()<UIAlertViewDelegate>
 {
     BOOL isAlertViewCanShow;
@@ -173,7 +174,10 @@
     }
     
     //有效时间
-    cell.validityTime.text = info.pmt_time_begin;
+    NSTimeInterval interval1 = [info.pmt_time_begin integerValue];
+    NSTimeInterval interval2 = [info.pmt_time_end integerValue];
+    NSString * str = [NSString stringWithFormat:@"%@---%@",[NSString convertTimeToStr:interval1],[NSString convertTimeToStr:interval2]];
+    cell.validityTime.text = str;
 
     
     //使用方法

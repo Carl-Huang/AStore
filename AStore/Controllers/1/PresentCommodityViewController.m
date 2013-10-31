@@ -17,6 +17,7 @@
 #import "GetGiftInfo.h"
 #import "PresentCommodityDesViewController.h"
 #import "NSMutableArray+SaveCustomiseData.h"
+#import "ConfirmOrderViewController.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -295,6 +296,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)loginAction
 {
+    [textField resignFirstResponder];
+    [textField2 resignFirstResponder];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     myDelegate.loadingView.labelText = @"正在登陆";
     [myDelegate showLoginViewOnView:self.view];
@@ -310,8 +313,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
                 {
                     NSLog(@"登陆成功");
                     [User saveUserInfo:textField.text password:textField2.text memberId:@"0000"];
-                    //TODO:去到订单页面
-                    
                 }
             }
         }
@@ -351,5 +352,37 @@ static NSString * cellIdentifier = @"cellIdentifier";
 }
 
 - (IBAction)exchangeImmediately:(id)sender {
+    if ([User isLogin]) {
+        //清空购物车信息
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        NSInteger point = comodityInfo.point.integerValue;
+        [viewController setCommoditySumMoney:0];
+        [viewController setGiftSumMoney:point];
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+        viewController = nil;
+    }else
+    {
+        prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
+                                            message:@"\n\n\n"
+                                           delegate:nil
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@"Enter", nil];
+        textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+        [textField setBackgroundColor:[UIColor whiteColor]];
+        [textField setPlaceholder:@"username"];
+        [prompt addSubview:textField];
+        textField2 = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+        [textField2 setBackgroundColor:[UIColor whiteColor]];
+        [textField2 setPlaceholder:@"password"];
+        [textField2 setSecureTextEntry:YES];
+        [prompt addSubview:textField2];
+        prompt.delegate = self;
+        [prompt show];
+        
+    }
+
 }
 @end

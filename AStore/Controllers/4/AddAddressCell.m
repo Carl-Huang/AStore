@@ -37,14 +37,26 @@
 
 - (IBAction)firstBtnAction:(id)sender {
     self.firstBlock();
+    [self.firstBtn setEnabled:NO];
+    [self.secBtn setEnabled:NO];
+    [self.thirBtn setEnabled:NO];
+    
 }
 
 - (IBAction)secondBtnAction:(id)sender {
     self.secondBlock();
+    [self.firstBtn setEnabled:NO];
+    [self.secBtn setEnabled:NO];
+    [self.thirBtn setEnabled:NO];
+
 }
 
 - (IBAction)thirdBtnAction:(id)sender {
     self.thirdBlock();
+    [self.firstBtn setEnabled:NO];
+    [self.secBtn setEnabled:NO];
+    [self.thirBtn setEnabled:NO];
+
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField

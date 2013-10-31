@@ -218,11 +218,11 @@
         cell.deliveryCost.text = formatStr;
         
         strFloat = orderInfo.score_g.integerValue;
-        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
+        formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
         cell.getPoint.text = formatStr;
         
         strFloat = orderInfo.score_u.integerValue;
-        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
+        formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
         cell.consumePoint.text = formatStr;
 
         strFloat = orderInfo.cost_item.integerValue;

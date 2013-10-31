@@ -17,6 +17,8 @@
 #import "HttpHelper.h"
 #import <objc/runtime.h>
 #import "NSMutableArray+SaveCustomiseData.h"
+#import "ConfirmOrderViewController.h"
+#import "NSString+MD5_32.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -280,9 +282,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
     //提交订单
     if ([User isLogin]) {
         //清空购物车信息
-//        [Commodity removeCommodityArray];
-//        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//        [myDelegate.commodityArray removeAllObjects];
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        NSInteger money = comodityInfo.price.integerValue;
+        [viewController setCommoditySumMoney:money];
+        [viewController setGiftSumMoney:0];
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedCommodityArray = @[@{@"commodity": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+        viewController = nil;
     }else
     {
         prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
@@ -330,10 +338,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)loginAction
 {
+    [textField resignFirstResponder];
+    [textField2 resignFirstResponder];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     myDelegate.loadingView.labelText = @"正在登陆";
     [myDelegate showLoginViewOnView:self.view];
-    [HttpHelper userLoginWithName:textField.text pwd:textField2.text completedBlock:^(id items) {
+    [HttpHelper userLoginWithName:textField.text pwd:[NSString md5:textField2.text] completedBlock:^(id items) {
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
         NSArray * array = items;

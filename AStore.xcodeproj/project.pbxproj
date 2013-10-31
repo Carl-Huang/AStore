@@ -1629,8 +1629,8 @@
 		C34217CA17F1E1F600B42F5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Carl Huang (2FZNLHFD97)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl Huang (2FZNLHFD97)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Carl huang (F2P9Y5HMZE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl huang (F2P9Y5HMZE)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
@@ -1639,8 +1639,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E4C50B95-811A-431C-A1EB-F4983D2296DE";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4C50B95-811A-431C-A1EB-F4983D2296DE";
+				PROVISIONING_PROFILE = "A25956AD-0E40-41A7-8B46-2106091A15B3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "598541A7-53A6-4DB0-ADEB-EB50EF136B38";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1648,8 +1648,8 @@
 		C34217CB17F1E1F600B42F5E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Carl Huang (2FZNLHFD97)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl Huang (2FZNLHFD97)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Carl huang (F2P9Y5HMZE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl huang (F2P9Y5HMZE)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
@@ -1658,8 +1658,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E4C50B95-811A-431C-A1EB-F4983D2296DE";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4C50B95-811A-431C-A1EB-F4983D2296DE";
+				PROVISIONING_PROFILE = "A25956AD-0E40-41A7-8B46-2106091A15B3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "598541A7-53A6-4DB0-ADEB-EB50EF136B38";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

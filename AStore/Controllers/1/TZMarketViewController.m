@@ -29,7 +29,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _dataSource = @[@"杭电",@"杭职",@"理工",@"计量",@"水利水电",@"其他"];
+        _dataSource = @[@"杭电",@"杭职",@"理工",@"计量",@"水利水电",@"金融",@"经贸",@"财经",@"杭师",@"工商",@"经济"];
     }
     return self;
 }

@@ -63,7 +63,7 @@
 {
     //根据title获取相关内容
     if ([dataSource count]==0) {
-        [HttpHelper getCommodityWithSaleTab:self.title withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+        [HttpHelper getCommodityWithSaleTab:self.lTitle withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             [dataSource addObjectsFromArray:commoditys];
             if ([dataSource count]) {
                 [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];

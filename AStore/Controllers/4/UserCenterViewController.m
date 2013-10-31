@@ -17,6 +17,7 @@
 #import "HttpHelper.h"
 #import "userInfo.h"
 #import "NSMutableArray+SaveCustomiseData.h"
+#import "NSString+MD5_32.h"
 @interface UserCenterViewController ()
 @property (nonatomic,retain)NSArray * dataSource;
 @property (nonatomic, strong)__block NSDictionary * synDicInfo;
@@ -47,7 +48,9 @@
     NSLog(@"%s",__func__);
     NSDictionary * localUserData = [User getUserInfo];
     if (localUserData) {
+        
         userInfo * localServerData = [userInfo unarchivingUserInfo];
+        usernameLabel.text = [localUserData objectForKey:DUserName];
         if (localServerData) {
             self.pointLabel.text = localServerData.point;
             self.userTypeLabel.text = localServerData.lv_name;
@@ -95,7 +98,7 @@
     synDicInfo = infoDic;
     NSLog(@"%s",__func__);
     
-    [HttpHelper getUserInfoWithUserName:[infoDic objectForKey:DUserName] pwd:[infoDic objectForKey:DPassword] completedBlock:^(id item, NSError *error) {
+    [HttpHelper getUserInfoWithUserName:[infoDic objectForKey:DUserName] pwd:[NSString md5:[infoDic objectForKey:DPassword]] completedBlock:^(id item, NSError *error) {
         if (error) {
             NSLog(@"%@",[error description]);
         }

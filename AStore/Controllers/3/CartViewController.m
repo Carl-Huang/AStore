@@ -209,13 +209,18 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 {
     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
     NSLog(@"%s",__func__);
-    for (int i = 0; i < [self.dataSource count];i++)
-    {
-        if (![[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
-            [myDelegate.commodityArray removeObjectAtIndex:i];
-        }
-    }
-
+//    for (int i = 0; i < [self.dataSource count];i++)
+//    {
+//        if (![[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+//            [myDelegate.commodityArray removeObjectAtIndex:i];
+//        }
+//    }
+    self.dataSource = nil;
+    [myDelegate.commodityArray removeAllObjects];
+    [myDelegate.presentArray removeAllObjects];
+    [NSMutableArray removeObjArrayWithkey:@"CommodityArray"];
+    [NSMutableArray removeObjArrayWithkey:@"PresentArray"];
+    [self.cartTable reloadData];
 }
 
 - (void)didReceiveMemoryWarning

@@ -195,15 +195,28 @@
 
 - (IBAction)resetPasswordAction:(id)sender {
     NSLog(@"%s",__func__);
+    if (self.oldPwdField.text.length == 0) {
+        [self showAlertViewWithTitle:@"提示" message:@"旧密码不能为空"];
+        return;
+    }
     if (![self.oldPwdField.text isEqualToString:pwd]) {
         NSLog(@"输入旧密码不对");
-    }else if ((self.nPwdField.text.length == 0)||(self.confirmPwdField.text.length ==0)||![self.nPwdField.text isEqualToString:self.confirmPwdField.text]) {//密码不匹配或为空
+        [self showAlertViewWithTitle:@"提示" message:@"输入旧密码不正确"];
+        return;
+    }else if ((self.nPwdField.text.length == 0)||(self.confirmPwdField.text.length ==0)) {//密码不匹配或为空
+        [self showAlertViewWithTitle:@"提示" message:@"密码不能为空"];
+        return;
+    }else if(![self.nPwdField.text isEqualToString:self.confirmPwdField.text])
+    {
         [self showAlertViewWithTitle:@"提示" message:@"密码输入不一致"];
+        return;
     }else if (![User isPwdlegal:self.nPwdField.text]){
         [self showAlertViewWithTitle:@"提示" message:@"密码长度不正确"];
+        return;
     }else if(![User isPwdNoSpecialCharacterStr:self.nPwdField.text])
     {
         [self showAlertViewWithTitle:@"提示" message:@"密码不能包括特殊字符"];
+        return;
     }else
     {
         NSString * cmdStr = [NSString stringWithFormat:@"updatepwd=%@&&uname=%@",[NSString md5:self.nPwdField.text],userName];
@@ -233,16 +246,20 @@
 
 -(void)pushToLoginViewcontroller
 {
+    NSDictionary * userInfo = [User getUserInfo];
+    [User saveUserInfo:[userInfo objectForKey:DUserName] password:_confirmPwdField.text memberId:[userInfo objectForKey:DMemberId]];
+    
+    [self.navigationController popViewControllerAnimated:YES];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate  removeLoadingViewWithView:nil];
     NSLog(@"%s",__func__);
-    NSArray *ary = self.navigationController.viewControllers;
-    for (UIViewController * viewcontroller in ary) {
-        if ([viewcontroller isKindOfClass:[LoginViewController class]]) {
-            [self.navigationController popToViewController:viewcontroller animated:YES];
-            return;
-        }
-    }
+//    NSArray *ary = self.navigationController.viewControllers;
+//    for (UIViewController * viewcontroller in ary) {
+//        if ([viewcontroller isKindOfClass:[LoginViewController class]]) {
+//            [self.navigationController popToViewController:viewcontroller animated:YES];
+//            return;
+//        }
+//    }
     LoginViewController * loginViewcontroller = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
     [self.navigationController pushViewController:loginViewcontroller animated:YES];
     loginViewcontroller = nil;

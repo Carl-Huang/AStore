@@ -40,13 +40,22 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSString * addressTextFieldText;
     UIView * viewforPickerView;
     CGRect originTableFrame;
+    
+    UIButton * firtBtnPoint;
+    UIButton * secBtnPoint;
+    UIButton * thirBtnPoint;
+    Region * secondDidSelectRegion;
+    NSArray * tempThirdPickerViewDataSource;
+    BOOL isSelectSecondPickerView;
+    BOOL isFinishLoadData;
 }
+@property (strong ,nonatomic)NSMutableDictionary * thirdAddrDataSource;
 @property (strong ,nonatomic)UIPickerView * pickerViewOne;
 @property (strong ,nonatomic)UIPickerView * pickerViewTwo;
 @property (strong ,nonatomic)UIPickerView * pickerViewThree;
 @property (strong ,nonatomic)NSMutableArray * dataSourceOne;
 @property (strong ,nonatomic)NSMutableArray * dataSourceTwo;
-@property (strong ,nonatomic)NSMutableArray * dataSourceThree;
+@property (strong ,nonatomic)NSMutableArray * thirdDataSource;
 
 
 @property (nonatomic ,strong) __block NSArray * regionInfoDic;
@@ -54,16 +63,16 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 
 @implementation ModifyAddressViewController
 @synthesize pickerViewOne,pickerViewTwo,pickerViewThree;
-@synthesize dataSourceOne,dataSourceTwo,dataSourceThree;
+@synthesize dataSourceOne,dataSourceTwo,thirdDataSource;
 @synthesize modifitedData;
-
+@synthesize thirdAddrDataSource;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         dataSourceOne   = [NSMutableArray array];
         dataSourceTwo   = [NSMutableArray array];
-        dataSourceThree = [NSMutableArray array];
+        thirdDataSource = [NSMutableArray array];
         
         modifitedData = nil;
         // Custom initialization
@@ -103,6 +112,11 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     }
     [self setupTextField];
     originTableFrame = self.addressTable.frame;
+    thirdAddrDataSource = [NSMutableDictionary dictionary];
+    
+    secondDidSelectRegion = nil;
+    isSelectSecondPickerView = YES;
+    isFinishLoadData = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -123,6 +137,9 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     [UIView animateWithDuration:0.3 animations:^{
         self.addressTable.frame = CGRectOffset(self.addressTable.frame, 0, -PickerViewOffsetY);
     }];
+    [firtBtnPoint setEnabled:YES];
+    [secBtnPoint setEnabled:YES];
+    [thirBtnPoint setEnabled:YES];
 }
 
 -(void)getRegionTyepWithDataArray:(NSArray *)array
@@ -143,30 +160,48 @@ static NSString * const cellIdentifier = @"cellIdentifier";
                         [dataSourceTwo addObject:region];
                         break;
                     case 3:
-                        [dataSourceThree addObject:region];
+                        [thirdDataSource addObject:region];
                         break;
                     default:
                         break;
                 }
             }
         }
-        NSInteger sumCount = [dataSourceOne count]+[dataSourceTwo count]+ [dataSourceThree count];
+        NSInteger sumCount = [dataSourceOne count]+[dataSourceTwo count]+ [thirdDataSource count];
         if (sumCount == [array count]) {
-            
             //默认选中数据中的第一项
             Region * region1 = [dataSourceOne objectAtIndex:0];
             firstPickerViewSelectedStr = region1.local_name;
             Region * region2 = [dataSourceTwo objectAtIndex:0];
             secondPickerViewSelectedStr = region2.local_name;
-            Region * region3 = [dataSourceThree objectAtIndex:0];
-            thirdPickerViewSelectedStr = region3.local_name;
-            [self.addressTable reloadData];
-            
+            secondDidSelectRegion = region2;
+            isFinishLoadData = YES;
+            [self classifyDataSourceSepcificByP_RegionId];
             //初始化pickerView
             [self setupPicketView];
         }
     }];
     
+}
+
+-(void)classifyDataSourceSepcificByP_RegionId
+{
+    if ([thirdDataSource count]) {
+        
+        for (Region *region in dataSourceTwo) {
+            NSMutableArray * tempArray = [NSMutableArray array];
+            for (Region * subRegion in thirdDataSource) {
+                if ([region.region_id isEqualToString:subRegion.p_region_id]) {
+                    [tempArray addObject:subRegion];
+                }
+            }
+            [thirdAddrDataSource setObject:tempArray forKey:region.region_id];
+            tempArray = nil;
+        }
+        Region * tempRegion = [[thirdAddrDataSource objectForKey:secondDidSelectRegion.region_id]objectAtIndex:0];
+        thirdPickerViewSelectedStr = tempRegion.local_name;
+    [self.addressTable reloadData];
+    }
 }
 
 -(void)setupPicketView
@@ -247,13 +282,9 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 - (IBAction)saveBtnAction:(id)sender
 {
     NSString * areaStr = [NSString stringWithFormat:@"%@%@%@",firstPickerViewSelectedStr,secondPickerViewSelectedStr,thirdPickerViewSelectedStr];
-    NSString * fixedPhoneNum = nil;
-    if (fixedTelField.text) {
-        fixedPhoneNum = fixedTelField.text;
-    }else
-        fixedPhoneNum = @"";
     __weak ModifyAddressViewController *weakSelf = self;
-    if (fixedTelField.text) {
+    NSString * fixedPhoneNum = nil;
+    if ([fixedTelField.text length]) {
         fixedPhoneNum = fixedTelField.text;
     }else
         fixedPhoneNum = @"";
@@ -261,15 +292,18 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     
     if (modifitedData == nil) {
         //新增地址信息
-        if (!nameField.text) {
+        if ([nameField.text length] == 0) {
             [self showAlertViewWithTitle:@"提示" message:@"名字不能为空"];
             return;
         }
-        if (!phoneField.text) {
+        if ([phoneField.text length] ==0) {
             [self showAlertViewWithTitle:@"提示" message:@"手机不能为空"];
             return;
         }
-        
+        if ([addressTextFieldText length]==0) {
+            [self showAlertViewWithTitle:@"提示" message:@"地址不能为空"];
+            return;
+        }
         //TODO: memberId 有问题
         [self showProcessingView];
         NSDictionary * userInfoDic = [User getUserInfo];
@@ -463,6 +497,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
              }];
              [viewforPickerView setHidden:NO];
              [pickerViewTwo setHidden:NO];
+             [pickerViewThree reloadAllComponents];
          }];
         [cell setThirdBlock:^()
          {
@@ -471,12 +506,16 @@ static NSString * const cellIdentifier = @"cellIdentifier";
              }];
              [viewforPickerView setHidden:NO];
              [pickerViewThree setHidden:NO];
+             
          }];
         [cell setTextFieldBlock:[self configureTextFieldBlock]];
         cell.firstTextField.text    = firstPickerViewSelectedStr;
         cell.secondTextfield.text   = secondPickerViewSelectedStr;
         cell.thirdTextfield.text    = thirdPickerViewSelectedStr;
         cell.fourthTextfield.text   = addressTextFieldText;
+        firtBtnPoint = cell.firstBtn;
+        secBtnPoint = cell.secBtn;
+        thirBtnPoint = cell.thirBtn;
         return cell;
     }
     normalCell.backgroundColor = [UIColor clearColor];
@@ -495,7 +534,15 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         region = [dataSourceTwo objectAtIndex:row];
     }else
     {
-        region = [dataSourceThree objectAtIndex:row];
+        if (isSelectSecondPickerView) {
+            //第二个pickview已经选择
+            if (secondDidSelectRegion) {
+                tempThirdPickerViewDataSource = [thirdAddrDataSource objectForKey:secondDidSelectRegion.region_id];
+                region = [tempThirdPickerViewDataSource objectAtIndex:row];
+                return region.local_name;
+            }
+            return nil;
+        }
     }
     return region.local_name;
 }
@@ -509,11 +556,24 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     }else if (pickerView.tag == SecondPickerViewTag)
     {
         region = [dataSourceTwo objectAtIndex:row];
+        secondDidSelectRegion = region;
+        isSelectSecondPickerView = YES;
         secondPickerViewSelectedStr = region.local_name;
+        NSArray * arr = [thirdAddrDataSource objectForKey:secondDidSelectRegion.region_id];
+        if ([arr count]) {
+            Region * region = [[thirdAddrDataSource objectForKey:secondDidSelectRegion.region_id]objectAtIndex:0];
+            thirdPickerViewSelectedStr = region.local_name;
+        }else
+        {
+            thirdPickerViewSelectedStr = nil;
+        }
+        [pickerViewThree reloadAllComponents];
     }else
     {
-        region = [dataSourceThree objectAtIndex:row];
-        thirdPickerViewSelectedStr = region.local_name;
+        if (isSelectSecondPickerView) {
+            region = [tempThirdPickerViewDataSource objectAtIndex:row];
+            thirdPickerViewSelectedStr = region.local_name;
+        }
     }
     [self.addressTable reloadData];
     NSLog(@"地址选择了: %@",region.local_name);
@@ -536,7 +596,12 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         return [dataSourceTwo count];
     }else
     {
-        return  [dataSourceThree count];
+        if (isSelectSecondPickerView) {
+            NSString * str = secondDidSelectRegion.region_id;
+            NSArray * arr = [thirdAddrDataSource objectForKey:str];
+            return [arr count];
+        }else
+        return 0;
     }
 }
 

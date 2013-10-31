@@ -14,6 +14,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *proceLabel;
 @property (weak, nonatomic) IBOutlet UITableView *commodityTableView;
 @property (weak, nonatomic) IBOutlet UIImageView *produceImage;
+@property (weak, nonatomic) IBOutlet UIButton *putInCarBtn;
 
+- (IBAction)putInCarAction:(id)sender;
+- (IBAction)exchangeImmediately:(id)sender;
 
 @end

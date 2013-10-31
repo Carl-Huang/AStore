@@ -225,6 +225,7 @@
 {
     [searchField resignFirstResponder];
     SearchResultViewController * searchResultController = [[SearchResultViewController alloc] initWithNibName:nil bundle:nil];
+    [searchResultController setSearchStr:searchField.text];
     searchResultController.lTitle = @"搜索结果";
     [self.navigationController pushViewController:searchResultController animated:YES];
     searchResultController = nil;
@@ -372,7 +373,6 @@
         NSLog(@"%@",titleStr);
         MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
         [viewController setTitleStr:titleStr];
-        //15 表示食品
         [viewController setTabId:@"57"];
         [self.navigationController pushViewController:viewController animated:YES];
         viewController = nil;

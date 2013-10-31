@@ -20,11 +20,13 @@
  	@param	selectedIndex	index of the item selected by the user
 */
 - (void)scrollMenu:(ACPScrollMenu *)menu didSelectIndex:(NSInteger)selectedIndex;
-
+-(void) updateScrollItems;
 @end
 
 @interface ACPScrollMenu : UIView <ACPItemDelegate, UIScrollViewDelegate>
-
+{
+    NSInteger itemCount;
+}
 //Type of animations
 typedef enum {
 	ACPFadeZoomIn,
@@ -37,7 +39,7 @@ typedef enum {
 
 @property (nonatomic, weak) id <ACPScrollDelegate> delegate;
 
-@property (nonatomic, strong) NSArray *menuArray;
+@property (nonatomic, strong) NSMutableArray *menuArray;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, assign) ACPAnimation animationType;
 
@@ -77,5 +79,5 @@ typedef enum {
  	@param	color	your favorite color.
 */
 - (void)setACPBackgroundColor:(UIColor *)color;
-
+-(void)updateScorllMenuItem:(NSArray *)array;
 @end

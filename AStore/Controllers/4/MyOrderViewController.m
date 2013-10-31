@@ -145,7 +145,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80.0;
+    return 230.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -197,15 +197,51 @@
     CommodityInfoCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section == 0) {
+        float strFloat = 0.0;
+        NSString * formatStr = nil;
         GetOrderInfo * orderInfo = [orderInfoArray objectAtIndex:indexPath.row];
         cell.orderNum.text          = orderInfo.order_id;
-        cell.orderTime.text         = orderInfo.acttime;
-        cell.orderStatus.text       = orderInfo.status;
+        NSMutableString * timeStr = [(NSMutableString *)[orderInfo.order_id substringToIndex:8]mutableCopy];
+        [timeStr insertString:@"." atIndex:4];
+        [timeStr insertString:@"." atIndex:7];
+        
+        cell.orderTime.text         = timeStr;
+        
+        NSString * statusStr = nil;
+        if ([orderInfo.status isEqualToString:@"dead"]) {
+            statusStr = @"撤销";
+        }else if([orderInfo.status isEqualToString:@"finish"])
+        {
+            statusStr = @"完成";
+        }else if([orderInfo.status isEqualToString:@"active"])
+        {
+            statusStr = @"正在进行";
+        }
+        cell.orderStatus.text       = statusStr;
         cell.commodityName.text     = orderInfo.tostr;
-        float floatString = [orderInfo.cost_item floatValue];
-        NSString * priceStr = [NSString stringWithFormat:@"￥%0.1f",floatString];
-        cell.commodityMoneySum.text = priceStr;
+        
+        strFloat = orderInfo.final_amount.integerValue;
+        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
+        cell.totalMoney.text = formatStr;
+        
+        strFloat = orderInfo.cost_freight.integerValue;
+        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
+        cell.deliveryCost.text = formatStr;
+        
+        strFloat = orderInfo.score_g.integerValue;
+        formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
+        cell.getPoint.text = formatStr;
+        
+        strFloat = orderInfo.score_u.integerValue;
+        formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
+        cell.consumePoint.text = formatStr;
+
+        strFloat = orderInfo.cost_item.integerValue;
+        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
+       
+        cell.commodityMoneySum.text = formatStr;
         cell.sum.text = @"总金额:";
+        cell.deliveryTime.text = orderInfo.shipping;
     }else if(indexPath.section == 1)
     {
 //        GetGiftInfo * gitfInfo = [giftArray objectAtIndex:indexPath.row];

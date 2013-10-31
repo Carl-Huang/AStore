@@ -11,7 +11,7 @@
 @interface CouponCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *orderNum;
 @property (weak, nonatomic) IBOutlet UILabel *couponName;
-@property (weak, nonatomic) IBOutlet UILabel *canUseTime;
+
 @property (weak, nonatomic) IBOutlet UILabel *validityTime;
 @property (weak, nonatomic) IBOutlet UILabel *userMethod;
 @property (weak, nonatomic) IBOutlet UILabel *couponStatus;

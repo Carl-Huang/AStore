@@ -20,5 +20,5 @@
 @property (strong ,nonatomic) NSString * cost_freight;
 @property (strong ,nonatomic) NSString * score_g;
 @property (strong ,nonatomic) NSString * score_u;
-
+@property (strong ,nonatomic) NSString * shipping;
 @end

@@ -33,7 +33,7 @@
     float floatString = [comodityInfo.price floatValue];
     NSString * priceStr = [NSString stringWithFormat:@"%.1f",floatString];
     self.price.text = priceStr;
-    self.goods_id.text = comodityInfo.goods_id;
+    self.goods_id.text = comodityInfo.bn;
     
     //webView
     NSString *htmlContent = [self analysisStr:comodityInfo.intro];

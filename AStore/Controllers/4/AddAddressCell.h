@@ -25,5 +25,8 @@ typedef void (^textFieldConfigureBlock) (id item);
 @property (weak, nonatomic) IBOutlet UITextField *secondTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *thirdTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *fourthTextfield;
+@property (weak, nonatomic) IBOutlet UIButton *firstBtn;
+@property (weak, nonatomic) IBOutlet UIButton *secBtn;
+@property (weak, nonatomic) IBOutlet UIButton *thirBtn;
 
 @end

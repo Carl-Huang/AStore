@@ -21,6 +21,7 @@
 #import "CouponInfo.h"
 #import "HttpHelper.h"
 #import "AppDelegate.h"
+#import "NSString+MD5_32.h"
 @interface MyCouponViewController ()<UIAlertViewDelegate>
 {
     BOOL isAlertViewCanShow;
@@ -120,7 +121,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80.0;
+    return 130.0;
 }
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -163,12 +164,25 @@
     CouponCell *cell = nil;
     cell = [self.commodityTable dequeueReusableCellWithIdentifier:cellIdentifier];
     CouponInfo *info = [couponArray objectAtIndex:indexPath.row];
-    cell.orderNum.text = info.cpns_id;
-    cell.validityTime.text = info.pmt_time_begin;
-    cell.couponStatus.text = info.memc_enabled;
+    cell.orderNum.text = info.memc_code;
     cell.couponName.text = info.cpns_name;
-    cell.canUseTime.text = info.pmt_time_end;
+    if ([info.memc_enabled isEqualToString:@"true"]) {
+        cell.couponStatus.text = @"可用";
+    }else
+    {
+         cell.couponStatus.text = @"还未开始或过期";
+    }
+    
+    //有效时间
+    NSTimeInterval interval1 = [info.pmt_time_begin integerValue];
+    NSTimeInterval interval2 = [info.pmt_time_end integerValue];
+    NSString * str = [NSString stringWithFormat:@"%@---%@",[NSString convertTimeToStr:interval1],[NSString convertTimeToStr:interval2]];
+    cell.validityTime.text = str;
+
+    
+    //使用方法
     cell.userMethod.text = info.pmt_describe;
+
     cell.backgroundColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

@@ -10,4 +10,5 @@
 
 @interface NSString (MD5_32)
 +(NSString *)md5:(NSString *)str;
++(NSString *)convertTimeToStr:(NSTimeInterval)time;
 @end

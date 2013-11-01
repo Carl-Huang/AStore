@@ -12,7 +12,11 @@
 #import "HttpHelper.h"
 #import "CategoryInfo.h"
 #import "AppDelegate.h"
+#import "SubCatalogViewController.h"
 @interface CatalogViewController ()
+{
+    NSMutableArray * totalCatalogData;
+}
 @property (strong, nonatomic) NSArray *firstSectionData;
 @property (strong, nonatomic) NSArray *secondSectionData;
 @property (strong, nonatomic) NSString * firstSectionKey;
@@ -46,7 +50,9 @@
 {
     [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary *catInfo) {
         if ([catInfo count]) {
-            _dictionary = (NSMutableDictionary *)catInfo;
+            totalCatalogData = [catInfo objectForKey:@"totalObj"];
+            NSDictionary * catalogInfo = [catInfo objectForKey:@"catalogInfo"];
+            _dictionary = (NSMutableDictionary *)catalogInfo;
             _firstSectionKey = [[_dictionary allKeys]objectAtIndex:0];
             _secondSectionKey = [[_dictionary allKeys]objectAtIndex:1];
             firstSectionData = (NSArray *)[_dictionary objectForKey:_firstSectionKey];
@@ -147,19 +153,61 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChildCatalogViewContaollerViewController * cCatList = [[ChildCatalogViewContaollerViewController alloc] initWithNibName:nil bundle:nil];
-   
-
-    //getCommodityWithSaleTab
+    
     if (indexPath.section == 0) {
-         [cCatList setCat_id:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
-        [cCatList setCat_name:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+        NSDictionary * tempDic = [firstSectionData objectAtIndex:indexPath.row];
+        NSString * parent_idStr = [tempDic objectForKey:@"cat_id"];
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (NSDictionary * dic in totalCatalogData) {
+            if ([[dic objectForKey:@"parent_id"] isEqualToString:parent_idStr])
+            {
+                [tempArray addObject:dic];
+            }
+        }
+
+        if ([tempArray count]) {
+            SubCatalogViewController * subViewController = [[SubCatalogViewController alloc]initWithNibName:@"SubCatalogViewController" bundle:nil];
+            [subViewController setDataSource:tempArray];
+            tempArray = nil;
+            [subViewController setTitleStr:[tempDic objectForKey:@"cat_name"]];
+            [self.navigationController pushViewController:subViewController animated:YES];
+        }else
+        {
+            ChildCatalogViewContaollerViewController * cCatList = [[ChildCatalogViewContaollerViewController alloc] initWithNibName:nil bundle:nil];
+
+            [cCatList setCat_id:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
+            [cCatList setCat_name:[[firstSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+            [self.navigationController pushViewController:cCatList animated:YES];
+        }
+        
     }else
     {
-        [cCatList setCat_id:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
-        [cCatList setCat_name:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+        NSDictionary * tempDic = [secondSectionData objectAtIndex:indexPath.row];
+        NSString * parent_idStr = [tempDic objectForKey:@"cat_id"];
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (NSDictionary * dic in totalCatalogData) {
+            if ([[dic objectForKey:@"parent_id"] isEqualToString:parent_idStr])
+            {
+                [tempArray addObject:dic];
+            }
+        }
+        
+        if ([tempArray count]) {
+            SubCatalogViewController * subViewController = [[SubCatalogViewController alloc]initWithNibName:@"SubCatalogViewController" bundle:nil];
+            [subViewController setDataSource:tempArray];
+            tempArray = nil;
+            [subViewController setTitleStr:[tempDic objectForKey:@"cat_name"]];
+            [self.navigationController pushViewController:subViewController animated:YES];
+        }else
+        {
+            ChildCatalogViewContaollerViewController * cCatList = [[ChildCatalogViewContaollerViewController alloc] initWithNibName:nil bundle:nil];
+            
+            [cCatList setCat_id:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
+            [cCatList setCat_name:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+             [self.navigationController pushViewController:cCatList animated:YES];
+        }
+       
     }
-    [self.navigationController pushViewController:cCatList animated:YES];
 }
 
 @end

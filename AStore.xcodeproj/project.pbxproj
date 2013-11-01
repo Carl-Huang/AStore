@@ -89,6 +89,8 @@
 		4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */; };
 		4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */; };
 		4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */; };
+		4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF714C0182356F500F028A6 /* SubCatalogViewController.m */; };
+		4EF714C3182356F500F028A6 /* SubCatalogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */; };
 		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
 		C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3A181CBDFE0042032D /* TFHpple.m */; };
 		C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3C181CBDFE0042032D /* TFHppleElement.m */; };
@@ -408,6 +410,9 @@
 		4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderMemo.xib; sourceTree = "<group>"; };
 		4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderMemoCell.h; sourceTree = "<group>"; };
 		4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderMemoCell.m; sourceTree = "<group>"; };
+		4EF714BF182356F500F028A6 /* SubCatalogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubCatalogViewController.h; sourceTree = "<group>"; };
+		4EF714C0182356F500F028A6 /* SubCatalogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubCatalogViewController.m; sourceTree = "<group>"; };
+		4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubCatalogViewController.xib; sourceTree = "<group>"; };
 		4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5_32.h"; sourceTree = "<group>"; };
 		4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5_32.m"; sourceTree = "<group>"; };
 		C3051F39181CBDFE0042032D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
@@ -1095,6 +1100,9 @@
 				C3845CD617F3F10600DED3C5 /* CatalogViewController.h */,
 				C3845CD717F3F10600DED3C5 /* CatalogViewController.m */,
 				C3845CD817F3F10600DED3C5 /* CatalogViewController.xib */,
+				4EF714BF182356F500F028A6 /* SubCatalogViewController.h */,
+				4EF714C0182356F500F028A6 /* SubCatalogViewController.m */,
+				4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */,
 				C35059F917F6622C00D590A7 /* ChildCatalogViewContaollerViewController.h */,
 				C35059FA17F6622C00D590A7 /* ChildCatalogViewContaollerViewController.m */,
 				C35059FB17F6622C00D590A7 /* ChildCatalogViewContaollerViewController.xib */,
@@ -1426,6 +1434,7 @@
 				4E22C708181CF8D2009256AB /* OrderDetailCell.xib in Resources */,
 				4E0C267B181EB83800E7E911 /* AdViewController.xib in Resources */,
 				C322E7D418202B3600246C9A /* TZCommodityViewController.xib in Resources */,
+				4EF714C3182356F500F028A6 /* SubCatalogViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1536,6 +1545,7 @@
 				4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */,
 				4E0C267A181EB83800E7E911 /* AdViewController.m in Sources */,
 				C322E7D318202B3600246C9A /* TZCommodityViewController.m in Sources */,
+				4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

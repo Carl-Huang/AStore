@@ -31,7 +31,7 @@
 
     [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@",NSStringFromSelector(_cmd));
-        
+        NSArray * totalResults = [NSArray arrayWithArray:responseObject];
         NSArray * results = (NSArray *)responseObject;
         //取得父节点
         NSMutableArray * parentsCat = [NSMutableArray array];
@@ -74,7 +74,9 @@
         
         if(success)
         {
-            success(catalogInfo);
+            NSDictionary * queryInfoDic = @{@"totalObj": totalResults,@"catalogInfo":catalogInfo};
+//            success(catalogInfo);
+            success(queryInfoDic);
         }
         
         

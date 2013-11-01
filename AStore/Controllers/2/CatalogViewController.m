@@ -206,7 +206,6 @@
             [cCatList setCat_name:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
              [self.navigationController pushViewController:cCatList animated:YES];
         }
-       
     }
 }
 

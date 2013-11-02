@@ -14,7 +14,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
 #import "CommodityViewController.h"
-@interface SearchResultViewController ()
+@interface SearchResultViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     NSInteger start;
     NSInteger count;
@@ -136,6 +136,7 @@
     cell.priceLabel.text = priceStr;
     [cell.titleLabel setAdjustsFontSizeToFitWidth:NO];
     cell.titleLabel.text = info.name;
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 

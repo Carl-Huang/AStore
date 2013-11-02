@@ -26,7 +26,7 @@
 +(NSString *)convertTimeToStr:(NSTimeInterval)time
 {
     //time 是毫秒级的数字
-    NSDate *date = [[NSDate alloc]initWithTimeIntervalSinceNow:time/1000.0];
+    NSDate *date = [[NSDate alloc]initWithTimeIntervalSince1970:time];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yyyy.MM.dd";
     NSString *strTime = [dateFormatter stringFromDate:date];

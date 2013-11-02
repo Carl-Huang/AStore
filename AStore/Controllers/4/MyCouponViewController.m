@@ -166,18 +166,27 @@
     CouponInfo *info = [couponArray objectAtIndex:indexPath.row];
     cell.orderNum.text = info.memc_code;
     cell.couponName.text = info.cpns_name;
-    if ([info.memc_enabled isEqualToString:@"true"]) {
-        cell.couponStatus.text = @"可用";
-    }else
-    {
-         cell.couponStatus.text = @"还未开始或过期";
-    }
     
     //有效时间
     NSTimeInterval interval1 = [info.pmt_time_begin integerValue];
     NSTimeInterval interval2 = [info.pmt_time_end integerValue];
     NSString * str = [NSString stringWithFormat:@"%@---%@",[NSString convertTimeToStr:interval1],[NSString convertTimeToStr:interval2]];
     cell.validityTime.text = str;
+    NSDate * current = [NSDate date];
+    NSDate *endDate = [[NSDate alloc]initWithTimeIntervalSince1970:interval2];
+    BOOL isValid = NO;
+    if ([current compare:endDate]==NSOrderedAscending ||[current compare:endDate] == NSOrderedSame) {
+        isValid = YES;
+    }
+    
+    if ([info.memc_enabled isEqualToString:@"true"]&&isValid) {
+        cell.couponStatus.text = @"可用";
+    }else
+    {
+         cell.couponStatus.text = @"还未开始或过期";
+    }
+    
+   
 
     
     //使用方法

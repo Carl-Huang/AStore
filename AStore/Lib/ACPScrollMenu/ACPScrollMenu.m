@@ -233,7 +233,7 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
     CGFloat contentOffsetX = scrollView.contentOffset.x+scrollView.frame.size.width;
     if (isShouldUpdateitem) {
         isShouldUpdateitem = NO;
-        if (contentOffsetX > scrollView.contentSize.width +30) {
+        if (contentOffsetX > scrollView.contentSize.width) {
             NSLog(@"should update interface");
             if ([self.delegate respondsToSelector:@selector(updateScrollItems)]) {
                 [self.delegate updateScrollItems];

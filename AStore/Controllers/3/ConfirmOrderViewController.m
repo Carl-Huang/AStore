@@ -164,13 +164,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     NSDictionary * localUserData = [User getUserInfo];
     memberIdStr = [localUserData objectForKey:DMemberId];
     NSString *cmdStr = [NSString stringWithFormat:@"getAddrs=%@",memberIdStr];
-    
+    __weak ConfirmOrderViewController * viewController = self;
     cmdStr = [SERVER_URL_Prefix stringByAppendingString:cmdStr];
     [HttpHelper requestWithString:cmdStr withClass:[AddressInfo class] successBlock:^(NSArray *items) {
         if ([items count]) {
             for (AddressInfo * addressInfo  in items) {
                 if (addressInfo.def_addr.integerValue == 1) {
                     addressTypeInfo = addressInfo;
+                    [viewController.confirmTable reloadData];
                 }
             }
         }
@@ -352,6 +353,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     if ([keyPath isEqual:@"deliveryMethod"]) {
         //获取配送方式
         deliveryTypeInfo = [change objectForKey:NSKeyValueChangeNewKey];
+        [self.confirmTable reloadData];
         NSLog(@"%@",deliveryTypeInfo.dt_name);
     }else if ([keyPath isEqual:@"selectAddressInfo"])
     {
@@ -426,6 +428,12 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         [headerView.offlinePayBtn addTarget:self action:@selector(offlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
         //默认为货到付款
         payType = OfflinePaymentType;
+        
+        //在线支付暂不可用
+        [headerView.onLineTextLabel setTextColor:[UIColor grayColor]];
+        [headerView.onlinePayBtn setEnabled:NO];
+        
+        
         [headerView.offlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
         [headerView.onlinePayBtn addTarget:self action:@selector(onlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -477,7 +485,25 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     }
     UILabel * descriptionLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 5, 250, 40)];
     [descriptionLabel setBackgroundColor:[UIColor clearColor]];
-    descriptionLabel.text = [self.dataSource objectAtIndex:indexPath.row+2*indexPath.section];
+    NSString * str = [self.dataSource objectAtIndex:indexPath.row+2*indexPath.section];
+    if (indexPath.section == 0&&indexPath.row == 0) {
+      
+        if (addressTypeInfo) {
+            NSString  *addreStr = [NSString stringWithFormat:@"%@%@",addressTypeInfo.area,addressTypeInfo.addr];
+            addreStr = [addreStr substringFromIndex:8];
+            str = [str stringByAppendingString:[NSString stringWithFormat:@"%@",addreStr]];
+        }
+    }else if (indexPath.section ==1 &&indexPath.row == 0)
+    {
+        if (deliveryTypeInfo == nil) {
+            str = [str stringByAppendingString:[NSString stringWithFormat:@":请选择配送时段"]];
+        }else
+        {
+            str = [str stringByAppendingString:[NSString stringWithFormat:@":%@",deliveryTypeInfo.dt_name]];
+        }
+    }
+    descriptionLabel.text = str;
+
     if (indexPath.row+2*indexPath.section != 1) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }

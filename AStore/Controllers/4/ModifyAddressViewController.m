@@ -66,6 +66,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 @synthesize dataSourceOne,dataSourceTwo,thirdDataSource;
 @synthesize modifitedData;
 @synthesize thirdAddrDataSource;
+@synthesize titleStr;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -83,7 +84,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:@"修改地址"];
+    [self setLeftTitle:titleStr];
     [self setBackItem:nil];
     
     UINib *cellNib = [UINib nibWithNibName:@"AddAddressCell" bundle:[NSBundle bundleForClass:[AddAddressCell class]]];

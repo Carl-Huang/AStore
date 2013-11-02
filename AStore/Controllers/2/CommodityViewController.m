@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
+#define LoginAlertViewTag  3001
+#define PutInCarViewAlerViewTag 3002 
 #import "CommodityViewController.h"
 #import "UIViewController+LeftTitle.h"
 #import "HeaderView.h"
@@ -19,6 +21,7 @@
 #import "NSMutableArray+SaveCustomiseData.h"
 #import "ConfirmOrderViewController.h"
 #import "NSString+MD5_32.h"
+#import "constants.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -249,14 +252,18 @@ static NSString * cellIdentifier = @"cellIdentifier";
 }
 
 - (IBAction)putInCartAction:(id)sender {
+    
     NSLog(@"%s",__func__);
+    //发送通知更新购车的BadgeView
+    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+    
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     NSInteger count = 1;
     BOOL canAddObj = YES;
     if ([myDelegate.commodityArray count] != 0) {
         for (int i = 0; i<[myDelegate.commodityArray count] ;i++) {
             NSMutableDictionary * infoDic = [[myDelegate.commodityArray objectAtIndex:i]mutableCopy];
-
+            
             Commodity * info = [infoDic objectForKey:@"commodity"];
             if ([info.product_id isEqualToString:self.comodityInfo.product_id]) {
                 count = [[infoDic objectForKey:@"count"]integerValue];
@@ -274,6 +281,13 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
         [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
     }
+    
+    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"加入购物车成功，去结算？" delegate:self cancelButtonTitle:@"马上" otherButtonTitles:@"再逛逛", nil];
+    carAlerView.tag = PutInCarViewAlerViewTag;
+    [carAlerView show];
+    carAlerView = nil;
+    
+   
 //   objc_setAssociatedObject(self.comodityInfo, (__bridge const void *)(self.comodityInfo.product_id), [NSNumber numberWithInt:count], OBJC_ASSOCIATION_COPY);
 
 }
@@ -281,7 +295,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
 - (IBAction)buyImmediatelyAction:(id)sender {
     //提交订单
     if ([User isLogin]) {
-        //清空购物车信息
         ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
         NSInteger money = comodityInfo.price.integerValue;
         [viewController setCommoditySumMoney:money];
@@ -299,6 +312,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                                                cancelButtonTitle:@"Cancel"
                                                otherButtonTitles:@"Enter", nil];
         textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+        prompt.tag= LoginAlertViewTag;
         [textField setBackgroundColor:[UIColor whiteColor]];
         [textField setPlaceholder:@"username"];
         [prompt addSubview:textField];
@@ -318,12 +332,23 @@ static NSString * cellIdentifier = @"cellIdentifier";
 {
     switch (buttonIndex) {
         case 0:
-            NSLog(@"取消登陆");
-            [self hideProcessingView];
+            if (alertView.tag == LoginAlertViewTag) {
+                NSLog(@"取消登陆");
+                [self hideProcessingView];
+            }else if (alertView.tag == PutInCarViewAlerViewTag)
+            {
+                [self buyImmediatelyAfterPutInCar];
+            }
+           
             break;
         case 1:
-            NSLog(@"正在登陆");
-            [self loginAction];
+            if (alertView.tag == LoginAlertViewTag) {
+                NSLog(@"正在登陆");
+                [self loginAction];
+            }else if (alertView.tag == PutInCarViewAlerViewTag)
+            {
+                NSLog(@"再逛逛");
+            }
             break;
         default:
             break;
@@ -365,5 +390,41 @@ static NSString * cellIdentifier = @"cellIdentifier";
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         [myDelegate removeLoadingViewWithView:nil];
     }];
+}
+
+-(void)buyImmediatelyAfterPutInCar
+{
+    if ([User isLogin]) {
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        NSInteger money = comodityInfo.price.integerValue;
+        [viewController setCommoditySumMoney:money];
+        [viewController setGiftSumMoney:0];
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedCommodityArray = @[@{@"commodity": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+        viewController = nil;
+    }else
+    {
+        prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
+                                            message:@"\n\n\n"
+                                           delegate:nil
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@"Enter", nil];
+        textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+        prompt.tag= LoginAlertViewTag;
+        [textField setBackgroundColor:[UIColor whiteColor]];
+        [textField setPlaceholder:@"username"];
+        [prompt addSubview:textField];
+        textField2 = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+        [textField2 setBackgroundColor:[UIColor whiteColor]];
+        [textField2 setPlaceholder:@"password"];
+        [textField2 setSecureTextEntry:YES];
+        [prompt addSubview:textField2];
+        prompt.delegate = self;
+        [prompt show];
+        
+    }
+
 }
 @end

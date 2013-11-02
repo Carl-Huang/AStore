@@ -158,6 +158,7 @@ static NSString * cellIdentifier = @"addressCell";
 {
     NSLog(@"%s",__func__);
     ModifyAddressViewController * viewcontroller = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
+    [viewcontroller setTitleStr:@"新增地址"];
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller  = nil;
 
@@ -276,6 +277,7 @@ static NSString * cellIdentifier = @"addressCell";
         if (btn.tag == alterBtnTag)
         {
             ModifyAddressViewController * viewController = [[ModifyAddressViewController alloc]initWithNibName:@"ModifyAddressViewController" bundle:nil];
+            [viewController setTitleStr:@"修改地址"];
             [viewController setModifitedData:item2];
             [self.navigationController pushViewController:viewController animated:YES];
             viewController = nil;

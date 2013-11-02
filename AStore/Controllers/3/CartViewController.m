@@ -166,7 +166,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     for (int i = 0; i < [self.dataSource count]; i++) {
         NSDictionary * dic = [dataSource objectAtIndex:i];
         Commodity * info = [dic objectForKey:@"commodity"];
-        [productIdStoreArray addObject:info];
+        [productIdStoreArray addObject:info.product_id];
     }
     [HttpHelper getProductStoreWithProductId:productIdStoreArray withCompletedBlock:^(id item, NSError *error) {
         ;
@@ -188,7 +188,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     for (int i = 0; i < [self.giftArray count]; i++) {
         NSDictionary * dic = [giftArray objectAtIndex:i];
         GetGiftInfo * info = [dic objectForKey:@"present"];
-        [giftIdStoreArray addObject:info.gift_id];
+        [giftIdStoreArray addObject:info.point];
     }
     [HttpHelper getGiftStoreWithGiftId:giftIdStoreArray withCompletedBlock:^(id item, NSError *error) {
         ;
@@ -657,6 +657,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     //当货物数量到0件时，删除该数据
                     [myDelegate.commodityArray removeObjectAtIndex:i];
                      [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"PresentArray"];
+                     [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
                     [self.cartTable reloadData];
                     return;
                 }else
@@ -709,6 +710,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                     //当货物数量到0件时，删除该数据
                     [myDelegate.presentArray removeObjectAtIndex:i];
                      [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
+                     [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
                     [self.cartTable reloadData];
                     return;
                 }else

@@ -15,14 +15,35 @@
 #import "LoginViewController.h"
 #import "Commodity.h"
 #import "NSMutableArray+SaveCustomiseData.h"
+#import "CustomBadge.h"
+#import "constants.h"
 @implementation AppDelegate
 @synthesize loadingView;
 @synthesize commodityArray;
 @synthesize presentArray;
 @synthesize buiedCommodityArray;
 @synthesize buiedPresentArray;
+@synthesize badgeView,badgeViewStr;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //初始化badgeView
+    NSInteger count = [[[NSUserDefaults standardUserDefaults]objectForKey:@"CarViewProductCount"]integerValue];
+    NSString  *originBadgeViewText = [NSString stringWithFormat:@"%d",count];
+
+    badgeView = [CustomBadge customBadgeWithString:originBadgeViewText];
+    [badgeView setFrame:CGRectMake(210, 410, 25, 25)];
+    if (count == 0) {
+        [badgeView setHidden:YES];
+    }else
+        [badgeView setHidden:NO];
+    
+    
+   
+
+    //注册一个通知用来更改badgeView的数字
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(resetBadgeViewTitle:) name:UpdateBadgeViewTitle object:nil];
+    
     //储存购物车的商品或赠品
     commodityArray  = [[NSMutableArray alloc]init];
     presentArray    = [[NSMutableArray alloc]init];
@@ -57,6 +78,7 @@
     [_akTabBarController setSelectedIconColors:@[[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1],
      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1]]];
     self.window.rootViewController = _akTabBarController;
+    [self.window.rootViewController.view addSubview:badgeView];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -132,4 +154,39 @@
     [loadingView hide:YES];
     loadingView = nil;
 }
+
+-(void)resetBadgeViewTitle:(NSNotification *)notification
+{
+    NSString * objStr = (NSString *)notification.object;
+    NSInteger  originBadgeNum = badgeView.badgeText.integerValue;
+    if (originBadgeNum == -1) {
+        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"CarViewProductCount"];
+
+        return;
+    }
+    NSString * badgeText = nil;
+    if (objStr) {
+        if ([objStr isEqualToString:@"minus"]) {
+            originBadgeNum -=1;
+            badgeText = [NSString stringWithFormat:@"%d",originBadgeNum];
+        }else
+        {
+            originBadgeNum +=1;
+            badgeText = [NSString stringWithFormat:@"%d",originBadgeNum];
+        }
+    }
+    if (originBadgeNum != 0) {
+        [badgeView setHidden:NO];
+    }else
+        [badgeView setHidden:YES];
+    
+    [[NSUserDefaults standardUserDefaults]setInteger:originBadgeNum forKey:@"CarViewProductCount"];
+    [badgeView autoBadgeSizeWithString:badgeText];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 @end

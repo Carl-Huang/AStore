@@ -58,4 +58,7 @@
 //更新购物车中cell的状态
 #define CommodityCellStatus @"CommodityCellStatus"
 #define PresentCellStatus   @"PresentCellStatus"
+
+//badgeView
+#define UpdateBadgeViewTitle @"UpdateBadgeViewTitle"
 #endif

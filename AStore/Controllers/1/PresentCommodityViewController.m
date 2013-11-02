@@ -5,6 +5,8 @@
 //  Created by vedon on 10/12/13.
 //  Copyright (c) 2013 carl. All rights reserved.
 //
+#define LoginAlertViewTag  3001
+#define PutInCarViewAlerViewTag 3002
 
 #import "PresentCommodityViewController.h"
 #import "UIViewController+LeftTitle.h"
@@ -276,12 +278,23 @@ static NSString * cellIdentifier = @"cellIdentifier";
 {
     switch (buttonIndex) {
         case 0:
-            NSLog(@"取消登陆");
-            [self hideProcessingView];
+            if (alertView.tag == LoginAlertViewTag) {
+                NSLog(@"取消登陆");
+                [self hideProcessingView];
+            }else if (alertView.tag == PutInCarViewAlerViewTag)
+            {
+                [self buyImmediatelyAfterPutInCar];
+            }
+            
             break;
         case 1:
-            NSLog(@"正在登陆");
-            [self loginAction];
+            if (alertView.tag == LoginAlertViewTag) {
+                NSLog(@"正在登陆");
+                [self loginAction];
+            }else if (alertView.tag == PutInCarViewAlerViewTag)
+            {
+                NSLog(@"再逛逛");
+            }
             break;
         default:
             break;
@@ -325,6 +338,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
 - (IBAction)putInCarAction:(id)sender {
     NSLog(@"%s",__func__);
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+    
     NSInteger count = 1;
     BOOL canAddObj = YES;
     if ([myDelegate.presentArray count] != 0) {
@@ -348,6 +363,11 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
         [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
     }
+    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"加入购物车成功，去结算？" delegate:self cancelButtonTitle:@"马上" otherButtonTitles:@"再逛逛", nil];
+    carAlerView.tag = PutInCarViewAlerViewTag;
+    [carAlerView show];
+    carAlerView = nil;
+
 
 }
 
@@ -370,6 +390,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                                            delegate:nil
                                   cancelButtonTitle:@"Cancel"
                                   otherButtonTitles:@"Enter", nil];
+        prompt.tag = LoginAlertViewTag;
         textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
         [textField setBackgroundColor:[UIColor whiteColor]];
         [textField setPlaceholder:@"username"];
@@ -384,5 +405,41 @@ static NSString * cellIdentifier = @"cellIdentifier";
         
     }
 
+}
+
+-(void)buyImmediatelyAfterPutInCar
+{
+    if ([User isLogin]) {
+        //清空购物车信息
+        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+        NSInteger point = comodityInfo.point.integerValue;
+        [viewController setCommoditySumMoney:0];
+        [viewController setGiftSumMoney:point];
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+        viewController = nil;
+    }else
+    {
+        prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"
+                                            message:@"\n\n\n"
+                                           delegate:nil
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@"Enter", nil];
+        prompt.tag = LoginAlertViewTag;
+        textField = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 50.0, 260.0, 25.0)];
+        [textField setBackgroundColor:[UIColor whiteColor]];
+        [textField setPlaceholder:@"username"];
+        [prompt addSubview:textField];
+        textField2 = [[UITextField alloc] initWithFrame:CGRectMake(12.0, 85.0, 260.0, 25.0)];
+        [textField2 setBackgroundColor:[UIColor whiteColor]];
+        [textField2 setPlaceholder:@"password"];
+        [textField2 setSecureTextEntry:YES];
+        [prompt addSubview:textField2];
+        prompt.delegate = self;
+        [prompt show];
+        
+    }
 }
 @end

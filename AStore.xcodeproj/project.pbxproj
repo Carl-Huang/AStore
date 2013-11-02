@@ -16,6 +16,7 @@
 		4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */; };
 		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
 		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
+		4E0AD0BF1824AC030057C84E /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0AD0BE1824AC030057C84E /* CustomBadge.m */; };
 		4E0C267A181EB83800E7E911 /* AdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0C2678181EB83800E7E911 /* AdViewController.m */; };
 		4E0C267B181EB83800E7E911 /* AdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4E0C2679181EB83800E7E911 /* AdViewController.xib */; };
 		4E1189971815031300081C01 /* NSMutableArray+SaveCustomiseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E1189961815031300081C01 /* NSMutableArray+SaveCustomiseData.m */; };
@@ -292,6 +293,8 @@
 		4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGoodInfo.m; sourceTree = "<group>"; };
 		4E0656651815722700AB6216 /* GetOrderGiftInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGiftInfo.h; sourceTree = "<group>"; };
 		4E0656661815722700AB6216 /* GetOrderGiftInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGiftInfo.m; sourceTree = "<group>"; };
+		4E0AD0BD1824AC020057C84E /* CustomBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBadge.h; sourceTree = "<group>"; };
+		4E0AD0BE1824AC030057C84E /* CustomBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBadge.m; sourceTree = "<group>"; };
 		4E0C2677181EB83800E7E911 /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		4E0C2678181EB83800E7E911 /* AdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdViewController.m; sourceTree = "<group>"; };
 		4E0C2679181EB83800E7E911 /* AdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdViewController.xib; sourceTree = "<group>"; };
@@ -920,6 +923,8 @@
 		C3C9991317F2CDB900043727 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				4E0AD0BD1824AC020057C84E /* CustomBadge.h */,
+				4E0AD0BE1824AC030057C84E /* CustomBadge.m */,
 				C3051F38181CBDFE0042032D /* TFHpple */,
 				4EB4CB3B18091C430059DA10 /* UIKit+AFNetworking */,
 				C383C101180651440047AAD4 /* MBProgressHUD.h */,
@@ -1560,6 +1565,7 @@
 				4E0C267A181EB83800E7E911 /* AdViewController.m in Sources */,
 				C322E7D318202B3600246C9A /* TZCommodityViewController.m in Sources */,
 				4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */,
+				4E0AD0BF1824AC030057C84E /* CustomBadge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

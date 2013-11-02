@@ -220,15 +220,15 @@
         cell.orderStatus.text       = statusStr;
         cell.commodityName.text     = orderInfo.tostr;
         
-        strFloat = orderInfo.final_amount.integerValue;
+        strFloat = orderInfo.final_amount.floatValue;
         formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
         cell.totalMoney.text = formatStr;
         
-        strFloat = orderInfo.cost_freight.integerValue;
+        strFloat = orderInfo.cost_freight.floatValue;
         formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
         cell.deliveryCost.text = formatStr;
         
-        strFloat = orderInfo.score_g.integerValue;
+        strFloat = orderInfo.score_g.floatValue;
         formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
         cell.getPoint.text = formatStr;
         
@@ -236,7 +236,7 @@
         formatStr = [NSString stringWithFormat:@"%0.1f",strFloat];
         cell.consumePoint.text = formatStr;
 
-        strFloat = orderInfo.cost_item.integerValue;
+        strFloat = orderInfo.cost_item.floatValue;
         formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
        
         cell.commodityMoneySum.text = formatStr;

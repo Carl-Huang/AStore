@@ -40,15 +40,17 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     
     DeliveryTypeInfo * deliveryTypeInfo; //配送方式
     AddressInfo * addressTypeInfo;       //个人地址信息
-    
+    NSString * shippingStr;
     
     NSString * memoStr;
     CGRect viewOriginFrame;
+    float  totalMoney;
     NSInteger totalWeight;
     NSInteger totalCommodityNum;
     NSInteger totalPoint;
     NSInteger deliveryCost;
     NSString * memberIdStr;
+    BOOL isFirstConfigureCell;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (assign ,nonatomic)BOOL isCheck;
@@ -72,8 +74,8 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         // Custom initialization
         dataSource = @[@"收货人信息",@"付款方式",@"配送方式",@"查看商品清单"];
         isCheck   = NO;
-        commoditySumMoney = 0;
-        giftSumMoney = 0;
+        commoditySumMoney = 0.0f;
+        giftSumMoney = 0.0f;
 
     }
     return self;
@@ -106,7 +108,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     [posForm setTitle:@"提交订单" forState:UIControlStateNormal];
     UILabel * sumLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 150, 30)];
     if (commoditySumMoney !=0) {
-        sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%d",commoditySumMoney];
+        sumLabel.text = [NSString stringWithFormat:@"应付总额:￥%0.1f",commoditySumMoney];
     }else
     {
         //赠品,hardcode 运费为2;
@@ -135,7 +137,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     totalWeight = 0;
     totalCommodityNum = 0;
     totalPoint = 0;
-    if (commoditySumMoney !=0) {
+    if (commoditySumMoney !=0.0) {
         for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
             Commodity * info = [dic objectForKey:@"commodity"];
             NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
@@ -146,16 +148,18 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         }
 
     }
-    if (giftSumMoney !=0) {
+    if (giftSumMoney !=0.0) {
         for (NSDictionary * dic in myDelegate.buiedPresentArray) {
             GetGiftInfo * info = [dic objectForKey:@"present"];
             NSInteger tempCount = [[dic objectForKey:@"count"]integerValue];
             NSInteger tempWeight = tempCount*info.weight.integerValue;
             totalWeight += tempWeight;
             totalCommodityNum += tempCount;
+            [self.confirmTable reloadData];
         }
     }
     [self getUserDefaultAddress];
+    isFirstConfigureCell = YES;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -183,6 +187,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 -(void)postFormAction
 {
     NSLog(@"%s",__func__);
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     if (addressTypeInfo ==nil) {
         [self showAlertViewWithTitle:@"提示" message:@"请选择收货人地址" tag:0];
         return;
@@ -191,20 +196,23 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         [self showAlertViewWithTitle:@"提示" message:@"请选择配送方式" tag:0];
         return;
     }
-
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    
     [myDelegate showLoginViewOnView:self.view];
     __weak ConfirmOrderViewController * weakSelf = self;
     if (commoditySumMoney!=0) {
+        if (myDelegate.buiedCommodityArray == nil) {
+            [self showAlertViewWithTitle:@"提示" message:@"请选择商品" tag:0];
+            return;
+        }
         [HttpHelper postOrderWithUserInfo:nil
                              deliveryType:deliveryTypeInfo
                                    Weight: [NSString stringWithFormat:@"%d",totalWeight]
                                productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
                                   address:addressTypeInfo
-                        totalProuctMomeny:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                        totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",commoditySumMoney]
                              deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
                                  getPoint:[NSString stringWithFormat:@"%d",totalPoint]
-                               totalMoney:[NSString stringWithFormat:@"%d",commoditySumMoney]
+                               totalMoney:[NSString stringWithFormat:@"%0.1f",totalMoney]
                                      memo:memoStr
                        withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
                            if (error) {
@@ -227,13 +235,18 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                        }];
             }
     if (giftSumMoney!= 0) {
+        if (myDelegate.buiedPresentArray == nil) {
+            [self showAlertViewWithTitle:@"提示" message:@"请选择赠品" tag:0];
+            return;
+            
+        }
         [HttpHelper postGiftOrderWithUserInfo:nil
                                  deliveryType:deliveryTypeInfo
                                        Weight:[NSString stringWithFormat:@"%d",totalWeight]
                                         tostr:@""
                                    productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
                                       address:addressTypeInfo
-                            totalProuctMomeny:[NSString stringWithFormat:@"%d",giftSumMoney]
+                            totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",giftSumMoney]
                                  deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
                                      getPoint:@"0"
                                    totalMoney:[NSString stringWithFormat:@"%d",deliveryCost]
@@ -278,6 +291,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             NSDictionary *commodityDic = [myDelegate.commodityArray objectAtIndex:i];
             Commodity * info = commodityDic[@"commodity"];
             if ([info.product_id isEqualToString:removeCommodityObj.product_id]) {
+                 [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
                 [myDelegate.commodityArray removeObjectAtIndex:i];
             }
         }
@@ -309,6 +323,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             GetGiftInfo * info = presentDic[@"present"];
             if ([info.gift_id isEqualToString:removePresentObj.gift_id]) {
                 [myDelegate.presentArray removeObjectAtIndex:i];
+                [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
             }
         }
     }
@@ -500,6 +515,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         }else
         {
             str = [str stringByAppendingString:[NSString stringWithFormat:@":%@",deliveryTypeInfo.dt_name]];
+            shippingStr = deliveryTypeInfo.dt_name;
         }
     }
     descriptionLabel.text = str;
@@ -523,29 +539,34 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 
 -(confirmOrderInfoCell *)configureCell:(confirmOrderInfoCell *)orderCell
 {
-    if (commoditySumMoney!=0) {
-        orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
-        if (commoditySumMoney > 36) {
-            orderCell.deliveryCost.text = @"0";
-            deliveryCost = 0;
-            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
-        }else
+    if (isFirstConfigureCell) {
+        isFirstConfigureCell = NO;
+        if (commoditySumMoney!=0) {
+            orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%0.1f",commoditySumMoney];
+            totalMoney = commoditySumMoney;
+            if (commoditySumMoney > 36) {
+                orderCell.deliveryCost.text = @"0";
+                deliveryCost = 0;
+                orderCell.totalMoney.text = [NSString stringWithFormat:@"%0.1f",totalMoney];
+            }else
+            {
+                orderCell.deliveryCost.text = @"2";
+                deliveryCost =2;
+                totalMoney +=2.0;
+                orderCell.totalMoney.text = [NSString stringWithFormat:@"%0.1f",totalMoney];
+            }
+            orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
+        }else if (giftSumMoney != 0)
         {
             orderCell.deliveryCost.text = @"2";
             deliveryCost =2;
-            commoditySumMoney +=2;
-            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",commoditySumMoney];
+            giftSumMoney +=2;
+            orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",deliveryCost];
+            orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%0.1f",giftSumMoney];
+            orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
+            orderCell.cost.text = @"抵扣积分:";
         }
-        orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
-    }else if (giftSumMoney != 0)
-    {
-        orderCell.deliveryCost.text = @"2";
-        deliveryCost =2;
-        giftSumMoney +=2;
-        orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",deliveryCost];
-        orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%d",giftSumMoney];
-        orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];
-        orderCell.cost.text = @"抵扣积分:";
+
     }
     return orderCell;
 }

@@ -550,7 +550,7 @@
         NSString * countStr = [NSString stringWithFormat:@"%d",count];
         arr_nums_str = [arr_nums_str stringByAppendingString:countStr];
         
-        tostr = [NSString stringWithFormat:@"%@%@",arr_name_str,countStr];
+        tostr = [NSString stringWithFormat:@"%@(%@)",arr_name_str,countStr];
         //总积分
         NSInteger totalScore = count * commodityInfo.score.integerValue;
         NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];
@@ -578,7 +578,7 @@
 
     NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_1=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&cost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
                           [userInfo objectForKey:DMemberId],
-                          deliveryType.dt_id,
+                          deliveryType.dt_name,
                           weight,
                           tostr,                //商品名称列表，多个商品用,分隔格式如下：
                           //商品1（规格）（数量）
@@ -640,7 +640,7 @@
     
     NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_2=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&ost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
                           [userInfo objectForKey:DMemberId],
-                          deliveryType.dt_id,
+                          deliveryType.dt_name,
                           weight,
                           tostr,                //商品名称列表，多个商品用,分隔格式如下：
                           //商品1（规格）（数量）
@@ -862,5 +862,16 @@
      
         
     });
+}
+
+//根据标签获取商品（聚优惠，跳蚤市场页面 如：餐饮）
++ (void)getCommodityWithTab:(NSString *)tab withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure
+{
+    NSString * route = @"youjian.php";
+    NSString * component_1 = [NSString stringWithFormat:@"cat_getSales=%@",tab];
+    NSString * component_2 = [NSString stringWithFormat:@"start=%d",start];
+    NSString * component_3 = [NSString stringWithFormat:@"count=%d",count];
+    NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3];
+    [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
 @end

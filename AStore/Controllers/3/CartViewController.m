@@ -275,10 +275,11 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 [array addObject:dic];
             }
         }
-        return array;
+        if ([array count]==0) {
+            return nil;
+        }
     }
-    return nil;
-    
+     return array;
 }
 
 -(NSArray *)getGiftProduct
@@ -291,9 +292,11 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
                 [array addObject:dic];
             }
         }
-        return array;
+        if ([array count] == 0) {
+            return nil;
+        }
     }
-    return nil;
+    return array;
 }
 
 -(CartCell *)configureCommodityCell:(CartCell *)cell WithIndexPath:(NSIndexPath *)indexPath
@@ -424,15 +427,24 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         }
 
         NSLog(@"%s",__func__);
-        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-        [viewController setCommoditySumMoney:commoditySumMoney];
-        [viewController setGiftSumMoney:0];
-        
-        [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedCommodityArray = [self getCommodityProduct];
-        viewController = nil;
+        if (myDelegate.buiedCommodityArray )
+        {
+            ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+            
+            [viewController setCommoditySumMoney:commoditySumMoney];
+            [viewController setGiftSumMoney:0];
+            
+            
+            [self.navigationController pushViewController:viewController animated:YES];
+            viewController = nil;
 
+        }else
+        {
+            [self showAlertViewWithTitle:@"提示" message:@"请选择商品"];
+        }
+       
     };
     return block;
 }
@@ -452,13 +464,20 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
         }
         
         NSLog(@"%s",__func__);
-        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-        [viewController setGiftSumMoney:giftSumMoney];
-        [viewController setCommoditySumMoney:0];
-        [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         myDelegate.buiedPresentArray = [self getGiftProduct];
-        viewController = nil;
+
+        if (myDelegate.buiedPresentArray )
+        {
+            ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+            [viewController setGiftSumMoney:giftSumMoney];
+            [viewController setCommoditySumMoney:0];
+            [self.navigationController pushViewController:viewController animated:YES];
+            viewController = nil;
+        }else
+        {
+            [self showAlertViewWithTitle:@"提示" message:@"请选择赠品"];
+        }
     };
     return block;
 }

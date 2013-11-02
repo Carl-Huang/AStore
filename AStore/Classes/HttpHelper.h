@@ -134,5 +134,7 @@
 
 
 +(void)getSpecificUrlContentOfAdUrl:(NSString *)urlStr completedBlock:(void (^)(id item ,NSError *error))block;
+
++ (void)getCommodityWithTab:(NSString *)tab withStart:(int)start withCount:(int)count   withSuccessBlock:(void (^)(NSArray * commoditys))success withErrorBlock:(void (^)(NSError * error))failure;
 //EndAdd:vedon >>>>>>>>>>>>>>>>>>>>
 @end

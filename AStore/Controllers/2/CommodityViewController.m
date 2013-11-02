@@ -218,6 +218,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"商品详情";
+//            cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"right"]];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else
         {

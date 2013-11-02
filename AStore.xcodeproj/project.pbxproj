@@ -49,6 +49,7 @@
 		4EAEE3FC17FE9654002857F1 /* CartCellHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EAEE3FB17FE9652002857F1 /* CartCellHeader.xib */; };
 		4EB025881805FE6A0038923A /* AddressInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB025871805FE6A0038923A /* AddressInfo.m */; };
 		4EB0258B180607260038923A /* CouponInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0258A180607260038923A /* CouponInfo.m */; };
+		4EB1B64B18254C5B004B5A0B /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EB1B64A18254C5B004B5A0B /* right.png */; };
 		4EB4CB3818090F9B0059DA10 /* ChildCatalogInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */; };
 		4EB4CB3A18090FAF0059DA10 /* ChildCatalogInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */; };
 		4EB4CB4B18091C430059DA10 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EB4CB3D18091C430059DA10 /* AFNetworkActivityIndicatorManager.m */; };
@@ -348,6 +349,7 @@
 		4EB025871805FE6A0038923A /* AddressInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressInfo.m; sourceTree = "<group>"; };
 		4EB02589180607250038923A /* CouponInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CouponInfo.h; sourceTree = "<group>"; };
 		4EB0258A180607260038923A /* CouponInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CouponInfo.m; sourceTree = "<group>"; };
+		4EB1B64A18254C5B004B5A0B /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
 		4EB4CB3618090F9B0059DA10 /* ChildCatalogInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildCatalogInfoCell.h; sourceTree = "<group>"; };
 		4EB4CB3718090F9B0059DA10 /* ChildCatalogInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildCatalogInfoCell.m; sourceTree = "<group>"; };
 		4EB4CB3918090FAF0059DA10 /* ChildCatalogInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChildCatalogInfoCell.xib; sourceTree = "<group>"; };
@@ -1002,6 +1004,7 @@
 		C3C9994117F2CDC600043727 /* 2x */ = {
 			isa = PBXGroup;
 			children = (
+				4EB1B64A18254C5B004B5A0B /* right.png */,
 				C37E1D6A17FEA97E000E1100 /* 单选btn-n@2x.png */,
 				C37E1D6B17FEA97E000E1100 /* 单选btn-s@2x.png */,
 				C32B1BCC17F406610089D6CC /* 个人中心icon-n@2x.png */,
@@ -1454,6 +1457,7 @@
 				C3F6F0E61821412900726F2A /* Default.png in Resources */,
 				C3F6F0E81821413900726F2A /* Default@2x.png in Resources */,
 				C3F6F0EA1821413D00726F2A /* Default-568h@2x.png in Resources */,
+				4EB1B64B18254C5B004B5A0B /* right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

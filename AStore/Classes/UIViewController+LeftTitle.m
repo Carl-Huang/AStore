@@ -11,15 +11,15 @@
 @implementation UIViewController (LeftTitle)
 - (void) setLeftTitle:(NSString *)title
 {
-    CGSize size = [title sizeWithFont:[UIFont boldSystemFontOfSize:18]];
+    CGSize size = [title sizeWithFont:[UIFont boldSystemFontOfSize:16]];
     if(size.width >= 200)
     {
         size.width = 200;
     }
-    UILabel * titleLable = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, size.width, 38)];
+    UILabel * titleLable = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, size.width+30, 38)];
     
     titleLable.textColor = [UIColor whiteColor];
-    titleLable.font = [UIFont boldSystemFontOfSize:18];
+    titleLable.font = [UIFont boldSystemFontOfSize:16];
 //    titleLable.adjustsFontSizeToFitWidth = YES;
     titleLable.backgroundColor = [UIColor clearColor];
     [titleLable setText:title];

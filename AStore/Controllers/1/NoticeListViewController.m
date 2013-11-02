@@ -99,10 +99,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     Artical * info = [dataSource objectAtIndex:indexPath.row];
     NoticeContentViewController * noticeContentController = [[NoticeContentViewController alloc] initWithNibName:nil bundle:nil];
     [noticeContentController setArticalContent:info];
+    [noticeContentController setTitleStr:info.title];
     [self.navigationController pushViewController:noticeContentController animated:YES];
     noticeContentController = nil;
 }

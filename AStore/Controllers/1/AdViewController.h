@@ -10,5 +10,6 @@
 
 @interface AdViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIWebView *adWebView;
-@property (strong ,nonatomic) NSURLRequest * request;
+@property (strong ,nonatomic) NSString * contentStr;
+@property (strong, nonatomic) NSString * titleStr;
 @end

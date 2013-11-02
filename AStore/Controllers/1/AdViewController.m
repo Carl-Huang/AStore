@@ -13,7 +13,8 @@
 @end
 
 @implementation AdViewController
-@synthesize request;
+@synthesize contentStr;
+@synthesize titleStr;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -26,10 +27,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:@"详细信息"];
+    [self setLeftTitle:titleStr];
     [self setBackItem:nil];
     
-    [self.adWebView loadRequest:request];
+    [self.adWebView loadHTMLString:contentStr baseURL:nil];
     self.adWebView.userInteractionEnabled = YES;
     self.adWebView.scalesPageToFit = YES;
     // Do any additional setup after loading the view from its nib.

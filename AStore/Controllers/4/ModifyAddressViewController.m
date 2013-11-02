@@ -48,6 +48,7 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     NSArray * tempThirdPickerViewDataSource;
     BOOL isSelectSecondPickerView;
     BOOL isFinishLoadData;
+    UIView *keyBoardView;
 }
 @property (strong ,nonatomic)NSMutableDictionary * thirdAddrDataSource;
 @property (strong ,nonatomic)UIPickerView * pickerViewOne;
@@ -111,13 +112,16 @@ static NSString * const cellIdentifier = @"cellIdentifier";
         secondPickerViewSelectedStr = @"";
         thirdPickerViewSelectedStr  = @"";
     }
-    [self setupTextField];
+
     originTableFrame = self.addressTable.frame;
     thirdAddrDataSource = [NSMutableDictionary dictionary];
     
     secondDidSelectRegion = nil;
     isSelectSecondPickerView = YES;
     isFinishLoadData = NO;
+    
+    [self inputKeyBoardView];
+    [self setupTextField];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -133,6 +137,27 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     }];
 }
 
+-(void)inputKeyBoardView
+{
+    keyBoardView= [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 35)];
+    [keyBoardView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [btn setFrame:CGRectMake(230,2, 80, 30)];
+    [btn setTitle:@"取消" forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"加入购物车-红-bg"] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    [btn addTarget:self action:@selector(keyBoardAction) forControlEvents:UIControlEventTouchUpInside];
+    [keyBoardView addSubview:btn];
+
+}
+
+-(void)keyBoardAction
+{
+    [phoneField resignFirstResponder];
+    [fixedTelField resignFirstResponder];
+    
+}
 -(void)resetTableviewFrame
 {
     [UIView animateWithDuration:0.3 animations:^{
@@ -419,10 +444,12 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     nameField.delegate = self;
     
     phoneField = [[UITextField alloc]initWithFrame:textFieldRect];
+    phoneField.inputAccessoryView = keyBoardView;
     phoneField.text = phone;
     phoneField.delegate =self;
     
     fixedTelField = [[UITextField alloc]initWithFrame:textFieldRect];
+    fixedTelField.inputAccessoryView = keyBoardView;
     fixedTelField.delegate = self;
     fixedTelField.text = tel;
     fixedTelField.tag = FixedTextFieldTag;
@@ -473,11 +500,13 @@ static NSString * const cellIdentifier = @"cellIdentifier";
     {
         normalCell.textLabel.text = @"*手机: ";
         [normalCell.contentView addSubview:phoneField];
+        [phoneField setKeyboardType:UIKeyboardTypeDecimalPad];
     }
     if(indexPath.row == 2)
     {
         normalCell.textLabel.text = @"固定电话: ";
         [normalCell.contentView addSubview:fixedTelField];
+        [fixedTelField setKeyboardType:UIKeyboardTypeDecimalPad];
     }
     if (indexPath.row == 3) {
         AddAddressCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];

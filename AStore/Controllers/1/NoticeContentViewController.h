@@ -11,4 +11,5 @@
 @interface NoticeContentViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIWebView *contentWebView;
 @property (strong ,nonatomic) Artical * articalContent;
+@property (strong ,nonatomic) NSString * titleStr;
 @end

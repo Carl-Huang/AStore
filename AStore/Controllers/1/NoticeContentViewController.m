@@ -15,6 +15,7 @@
 
 @implementation NoticeContentViewController
 @synthesize articalContent;
+@synthesize titleStr;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,7 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:@"公告内容"];
+    [self setLeftTitle:titleStr];
     [self setBackItem:nil];
     NSString * contentStr = [self analysisStr:articalContent.content];
     [self.contentWebView loadHTMLString:contentStr baseURL:nil];

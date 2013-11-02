@@ -122,17 +122,22 @@
     UIImageView * tempImg = (UIImageView *)recon.view;
     NSDictionary * dic = [imagesArray objectAtIndex:tempImg.tag];
     NSLog(@"%@",dic[@"url"]);
-    //    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
-    //        NSString * str = item;
-    //
-    //    }];
-    AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
-    [viewController setRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dic[@"url"]]]];
-    [self.navigationController pushViewController:viewController animated:YES];
-    viewController = nil;
+     __weak TZMarketViewController * viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+        [viewController performSelector:@selector(adView:) withObject:item];
+
+    }];
 }
 
-
+-(void)adView:(id)obj
+{
+    AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
+    [viewController setContentStr:(NSString *)obj];
+    [viewController setTitleStr:@"校园跳蚤市场免费供同学们使用"];
+    [self.navigationController pushViewController:viewController animated:YES];
+    viewController = nil;
+    
+}
 
 #pragma mark - Table view data source
 

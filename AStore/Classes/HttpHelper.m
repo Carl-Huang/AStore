@@ -844,7 +844,11 @@
         
         TFHpple * xParse = [[TFHpple alloc] initWithHTMLData:htmlData];
         NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"ArticleDetailsWrap\"]/p"];
-        
+        TFHppleElement * element = [elements objectAtIndex:0];
+
+    
+       
+      
         if([elements count] == 0)
         {
             NSLog(@"Could not found the elements.");
@@ -857,7 +861,7 @@
             return ;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-           block(elements,nil);
+           block(element.raw,nil);
         });
      
         

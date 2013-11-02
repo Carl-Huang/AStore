@@ -151,14 +151,22 @@
     UIImageView * tempImg = (UIImageView *)recon.view;
     NSDictionary * dic = [imagesArray objectAtIndex:tempImg.tag];
     NSLog(@"%@",dic[@"url"]);
-//    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
-//        NSString * str = item;
-//        
-//    }];
+    __weak MainViewController * viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+        NSString * str = (NSString *)item;
+        [viewController performSelector:@selector(adView:) withObject:str];
+    }];
+}
+
+
+-(void)adView:(id)obj
+{
     AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
-    [viewController setRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dic[@"url"]]]];
+    [viewController setContentStr:(NSString *)obj];
+    [viewController setTitleStr:@"微信公众平台专享特价"];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
+
 }
 -(void)fetchDataThreadMethod
 {

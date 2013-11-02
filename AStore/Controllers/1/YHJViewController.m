@@ -128,15 +128,20 @@
     UIImageView * tempImg = (UIImageView *)recon.view;
     NSDictionary * dic = [imagesArray objectAtIndex:tempImg.tag];
     NSLog(@"%@",dic[@"url"]);
-    //    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
-    //        NSString * str = item;
-    //
-    //    }];
+    __weak YHJViewController *viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+         [viewController performSelector:@selector(adView:) withObject:item];
+
+    }];
+  }
+
+-(void)adView:(id)obj
+{
     AdViewController * viewController = [[AdViewController alloc]initWithNibName:@"AdViewController" bundle:nil];
-    [viewController setRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dic[@"url"]]]];
+    [viewController setContentStr:(NSString *)obj];
     [self.navigationController pushViewController:viewController animated:YES];
     viewController = nil;
+    
 }
-
 
 @end

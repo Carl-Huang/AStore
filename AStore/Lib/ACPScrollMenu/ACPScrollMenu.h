@@ -26,6 +26,7 @@
 @interface ACPScrollMenu : UIView <ACPItemDelegate, UIScrollViewDelegate>
 {
     NSInteger itemCount;
+    BOOL isShouldUpdateitem;
 }
 //Type of animations
 typedef enum {

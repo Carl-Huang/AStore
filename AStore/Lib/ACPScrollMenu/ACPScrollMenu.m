@@ -68,6 +68,7 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 	[self.menuArray addObjectsFromArray:menuItems];
 	[self setMenu];
 	_animationType = ACPZoomOut;
+    isShouldUpdateitem = YES;
 }
 
 -(void)updateScorllMenuItem:(NSArray *)array
@@ -230,13 +231,21 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     CGFloat contentOffsetX = scrollView.contentOffset.x+scrollView.frame.size.width;
-    if (contentOffsetX > scrollView.contentSize.width +80) {
-        NSLog(@"should update interface");
-        if ([self.delegate respondsToSelector:@selector(updateScrollItems)]) {
-            [self.delegate updateScrollItems];
+    if (isShouldUpdateitem) {
+        isShouldUpdateitem = NO;
+        if (contentOffsetX > scrollView.contentSize.width +30) {
+            NSLog(@"should update interface");
+            if ([self.delegate respondsToSelector:@selector(updateScrollItems)]) {
+                [self.delegate updateScrollItems];
+            }
         }
+        [self performSelector:@selector(resetUpdateState) withObject:nil afterDelay:5];
     }
-
+   
 }
 
+-(void)resetUpdateState
+{
+    isShouldUpdateitem = YES;
+}
 @end

@@ -166,7 +166,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     for (int i = 0; i < [self.dataSource count]; i++) {
         NSDictionary * dic = [dataSource objectAtIndex:i];
         Commodity * info = [dic objectForKey:@"commodity"];
-        [productIdStoreArray addObject:info.product_id];
+        [productIdStoreArray addObject:info];
     }
     [HttpHelper getProductStoreWithProductId:productIdStoreArray withCompletedBlock:^(id item, NSError *error) {
         ;

@@ -20,7 +20,7 @@
     
     titleLable.textColor = [UIColor whiteColor];
     titleLable.font = [UIFont boldSystemFontOfSize:18];
-    titleLable.adjustsFontSizeToFitWidth = YES;
+//    titleLable.adjustsFontSizeToFitWidth = YES;
     titleLable.backgroundColor = [UIColor clearColor];
     [titleLable setText:title];
     UIBarButtonItem * titleItem = [[UIBarButtonItem alloc] initWithCustomView:titleLable];

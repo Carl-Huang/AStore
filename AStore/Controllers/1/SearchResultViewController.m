@@ -134,6 +134,7 @@
     NSString * priceStr = [NSString stringWithFormat:@"%0.1f",floatString];
 
     cell.priceLabel.text = priceStr;
+    [cell.titleLabel setAdjustsFontSizeToFitWidth:NO];
     cell.titleLabel.text = info.name;
     return cell;
 }

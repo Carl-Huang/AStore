@@ -843,7 +843,7 @@
         }
         
         TFHpple * xParse = [[TFHpple alloc] initWithHTMLData:htmlData];
-        NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"ArticleDetailsWrap\"]/p"];
+        NSArray * elements = [xParse searchWithXPathQuery:@"//div[@class=\"ArticleDetailsWrap\"]"];
         TFHppleElement * element = [elements objectAtIndex:0];
 
     
@@ -860,6 +860,9 @@
             
             return ;
         }
+        
+        //NSLog(@"%@",[element.children objectAtIndex:7]);
+        
         dispatch_async(dispatch_get_main_queue(), ^{
            block(element.raw,nil);
         });

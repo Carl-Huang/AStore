@@ -28,7 +28,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        _catalogArr = @[@"餐饮",@"娱乐",@"休闲",@"住宿",@"旅游",@"培训",@"快递",@"其他"];
+        _catalogArr = @[@"餐饮",@"娱乐",@"休闲",@"住宿",@"旅游",@"教育培训",@"快递",@"其他聚优惠"];
     }
     return self;
 }

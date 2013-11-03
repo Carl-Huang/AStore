@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setLeftTitle:titleStr];
+    [self setLeftTitle:@"详细内容"];
     [self setBackItem:nil];
     
     [self.adWebView loadHTMLString:contentStr baseURL:nil];

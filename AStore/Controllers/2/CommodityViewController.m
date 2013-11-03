@@ -256,7 +256,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
     
     NSLog(@"%s",__func__);
     //发送通知更新购车的BadgeView
-    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
     
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     NSInteger count = 1;
@@ -275,6 +274,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             }
         }
         if (canAddObj) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
             [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
         }
     }else

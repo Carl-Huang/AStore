@@ -24,6 +24,7 @@ static NSString * const selectKey = @"selectKey";
     NSInteger preSelectItem;
     NSInteger selectItem;
     NSMutableDictionary * selectItemsDic;
+    CGRect originRect;
 }
 @property (strong ,nonatomic)NSArray * dataSourece;
 
@@ -54,6 +55,7 @@ static NSString * const selectKey = @"selectKey";
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     [myDelegate showLoginViewOnView:self.view];
     selectItemsDic = [NSMutableDictionary dictionary];
+    originRect = CGRectZero;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -157,25 +159,38 @@ static NSString * const selectKey = @"selectKey";
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == [self.dataSourece count]-1) {
+        return 550;
+    }
     return 142;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     DeliveryCell * cell = [self.deliveryTable dequeueReusableCellWithIdentifier:cellIdentifier];
     DeliveryTypeInfo * info = [self.dataSourece objectAtIndex:indexPath.row];
     cell.timeToReach.text = info.dt_name;
-    cell.timeLimitation.text = [self html:info.detail TrimWhiteSpace:YES];
+    if (originRect.size.height == 0 ) {
+        originRect = cell.addressDescription.frame;
+    }
+    
+    cell.addressDescription.frame = originRect;
+    [cell.addressDescription loadHTMLString:info.detail baseURL:nil];
+    
     [cell.checkBtn addTarget:self action:@selector(checkBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     
     if ([[selectItemsDic objectForKey:[NSString stringWithFormat:@"%d",indexPath.row]] integerValue] == 1) {
         [cell.checkBtn setImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
-
     }else
     {
         [cell.checkBtn setImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal];
     }
-    
+    if (indexPath.row == [self.dataSourece count]-1) {
+        CGRect rect = cell.addressDescription.frame;
+        rect.size.height = 450;
+        cell.addressDescription.frame = rect;
+    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return  cell;
 

@@ -160,6 +160,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     }
     [self getUserDefaultAddress];
     isFirstConfigureCell = YES;
+    memoStr = nil;
     // Do any additional setup after loading the view from its nib.
 }
 

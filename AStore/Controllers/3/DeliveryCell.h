@@ -12,7 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *checkBtn;
 @property (weak, nonatomic) IBOutlet UILabel *timeToReach;
 @property (weak, nonatomic) IBOutlet UILabel *additionMoney;
-@property (weak, nonatomic) IBOutlet UILabel *timeLimitation;
+@property (weak, nonatomic) IBOutlet UIWebView * addressDescription;
 @property (weak, nonatomic) IBOutlet UILabel *awardMethod;
 
 @end

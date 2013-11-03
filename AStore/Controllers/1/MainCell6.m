@@ -25,11 +25,13 @@
         start = 11;
         count = 5;
         firstUpdate = YES;
+        isUpdatingItem = NO;
     }
 }
 
 -(void)updateScrollView
 {
+    start +=count;
     if (array) {
         [array removeAllObjects];
         array = nil;
@@ -49,7 +51,7 @@
             ACPItem *item = [[ACPItem alloc]initACPItem:image iconImage:nil andLabel:priceStr];
             [itemDic setObject:item forKey:[NSString stringWithFormat:@"%d",i]];
             if ([itemDic count] == [dataSource count]) {
-                
+                isUpdatingItem = NO;
                 if (firstUpdate) {
                     [self performSelectorOnMainThread:@selector(addPicToScrollView) withObject:nil waitUntilDone:NO];
                 }else
@@ -60,7 +62,8 @@
             }
             weakImageView = nil;
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            ;
+            start -=count;
+            isUpdatingItem = NO;
         }];
     }
 }
@@ -109,16 +112,20 @@
 -(void)updateScrollItems
 {
     NSLog(@"%s",__func__);
-    firstUpdate = NO;
-    __weak MainCell6 * weakSelf = self;
-    [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
-        if ([commoditys count]) {
-            [weakSelf.dataSource addObjectsFromArray:commoditys];
-            [weakSelf updateScrollView];
-
-        }
-    } withErrorBlock:^(NSError *error) {
-        NSLog(@"获取热门日用品失败 %@", [error description]);
-    }];
+    if (!isUpdatingItem) {
+        isUpdatingItem = YES;
+        firstUpdate = NO;
+        __weak MainCell6 * weakSelf = self;
+        [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+            if ([commoditys count]) {
+                [weakSelf.dataSource addObjectsFromArray:commoditys];
+                [weakSelf updateScrollView];
+                
+            }
+        } withErrorBlock:^(NSError *error) {
+            NSLog(@"获取热门日用品失败 %@", [error description]);
+        }];
+    }
+   
 }
 @end

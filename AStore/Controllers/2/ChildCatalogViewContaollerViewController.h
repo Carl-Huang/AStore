@@ -12,5 +12,6 @@
 @property (strong ,nonatomic) NSMutableArray  * dataSource;
 @property (strong ,nonatomic) NSString * cat_id;
 @property (strong ,nonatomic) NSString * cat_name;
+@property (strong, nonatomic) IBOutlet UITableView *catalogTableview;
 
 @end

@@ -193,20 +193,23 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    
     __weak ChildCatalogViewContaollerViewController * weakSelf= self;
     CGFloat offsetY=0.0;
     offsetY = scrollView.contentOffset.y;
     NSInteger contentHeight = scrollView.contentSize.height;
-    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height-20;
     
     if (offsetY >= boundary)
     {
         if (!isUpdateItem) {
             isUpdateItem = YES;
-            start +=count + 1;
-            count +=10;
+            start +=count;
+
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+            [myDelegate showLoginViewOnView:self.view];
             //执行再次加载新的数据
             [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
@@ -215,7 +218,11 @@ static NSString * cellIdentifier = @"cellIdentifier";
                     //                NSLog(@"%@",commoditys);
                 }
             } withErrorBlock:^(NSError *error) {
+                start -=count;
+                [myDelegate removeLoadingViewWithView:nil];
             }];
+            
+            
             [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
 
         }
@@ -225,5 +232,9 @@ static NSString * cellIdentifier = @"cellIdentifier";
 -(void)resetUpdateStatus
 {
     isUpdateItem = NO;
+}
+- (void)viewDidUnload {
+    [self setCatalogTableview:nil];
+    [super viewDidUnload];
 }
 @end

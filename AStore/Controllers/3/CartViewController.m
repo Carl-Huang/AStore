@@ -214,12 +214,14 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     //清理选中的商品或者
     for (int i = 0; i < [self.dataSource count];i++) {
         if ([[commodityDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
             [myDelegate.commodityArray removeObjectAtIndex:i];
             [commodityDicInfo setObject:[NSNumber numberWithBool:NO] forKey:[NSString stringWithFormat:@"%d",i+1]];
         }
     }
     for (int i = 0; i < [self.giftArray count];i++) {
         if ([[presentDicInfo objectForKey:[NSString stringWithFormat:@"%d",i+1]]boolValue]) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"minus"];
             [myDelegate.presentArray removeObjectAtIndex:i];
             [presentDicInfo setObject:[NSNumber numberWithBool:NO] forKey:[NSString stringWithFormat:@"%d",i+1]];
         }

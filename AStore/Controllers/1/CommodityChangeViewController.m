@@ -145,7 +145,7 @@
     viewController = nil;
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     __weak CommodityChangeViewController * weakSelf= self;
     CGFloat offsetY=0.0;
@@ -157,11 +157,14 @@
     {
         if (!isUpdateItem) {
             isUpdateItem = YES;
-            start +=count + 1;
-            count +=10;
+            start +=count;
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+            [myDelegate showLoginViewOnView:self.view];
             //执行再次加载新的数据
             [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
                 if (error) {
+                    start -=count;
+                    [myDelegate removeLoadingViewWithView:nil];
                     NSLog(@"%@",[error description]);
                 }else if([item count])
                 {

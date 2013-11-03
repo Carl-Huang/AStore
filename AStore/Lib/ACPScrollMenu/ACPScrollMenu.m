@@ -231,16 +231,16 @@ static CGFloat const kScrollViewItemMarginWidth = 10.0f;
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     CGFloat contentOffsetX = scrollView.contentOffset.x+scrollView.frame.size.width;
-    if (isShouldUpdateitem) {
-        isShouldUpdateitem = NO;
+//    if (isShouldUpdateitem) {
+//        isShouldUpdateitem = NO;
         if (contentOffsetX > scrollView.contentSize.width) {
             NSLog(@"should update interface");
             if ([self.delegate respondsToSelector:@selector(updateScrollItems)]) {
                 [self.delegate updateScrollItems];
             }
         }
-        [self performSelector:@selector(resetUpdateState) withObject:nil afterDelay:5];
-    }
+//        [self performSelector:@selector(resetUpdateState) withObject:nil afterDelay:5];
+//    }
    
 }
 

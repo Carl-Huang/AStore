@@ -147,7 +147,7 @@
     viewController = nil;
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     __weak YHJDetailViewController * weakSelf= self;
     CGFloat offsetY=0.0;
@@ -160,14 +160,17 @@
         if (!isUpdateItem) {
             isUpdateItem  = YES;
         }
-        start +=count + 1;
-        count +=10;
+        start +=count;
+        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        [myDelegate showLoginViewOnView:self.view];
+
         //执行再次加载新的数据
         [HttpHelper getCommodityWithSaleTab:self.title withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             [dataSource addObjectsFromArray:commoditys];
             [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             
         } withErrorBlock:^(NSError *error) {
+            start -=count;
             [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             NSLog(@"%@",[error description]);
         }];

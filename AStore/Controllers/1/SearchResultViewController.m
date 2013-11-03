@@ -154,7 +154,7 @@
     viewController = nil;
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     __weak SearchResultViewController * weakSelf= self;
     CGFloat offsetY=0.0;
@@ -167,14 +167,16 @@
        
         //执行再次加载新的数据
         if (!isUpdateItem) {
-            start +=count + 1;
-            count +=5;
+            start +=count;
             isUpdateItem = YES;
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+            [myDelegate showLoginViewOnView:self.view];
             [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 [dataSource addObjectsFromArray:commoditys];
                 [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
                 
             } withErrorBlock:^(NSError *error) {
+                start -=count;
                 [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
                 NSLog(@"%@",[error description]);
                 

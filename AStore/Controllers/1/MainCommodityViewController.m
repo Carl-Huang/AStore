@@ -15,7 +15,7 @@
 #import "AppDelegate.h"
 #import "CommodityViewController.h"
 static NSString * cellIdentifier = @"cellidentifier";
-@interface MainCommodityViewController ()
+@interface MainCommodityViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL isAlertViewCanShow;
     BOOL isUpdateItem;
@@ -145,7 +145,7 @@ static NSString * cellIdentifier = @"cellidentifier";
 
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     __weak MainCommodityViewController * weakSelf= self;
     CGFloat offsetY=0.0;
@@ -157,16 +157,18 @@ static NSString * cellIdentifier = @"cellidentifier";
     {
        
         if (!isUpdateItem) {
-            start +=count + 1;
-            count +=10;
+            start +=count ;
             isUpdateItem = YES;
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+            [myDelegate showLoginViewOnView:self.view];
             [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
                     [dataSource addObjectsFromArray:commoditys];
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
                 }
             } withErrorBlock:^(NSError *error) {
-                ;
+                start -=count;
+                [myDelegate removeLoadingViewWithView:nil];
             }];
              [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
         }

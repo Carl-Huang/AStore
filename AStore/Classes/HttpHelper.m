@@ -149,7 +149,7 @@
     NSString * component_3 = [NSString stringWithFormat:@"start=%d",start];
     NSString * compoment_4 = [NSString stringWithFormat:@"count=%d",count];
     NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3,compoment_4];
-
+    NSLog(@"%@",urlString);
     [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
 

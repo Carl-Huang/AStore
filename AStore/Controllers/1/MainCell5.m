@@ -26,12 +26,14 @@
         start = 11;
         count = 5;
         firstUpdate = YES;
+        isUpdatingItem = NO;
     }
     //更新滚动的界面
 }
 
 -(void)updateScrollView
 {
+    start +=count;
     if (array) {
         [array removeAllObjects];
         array = nil;
@@ -50,6 +52,7 @@
             ACPItem *item = [[ACPItem alloc]initACPItem:image iconImage:nil andLabel:priceStr];
             [itemDic setObject:item forKey:[NSString stringWithFormat:@"%d",i]];
             if ([itemDic count] == [dataSource count]) {
+                isUpdatingItem = NO;
                 if (firstUpdate) {
                     [self performSelectorOnMainThread:@selector(addPicToScrollView) withObject:nil waitUntilDone:NO];
                 }else
@@ -59,7 +62,8 @@
             
             }
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-            ;
+            start -=count;
+            isUpdatingItem = NO;
         }];
     }
 }
@@ -109,17 +113,21 @@
 -(void)updateScrollItems
 {
     NSLog(@"%s",__func__);
-    firstUpdate = NO;
-     __weak MainCell5 * weakSelf = self;
-    [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
-        if ([commoditys count]) {
-            [self.dataSource addObjectsFromArray:commoditys];
-            [weakSelf updateScrollView];
-        }
-        
-    } withErrorBlock:^(NSError *error) {
-        NSLog(@"获取热门食品失败 %@", [error description]);
-    }];
+    if (!isUpdatingItem) {
+        isUpdatingItem = YES;
+        firstUpdate = NO;
+        __weak MainCell5 * weakSelf = self;
+        [HttpHelper getCommodityWithCatalogTabID:15 withTagName:@"热门商品" withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+            if ([commoditys count]) {
+                [self.dataSource addObjectsFromArray:commoditys];
+                [weakSelf updateScrollView];
+            }
+            
+        } withErrorBlock:^(NSError *error) {
+            NSLog(@"获取热门食品失败 %@", [error description]);
+        }];
+
+    }
 }
 
 

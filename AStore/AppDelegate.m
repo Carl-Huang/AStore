@@ -159,11 +159,7 @@
 {
     NSString * objStr = (NSString *)notification.object;
     NSInteger  originBadgeNum = badgeView.badgeText.integerValue;
-    if (originBadgeNum == -1) {
-        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"CarViewProductCount"];
-
-        return;
-    }
+   
     NSString * badgeText = nil;
     if (objStr) {
         if ([objStr isEqualToString:@"minus"]) {
@@ -179,7 +175,11 @@
         [badgeView setHidden:NO];
     }else
         [badgeView setHidden:YES];
-    
+    if (originBadgeNum == -1) {
+        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"CarViewProductCount"];
+        
+        return;
+    }
     [[NSUserDefaults standardUserDefaults]setInteger:originBadgeNum forKey:@"CarViewProductCount"];
     [badgeView autoBadgeSizeWithString:badgeText];
 }

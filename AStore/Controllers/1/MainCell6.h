@@ -14,6 +14,7 @@ typedef void (^MainCell6Block) (id item);
     NSInteger start;
     NSInteger count;
     BOOL firstUpdate;
+    BOOL isUpdatingItem;
 }
 @property (weak, nonatomic) IBOutlet ACPScrollMenu *customiseScrollView;
 @property (strong ,nonatomic) NSMutableArray * dataSource;

@@ -279,6 +279,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         }
     }else
     {
+         [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
         [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
         [NSMutableArray archivingObjArray:myDelegate.commodityArray withKey:@"CommodityArray"];
     }

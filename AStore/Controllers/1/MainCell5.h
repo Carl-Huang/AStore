@@ -14,6 +14,7 @@ typedef void (^MainCell5Block) (id item);
     NSInteger start;
     NSInteger count;
     BOOL firstUpdate;
+    BOOL isUpdatingItem;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;

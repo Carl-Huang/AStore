@@ -561,7 +561,6 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         {
             orderCell.deliveryCost.text = @"2";
             deliveryCost =2;
-            giftSumMoney +=2;
             orderCell.totalMoney.text = [NSString stringWithFormat:@"%d",deliveryCost];
             orderCell.totalProductMoney.text = [NSString stringWithFormat:@"%0.1f",giftSumMoney];
             orderCell.getPoint.text = [NSString stringWithFormat:@"%d",totalPoint];

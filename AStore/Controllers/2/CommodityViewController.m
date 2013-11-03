@@ -218,8 +218,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
     {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"商品详情";
-//            cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"right"]];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            UIImageView * imageView= [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"箭头@2x"]];
+            [imageView setContentMode:UIViewContentModeScaleAspectFit];
+            [imageView setFrame:CGRectMake(245, 10, 13, 13)];
+            [cell.contentView addSubview:imageView];
+            
+//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else
         {
             [cell.textLabel setNumberOfLines:2];

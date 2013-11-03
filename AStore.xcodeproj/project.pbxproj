@@ -14,6 +14,8 @@
 		4E03EB801816823100D80E27 /* ProductStoreInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB7F1816823100D80E27 /* ProductStoreInfo.m */; };
 		4E03EB831816825D00D80E27 /* GiftStoreInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB821816825D00D80E27 /* GiftStoreInfo.m */; };
 		4E03EB861816839300D80E27 /* DeliveryTypeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */; };
+		4E0455781826900D00FA3BD4 /* 箭头.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E0455771826900D00FA3BD4 /* 箭头.png */; };
+		4E04557A1826901500FA3BD4 /* 箭头@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E0455791826901500FA3BD4 /* 箭头@2x.png */; };
 		4E06566418156FFD00AB6216 /* GetOrderGoodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */; };
 		4E0656671815722800AB6216 /* GetOrderGiftInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0656661815722700AB6216 /* GetOrderGiftInfo.m */; };
 		4E0AD0BF1824AC030057C84E /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0AD0BE1824AC030057C84E /* CustomBadge.m */; };
@@ -290,6 +292,8 @@
 		4E03EB821816825D00D80E27 /* GiftStoreInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftStoreInfo.m; sourceTree = "<group>"; };
 		4E03EB841816839200D80E27 /* DeliveryTypeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeliveryTypeInfo.h; sourceTree = "<group>"; };
 		4E03EB851816839300D80E27 /* DeliveryTypeInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeliveryTypeInfo.m; sourceTree = "<group>"; };
+		4E0455771826900D00FA3BD4 /* 箭头.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "箭头.png"; sourceTree = "<group>"; };
+		4E0455791826901500FA3BD4 /* 箭头@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "箭头@2x.png"; sourceTree = "<group>"; };
 		4E06566218156FFD00AB6216 /* GetOrderGoodInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGoodInfo.h; sourceTree = "<group>"; };
 		4E06566318156FFD00AB6216 /* GetOrderGoodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrderGoodInfo.m; sourceTree = "<group>"; };
 		4E0656651815722700AB6216 /* GetOrderGiftInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrderGiftInfo.h; sourceTree = "<group>"; };
@@ -950,6 +954,7 @@
 		C3C9991517F2CDC500043727 /* 1x */ = {
 			isa = PBXGroup;
 			children = (
+				4E0455771826900D00FA3BD4 /* 箭头.png */,
 				C37E1D6617FEA968000E1100 /* 单选btn-n.png */,
 				C37E1D6717FEA968000E1100 /* 单选btn-s.png */,
 				C32B1BB817F405F50089D6CC /* 个人中心icon-n.png */,
@@ -1004,6 +1009,7 @@
 		C3C9994117F2CDC600043727 /* 2x */ = {
 			isa = PBXGroup;
 			children = (
+				4E0455791826901500FA3BD4 /* 箭头@2x.png */,
 				4EB1B64A18254C5B004B5A0B /* right.png */,
 				C37E1D6A17FEA97E000E1100 /* 单选btn-n@2x.png */,
 				C37E1D6B17FEA97E000E1100 /* 单选btn-s@2x.png */,
@@ -1458,6 +1464,8 @@
 				C3F6F0E81821413900726F2A /* Default@2x.png in Resources */,
 				C3F6F0EA1821413D00726F2A /* Default-568h@2x.png in Resources */,
 				4EB1B64B18254C5B004B5A0B /* right.png in Resources */,
+				4E0455781826900D00FA3BD4 /* 箭头.png in Resources */,
+				4E04557A1826901500FA3BD4 /* 箭头@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -220,7 +220,9 @@
         cell.orderStatus.text       = statusStr;
         cell.commodityName.text     = orderInfo.tostr;
         
-        strFloat = orderInfo.final_amount.floatValue;
+        //总金额
+        cell.sum.text = @"总金额:";
+        strFloat = orderInfo.cost_item.floatValue;
         formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
         cell.totalMoney.text = formatStr;
         
@@ -239,8 +241,12 @@
         strFloat = orderInfo.cost_item.floatValue;
         formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
        
+        //商品总额
+        strFloat = orderInfo.final_amount.floatValue;
+        formatStr = [NSString stringWithFormat:@"￥%0.1f",strFloat];
         cell.commodityMoneySum.text = formatStr;
-        cell.sum.text = @"总金额:";
+        
+        
         cell.deliveryTime.text = orderInfo.shipping;
     }else if(indexPath.section == 1)
     {

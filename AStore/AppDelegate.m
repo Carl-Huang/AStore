@@ -32,7 +32,14 @@
     NSString  *originBadgeViewText = [NSString stringWithFormat:@"%d",count];
 
     badgeView = [CustomBadge customBadgeWithString:originBadgeViewText];
-    [badgeView setFrame:CGRectMake(210, 415, 25, 25)];
+    if(IS_SCREEN_4_INCH)
+    {
+       [badgeView setFrame:CGRectMake(210, 503, 25, 25)];
+    }else
+    {
+       [badgeView setFrame:CGRectMake(210, 415, 25, 25)]; 
+    }
+    
     if (count == 0) {
         [badgeView setHidden:YES];
     }else

@@ -45,7 +45,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     float commoditySumMoney;
     float giftSumMoney;
     NSMutableArray * productIdStoreArray;
+    NSMutableArray * productStoreArray;
     NSMutableArray * giftIdStoreArray;
+    NSMutableArray * giftStoreArray;
 }
 @property (strong ,nonatomic)NSArray * dataSource;
 @property (strong ,nonatomic)NSArray * giftArray;
@@ -174,10 +176,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             NSLog(@"%@",[error description]);
             return ;
         }
-        [productIdStoreArray removeAllObjects];
-        productIdStoreArray =item;
-        if ([productIdStoreArray count]) {
-            for (ProductStoreInfo * info in productIdStoreArray) {
+//        [productIdStoreArray removeAllObjects];
+        productStoreArray =item;
+        if ([productStoreArray count]) {
+            for (ProductStoreInfo * info in productStoreArray) {
                 NSLog(@"%@: %@",info.product_id,info.store);
             }
         }
@@ -188,7 +190,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     for (int i = 0; i < [self.giftArray count]; i++) {
         NSDictionary * dic = [giftArray objectAtIndex:i];
         GetGiftInfo * info = [dic objectForKey:@"present"];
-        [giftIdStoreArray addObject:info.point];
+        [giftIdStoreArray addObject:info.gift_id];
     }
     [HttpHelper getGiftStoreWithGiftId:giftIdStoreArray withCompletedBlock:^(id item, NSError *error) {
         ;
@@ -196,10 +198,10 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             NSLog(@"%@",[error description]);
             return ;
         }
-        [giftIdStoreArray removeAllObjects];
-        giftIdStoreArray =item;
-        if ([giftIdStoreArray count]) {
-            for (GiftStoreInfo * info in giftIdStoreArray) {
+//        [giftIdStoreArray removeAllObjects];
+        giftStoreArray =item;
+        if ([giftStoreArray count]) {
+            for (GiftStoreInfo * info in giftStoreArray) {
                 NSLog(@"%@: %@",info.gift_id,info.storage);
             }
         }
@@ -692,7 +694,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             }else
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
-                for (ProductStoreInfo * storeInfo in productIdStoreArray) {
+                for (ProductStoreInfo * storeInfo in productStoreArray) {
                     if ([storeInfo.product_id isEqualToString: info.product_id]) {
                         if (storeInfo.store.integerValue > num) {
                             num += 1;
@@ -746,7 +748,7 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             {
                 NSInteger  num = [[dic objectForKey:@"count"]integerValue];
                 //判断是否超过限量，或者超过对应赠品的库存量
-                for (GiftStoreInfo *storeInfo in giftIdStoreArray) {
+                for (GiftStoreInfo *storeInfo in giftStoreArray) {
                     if ([storeInfo.gift_id isEqualToString: info.gift_id]) {
                         if (storeInfo.storage.integerValue <= num) {
                             [self showAlertViewWithTitle:@"提示" message:@"库存量不足"];

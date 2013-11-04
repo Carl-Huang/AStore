@@ -362,6 +362,9 @@
     MainCell3ConfigureBlock block = ^(id item)
     {
         NSString * titleStr = (NSString * )item;
+        if ([titleStr isEqualToString:@"清仓特卖"]) {
+            titleStr = @"清仓";
+        }
         NSLog(@"%@",titleStr);
         MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
         [viewController setTitleStr:titleStr];
@@ -378,6 +381,10 @@
     MainCell3ConfigureBlock block = ^(id item)
     {
         NSString * titleStr = (NSString * )item;
+        if ([titleStr isEqualToString:@"清仓特卖"]) {
+            titleStr = @"清仓";
+        }
+
         NSLog(@"%@",titleStr);
         MainCommodityViewController * viewController = [[MainCommodityViewController alloc]initWithNibName:@"MainCommodityViewController" bundle:nil];
         [viewController setTitleStr:titleStr];

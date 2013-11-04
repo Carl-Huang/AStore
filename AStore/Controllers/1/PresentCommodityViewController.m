@@ -20,6 +20,7 @@
 #import "PresentCommodityDesViewController.h"
 #import "NSMutableArray+SaveCustomiseData.h"
 #import "ConfirmOrderViewController.h"
+#import "GiftStoreInfo.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -337,52 +338,97 @@ static NSString * cellIdentifier = @"cellIdentifier";
 }
 - (IBAction)putInCarAction:(id)sender {
     NSLog(@"%s",__func__);
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
-    
-    NSInteger count = 1;
-    BOOL canAddObj = YES;
-    if ([myDelegate.presentArray count] != 0) {
-        for (int i = 0; i<[myDelegate.presentArray count] ;i++) {
-            NSMutableDictionary * infoDic = [[myDelegate.presentArray objectAtIndex:i]mutableCopy];
-            
-            GetGiftInfo * info = [infoDic objectForKey:@"present"];
-            if ([info.gift_id isEqualToString:self.comodityInfo.gift_id]) {
-                count = [[infoDic objectForKey:@"count"]integerValue];
-                count ++;
-                infoDic[@"count"] = [NSNumber numberWithInteger:count];
-                [myDelegate.presentArray replaceObjectAtIndex:i withObject:infoDic];
-                canAddObj = NO;
+    //判断时候有库存
+    [HttpHelper getGiftStoreWithGiftId:@[self.comodityInfo.gift_id] withCompletedBlock:^(id item, NSError *error) {
+        if (error) {
+            NSLog(@"%@",[error description]);
+        }
+        NSArray *array = item;
+        if ([array count]) {
+            for (GiftStoreInfo * info in item) {
+                NSLog(@"%@",info.storage);
+                if (info.storage.integerValue > 0) {
+                    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+                    
+                    NSInteger count = 1;
+                    BOOL canAddObj = YES;
+                    if ([myDelegate.presentArray count] != 0) {
+                        for (int i = 0; i<[myDelegate.presentArray count] ;i++) {
+                            NSMutableDictionary * infoDic = [[myDelegate.presentArray objectAtIndex:i]mutableCopy];
+                            
+                            GetGiftInfo * info = [infoDic objectForKey:@"present"];
+                            if ([info.gift_id isEqualToString:self.comodityInfo.gift_id]) {
+                                count = [[infoDic objectForKey:@"count"]integerValue];
+                                count ++;
+                                infoDic[@"count"] = [NSNumber numberWithInteger:count];
+                                [myDelegate.presentArray replaceObjectAtIndex:i withObject:infoDic];
+                                canAddObj = NO;
+                            }
+                        }
+                        if (canAddObj) {
+                            [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
+                        }
+                    }else
+                    {
+                        [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
+                        [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
+                    }
+                    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"加入购物车成功，去结算？" delegate:self cancelButtonTitle:@"马上" otherButtonTitles:@"再逛逛", nil];
+                    carAlerView.tag = PutInCarViewAlerViewTag;
+                    [carAlerView show];
+                    carAlerView = nil;
+                }else
+                {
+                    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"库存不足，加入购物车失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [carAlerView show];
+                    carAlerView = nil;
+                }
             }
+        }else{
+            UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"操作失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [carAlerView show];
+            carAlerView = nil;
+
         }
-        if (canAddObj) {
-            [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
-        }
-    }else
-    {
-        [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
-        [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
-    }
-    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"加入购物车成功，去结算？" delegate:self cancelButtonTitle:@"马上" otherButtonTitles:@"再逛逛", nil];
-    carAlerView.tag = PutInCarViewAlerViewTag;
-    [carAlerView show];
-    carAlerView = nil;
+    }];
+    
+   
 
 
 }
 
 - (IBAction)exchangeImmediately:(id)sender {
     if ([User isLogin]) {
-        //清空购物车信息
-        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-        NSInteger point = comodityInfo.point.integerValue;
-        [viewController setCommoditySumMoney:0];
-        [viewController setGiftSumMoney:point];
         
-        [self.navigationController pushViewController:viewController animated:YES];
-        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
-        viewController = nil;
+        [HttpHelper getGiftStoreWithGiftId:@[self.comodityInfo.gift_id] withCompletedBlock:^(id item, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error description]);
+            }
+            NSArray *array = item;
+            if ([array count]) {
+                for (GiftStoreInfo * info in item) {
+                    NSLog(@"%@",info.storage);
+                    if (info.storage.integerValue > 0) {
+                        ConfirmOrderViewController *viewController = [[ConfirmOrderViewController alloc]initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+                        NSInteger point = comodityInfo.point.integerValue;
+                        [viewController setCommoditySumMoney:0];
+                        [viewController setGiftSumMoney:point];
+                        
+                        [self.navigationController pushViewController:viewController animated:YES];
+                        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                        myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+                        viewController = nil;
+                    }else
+                    {
+                        UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"库存不足，提交订单失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [carAlerView show];
+                        carAlerView = nil;
+                    }
+                }
+            }
+        }];
+       
     }else
     {
         prompt = [[UIAlertView alloc] initWithTitle:@"请先登陆"

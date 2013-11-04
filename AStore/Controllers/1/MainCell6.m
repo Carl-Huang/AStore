@@ -31,7 +31,7 @@
 
 -(void)updateScrollView
 {
-    start +=count;
+    
     if (array) {
         [array removeAllObjects];
         array = nil;
@@ -115,8 +115,9 @@
     if (!isUpdatingItem) {
         isUpdatingItem = YES;
         firstUpdate = NO;
+        start +=count;
         __weak MainCell6 * weakSelf = self;
-        [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:0 withCount:10 withSuccessBlock:^(NSArray *commoditys) {
+        [HttpHelper getCommodityWithCatalogTabID:57 withTagName:@"热门商品" withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             if ([commoditys count]) {
                 [weakSelf.dataSource addObjectsFromArray:commoditys];
                 [weakSelf updateScrollView];

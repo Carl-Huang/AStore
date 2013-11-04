@@ -312,12 +312,6 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
     [myDelegate removeLoadingViewWithView:nil];
     //清除提交的赠品
     for (NSDictionary * dic in myDelegate.buiedPresentArray) {
-        if ([myDelegate.presentArray containsObject:dic]) {
-            [myDelegate.presentArray removeObject:dic];
-        }
-        
-    }
-    for (NSDictionary * dic in myDelegate.buiedPresentArray) {
         GetGiftInfo * removePresentObj = dic[@"present"];
         for (int i = 0;i <[myDelegate.presentArray count]; i++) {
             NSDictionary *presentDic = [myDelegate.presentArray objectAtIndex:i];

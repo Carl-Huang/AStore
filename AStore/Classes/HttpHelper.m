@@ -189,8 +189,6 @@
     NSLog(@"URL:%@",urlString);
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //        NSLog(@"%@",responseObject);
-        
         if(success)
         {
             success([HttpHelper mapModelProcess:responseObject withClass:[Commodity class]]);
@@ -281,7 +279,7 @@
             objc_property_t property = properties[i];
             NSString * propertyName = [NSString stringWithUTF8String:property_getName(property)];
             [model setValue:[info objectForKey:propertyName] forKeyPath:propertyName];
-             NSLog(@"%@:%@",propertyName,[model valueForKeyPath:propertyName]);
+//             NSLog(@"%@:%@",propertyName,[model valueForKeyPath:propertyName]);
         }
         [models addObject:model];
     }

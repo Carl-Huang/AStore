@@ -211,7 +211,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
             [myDelegate showLoginViewOnView:self.view];
             //执行再次加载新的数据
-            [HttpHelper getCommodityWithSaleTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
+            [HttpHelper getCommodityWithTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
                     [dataSource addObjectsFromArray:commoditys];
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];

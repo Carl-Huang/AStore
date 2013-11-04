@@ -345,11 +345,25 @@ static NSString * cellIdentifier = @"cellIdentifier";
         }
         NSArray *array = item;
         if ([array count]) {
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
             for (GiftStoreInfo * info in item) {
                 NSLog(@"%@",info.storage);
-                if (info.storage.integerValue > 0) {
-                    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-                    [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+                
+                
+                //判断是否超过限额和库存
+                BOOL isReachtStoreNum = YES;
+                if ([myDelegate.presentArray count]) {
+                    for (NSDictionary * dic in myDelegate.presentArray) {
+                        GetGiftInfo * presentInfo = dic[@"present"];
+                        if ([presentInfo.gift_id isEqualToString:self.comodityInfo.gift_id]) {
+                            if (info.storage.integerValue <= [dic[@"count"]integerValue]||presentInfo.limit_num.integerValue <=[dic[@"count"]integerValue]) {
+                                isReachtStoreNum  = NO;
+                            }
+                        }
+                    }
+
+                }
+                if (info.storage.integerValue > 0&&isReachtStoreNum) {
                     
                     NSInteger count = 1;
                     BOOL canAddObj = YES;
@@ -367,10 +381,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
                             }
                         }
                         if (canAddObj) {
+//                             [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
                             [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
                         }
                     }else
                     {
+                         [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
                         [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:1]}];
                         [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
                     }

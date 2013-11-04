@@ -260,19 +260,31 @@ static NSString * cellIdentifier = @"cellIdentifier";
 - (IBAction)putInCartAction:(id)sender {
     
     NSLog(@"%s",__func__);
-    //增加判断时候有库存
+    
     [HttpHelper getProductStoreWithProductId:@[self.comodityInfo.product_id] withCompletedBlock:^(id item, NSError *error) {
         if (error) {
             NSLog(@"%@",[error description]);
         }
         NSArray *array = item;
         if ([array count]) {
-            for (ProductStoreInfo * info in item) {
+            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                for (ProductStoreInfo * info in item) {
                 NSLog(@"%@",info.store);
-                if (info.store.integerValue >0) {
+                //判断是否超过库存
+                BOOL isReachtStoreNum = YES;
+                if ([myDelegate.commodityArray count]) {
+                    for (NSDictionary * dic in myDelegate.commodityArray) {
+                        Commodity * commodityInfo = dic[@"commodity"];
+                        if ([commodityInfo.product_id isEqualToString:self.comodityInfo.product_id]) {
+                            if (info.store.integerValue <= [dic[@"count"]integerValue]) {
+                                isReachtStoreNum  = NO;
+                            }
+                        }
+                    }
+                }
+                  
+                if (info.store.integerValue >0 && isReachtStoreNum) {
                     NSLog(@"成功加入购物车");
-                    
-                    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
                     NSInteger count = 1;
                     BOOL canAddObj = YES;
                     if ([myDelegate.commodityArray count] != 0) {
@@ -289,7 +301,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                             }
                         }
                         if (canAddObj) {
-                            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+//                            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
                             [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
                         }
                     }else

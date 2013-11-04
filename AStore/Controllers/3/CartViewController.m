@@ -176,7 +176,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
             NSLog(@"%@",[error description]);
             return ;
         }
-//        [productIdStoreArray removeAllObjects];
         productStoreArray =item;
         if ([productStoreArray count]) {
             for (ProductStoreInfo * info in productStoreArray) {

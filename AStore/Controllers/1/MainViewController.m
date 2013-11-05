@@ -43,6 +43,7 @@
     BOOL isFetchStuffDataSuccess;
     NSMutableArray * imagesArray;
     CustomScrollView * scrollView;
+    NSInteger imageCouont;
 }
 @end
 
@@ -67,6 +68,7 @@
         NSLog(@"%@",items);
 
         if ([items count]) {
+            imageCouont = [items count];
             for (NSDictionary *dic in items) {
                 UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
                 NSURL *url = [NSURL URLWithString:[dic objectForKey:@"image"]];
@@ -131,20 +133,23 @@
 -(void)configureImagesArrayWithObj:(NSDictionary *)dic
 {
     [imagesArray addObject:dic];
-    NSMutableArray * tempArray = [NSMutableArray array];
-    for (int i = 0 ;i < [imagesArray count];i++) {
-        NSDictionary *dic = [imagesArray objectAtIndex:i];
-        UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
-        [imageview addGestureRecognizer:tapGesture];
-        imageview.userInteractionEnabled = YES;
-        imageview.tag = i;
-        [tempArray addObject:imageview];
+    if ([imagesArray count] == imageCouont) {
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (int i = 0 ;i < [imagesArray count];i++) {
+            NSDictionary *dic = [imagesArray objectAtIndex:i];
+            UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
+            [imageview addGestureRecognizer:tapGesture];
+            imageview.userInteractionEnabled = YES;
+            imageview.tag = i;
+            [tempArray addObject:imageview];
+        }
+        
+        scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
+        
+        [self.tableView reloadData];
     }
-
-    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
-
-    [self.tableView reloadData];
+   
 }
 
 -(void)pushToAdViewcontroller:(UIGestureRecognizer *)recon

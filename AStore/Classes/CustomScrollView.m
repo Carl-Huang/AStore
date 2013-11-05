@@ -13,6 +13,8 @@
 {
     UIScrollView *_scrollView;
     UIPageControl *_pageControl;
+    int viewCount;
+    CGRect rect;
 }
 
 @end
@@ -26,30 +28,31 @@
     
     if(self)
     {
+        rect = frame;
+        // 定时器 循环
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
+        
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width)];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
-        int viewCount = 0;
+        viewCount = 0;
         if(views != nil)
         {
             viewCount = [views count];
         }
 
         
-        for(int i = 0; i < viewCount; i++)
-        {
-            UIView *view = [views objectAtIndex:i];
-            view.frame = CGRectMake(i * frame.size.width, 0, frame.size.width, frame.size.height);
-            [_scrollView addSubview:view];
-
-        }
+//        for(int i = 0; i < viewCount; i++)
+//        {
+//            UIView *view = [views objectAtIndex:i];
+//            view.frame = CGRectMake(i * frame.size.width, 0, frame.size.width, frame.size.height);
+//            [_scrollView addSubview:view];
+//
+//        }
         
         _scrollView.contentSize = CGSizeMake(viewCount * frame.size.width, frame.size.height);
-        
         [self addSubview:_scrollView];
-        
-        
         int pageControlWidth = viewCount * 20;
         int pageControlHeight = 30;
         
@@ -58,29 +61,23 @@
         _pageControl.numberOfPages = viewCount;
         _pageControl.currentPage = 0;
         
-        [_pageControl addTarget:self action:@selector(pageTurn:) forControlEvents:UIControlEventValueChanged];
+        [_pageControl addTarget:self action:@selector(turnPage) forControlEvents:UIControlEventValueChanged];
         [self addSubview:_pageControl];
- 
+        
+        UIImageView *imageView = [views objectAtIndex:([views count]-1)];
+        imageView.frame = CGRectMake(0, 0, 320, rect.size.height); 
+        [_scrollView addSubview:imageView];
+        imageView = [views objectAtIndex:0];
+        imageView.frame = CGRectMake((320 * ([views count]-1)) , 0, 320,  rect.size.height); 
+        [_scrollView addSubview:imageView];
+        
+        [_scrollView setContentSize:CGSizeMake(320 * ([views count] + 2),   rect.size.height)];
+        [_scrollView setContentOffset:CGPointMake(0, 0)];
+        [_scrollView scrollRectToVisible:CGRectMake(0,0,320, rect.size.height) animated:NO];
     }
-    
-    
-    
     return self;
 }
 
-
-
-
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 
 -(void)pageTurn:(UIPageControl *)sender
@@ -93,26 +90,39 @@
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    
+//    for (UIView *view in [_scrollView subviews]) {
+//        view.userInteractionEnabled = NO;
+//    }
+//}
+//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    CGPoint offSet = _scrollView.contentOffset;
+//    CGRect bounds = _scrollView.frame;
+//    int currentPage = offSet.x / bounds.size.width;
+//    _pageControl.currentPage = currentPage;
+//    for (UIView *view in [_scrollView subviews]) {
+//        view.userInteractionEnabled = YES;
+//    }
+//    
+//    
+//}
+
+
+- (void)turnPage
 {
-    
-    for (UIView *view in [_scrollView subviews]) {
-        view.userInteractionEnabled = NO;
-    }
+    int page = _pageControl.currentPage; 
+    [_scrollView scrollRectToVisible:CGRectMake(320*(page),0,320, rect.size.height) animated:NO];
 }
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+
+- (void)runTimePage
 {
-    CGPoint offSet = _scrollView.contentOffset;
-    CGRect bounds = _scrollView.frame;
-    int currentPage = offSet.x / bounds.size.width;
-    _pageControl.currentPage = currentPage;
-    for (UIView *view in [_scrollView subviews]) {
-        view.userInteractionEnabled = YES;
-    }
-    
-    
+    int page = _pageControl.currentPage; 
+    page++;
+    page = page > viewCount-1 ? 0 : page ;
+    _pageControl.currentPage = page;
+    [self turnPage];
 }
-
-
-
 @end

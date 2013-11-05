@@ -637,7 +637,9 @@
           withCompletedBlock:(void (^)(id item,NSError * error))block
 {
     NSDictionary *userInfo = [User getUserInfo];
-    
+    if (memo == nil) {
+        memo =@"   ";
+    }
     NSString * cmdStr1 = [NSString stringWithFormat:@"addOrders_2=1&&member_id=%@&&shipping=%@&&weight=%@&&tostr=%@&&itemnum=%@&&ship_name=%@&&ship_area=%@&&ship_addr=%@&&ship_time=%@&&ship_mobile=%@&&tel=%@&&ost_item=%@&&cost_freight=%@&&score_u=%@&&score_g=%@&&total_amount=%@&&memo=%@",
                           [userInfo objectForKey:DMemberId],
                           deliveryType.dt_name,

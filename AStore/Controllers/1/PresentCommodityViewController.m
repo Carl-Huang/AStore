@@ -381,7 +381,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                             }
                         }
                         if (canAddObj) {
-//                             [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+                             [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
                             [myDelegate.presentArray addObject:@{@"present": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
                         }
                     }else
@@ -396,7 +396,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                     carAlerView = nil;
                 }else
                 {
-                    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"库存不足，加入购物车失败" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    UIAlertView * carAlerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"库存不足或超出兑换限额，加入购物车失败。" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                     [carAlerView show];
                     carAlerView = nil;
                 }
@@ -433,6 +433,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                         
                         [self.navigationController pushViewController:viewController animated:YES];
                         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                        myDelegate.buiedPresentArray = nil;
                         myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
                         viewController = nil;
                     }else
@@ -480,6 +481,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedPresentArray = nil;
         myDelegate.buiedPresentArray = @[@{@"present": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
         viewController = nil;
     }else

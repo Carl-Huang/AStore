@@ -301,7 +301,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
                             }
                         }
                         if (canAddObj) {
-//                            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
+                            [[NSNotificationCenter defaultCenter]postNotificationName:UpdateBadgeViewTitle object:@"puls"];
                             [myDelegate.commodityArray addObject:@{@"commodity": self.comodityInfo,@"count":[NSNumber numberWithInteger:count]}];
                         }
                     }else
@@ -354,10 +354,10 @@ static NSString * cellIdentifier = @"cellIdentifier";
                         float money = comodityInfo.price.floatValue;
                         [viewController setCommoditySumMoney:money];
                         [viewController setGiftSumMoney:0];
-                        
-                        [self.navigationController pushViewController:viewController animated:YES];
                         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+                        myDelegate.buiedCommodityArray = nil;
                         myDelegate.buiedCommodityArray = @[@{@"commodity": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
+                        [self.navigationController pushViewController:viewController animated:YES];
                         viewController = nil;
 
                     }else
@@ -469,6 +469,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         
         [self.navigationController pushViewController:viewController animated:YES];
         AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        myDelegate.buiedCommodityArray = nil;
         myDelegate.buiedCommodityArray = @[@{@"commodity": comodityInfo,@"count":[NSNumber numberWithInt:1]}];
         viewController = nil;
     }else

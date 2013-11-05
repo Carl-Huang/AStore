@@ -124,6 +124,8 @@
     isFetchStuffDataSuccess = NO;
     fetchDataThread = [[NSThread alloc]initWithTarget:self selector:@selector(fetchDataThreadMethod) object:nil];
     [fetchDataThread start];
+
+    
 }
 
 -(void)configureImagesArrayWithObj:(NSDictionary *)dic

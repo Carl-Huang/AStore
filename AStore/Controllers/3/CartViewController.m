@@ -99,11 +99,6 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
     presentDicInfo = [NSMutableDictionary dictionary];
     giftSumMoney = 0.0;
     commoditySumMoney = 0.0;
-    
-    AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
-    self.dataSource  = myDelegate.commodityArray;
-    self.giftArray = myDelegate.presentArray;
-    
   
     
     //注册一个通知，当商品，或赠品提交后更新tableivew 中cell的选中状态
@@ -139,7 +134,9 @@ static NSString * cellHeaderIdentifier = @"cartCellHeaderIdentifier";
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+     AppDelegate * myDelegate = (AppDelegate * )[[UIApplication sharedApplication]delegate];
+    self.dataSource  = myDelegate.commodityArray;
+    self.giftArray = myDelegate.presentArray;
     //获取商品,赠品 对应的库存量
     [self getStoreInfo];
     

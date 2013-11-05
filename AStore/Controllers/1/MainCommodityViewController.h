@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MBProgressHUD.h"
 @interface MainCommodityViewController : UIViewController
 @property (strong ,nonatomic) NSMutableArray  * dataSource;
 @property (strong ,nonatomic) NSString * titleStr;
 @property (strong ,nonatomic) NSString * tabId;
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
+@property (strong ,nonatomic)MBProgressHUD *loadingView;
 @end

@@ -49,13 +49,13 @@ static NSString * cellIdentifier = @"commodityListCell";
     [self.commodityListTable registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     // Do any additional setup after loading the view from its nib.
     
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    if (myDelegate.buiedCommodityArray) {
-        self.commoditiesArray = myDelegate.buiedCommodityArray;
-    }
-    if (myDelegate.buiedPresentArray) {
-        self.giftArray = myDelegate.buiedPresentArray;
-    }
+//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//    if (myDelegate.buiedCommodityArray) {
+//        self.commoditiesArray = myDelegate.buiedCommodityArray;
+//    }
+//    if (myDelegate.buiedPresentArray) {
+//        self.giftArray = myDelegate.buiedPresentArray;
+//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,11 +97,18 @@ static NSString * cellIdentifier = @"commodityListCell";
     UIView * headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
     [headerView setBackgroundColor:[UIColor clearColor]];
     
-    if (section == 0 ) {
-        label.text = @"购买的商品";
-    } else if(section == 1){
+    if ([commoditiesArray count]) {
+       label.text = @"购买的商品";
+    }else if([giftArray count])
+    {
         label.text = @"赠品";
     }
+
+//    if (section == 0 ) {
+//        label.text = @"购买的商品";
+//    } else if(section == 1){
+//        label.text = @"赠品";
+//    }
     [headerView addSubview:imageView];
     [headerView addSubview:label];
     imageView = nil;
@@ -112,17 +119,24 @@ static NSString * cellIdentifier = @"commodityListCell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
+//    if (section == 0) {
+//        return [commoditiesArray count];
+//    }else if(section == 1)
+//        return [giftArray count];
+    
+    if ([commoditiesArray count]) {
         return [commoditiesArray count];
-    }else if(section == 1)
+    }else if([giftArray count])
+    {
         return [giftArray count];
+    }
     return 1;
 }
 
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,7 +144,7 @@ static NSString * cellIdentifier = @"commodityListCell";
     CommodityListCell *cell = nil;
     cell = [self.commodityListTable dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if (indexPath.section == 0) {
+    if ([commoditiesArray count]) {
         NSDictionary * dic = [self.commoditiesArray objectAtIndex:indexPath.row];
         Commodity * info = [dic objectForKey:@"commodity"];
         cell.productName.text = info.name;
@@ -149,7 +163,7 @@ static NSString * cellIdentifier = @"commodityListCell";
         }];
         
         cell.productQuantity.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"count"]];
-    }else if(indexPath.section == 1)
+    }else if([giftArray count])
     {
         NSDictionary * dic = [self.giftArray objectAtIndex:indexPath.row];
         GetGiftInfo * info = [dic objectForKey:@"present"];

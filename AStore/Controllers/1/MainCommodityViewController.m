@@ -28,6 +28,8 @@ static NSString * cellIdentifier = @"cellidentifier";
 @synthesize dataSource;
 @synthesize titleStr;
 @synthesize tabId;
+@synthesize loadingView;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,10 +48,21 @@ static NSString * cellIdentifier = @"cellidentifier";
     UINib *cellNib = [UINib nibWithNibName:@"ChildCatalogInfoCell" bundle:[NSBundle bundleForClass:[ChildCatalogInfoCell class]]];
     [self.tableview registerNib:cellNib forCellReuseIdentifier:cellIdentifier];
     
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate  showLoginViewOnView:self.view];
+//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//    [myDelegate  showLoginViewOnView:self.view];
     dataSource = [NSMutableArray array];
     isUpdateItem = NO;
+    
+    
+    loadingView = [[MBProgressHUD alloc]initWithView:self.view];
+    loadingView.dimBackground = YES;
+    loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    loadingView.labelText = @"正在加载...";
+    [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
+    loadingView.taskInProgress = YES;
+    [self.view addSubview:loadingView];
+    [loadingView hide:NO];
+    [loadingView show:YES];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -67,7 +80,7 @@ static NSString * cellIdentifier = @"cellidentifier";
 -(void)viewWillAppear:(BOOL)animated
 {
     start = 0;
-    count = 5;
+    count = 10;
     if ([dataSource count]==0) {
         [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             if ([commoditys count]) {
@@ -82,8 +95,11 @@ static NSString * cellIdentifier = @"cellidentifier";
 
 -(void)refreshTableView
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate  removeLoadingViewWithView:nil];
+    [loadingView show:NO];
+    [loadingView hide:YES];
+
+//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//    [myDelegate  removeLoadingViewWithView:nil];
 
     [self.tableview reloadData];
 }
@@ -145,13 +161,13 @@ static NSString * cellIdentifier = @"cellidentifier";
 
 }
 
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     __weak MainCommodityViewController * weakSelf= self;
     CGFloat offsetY=0.0;
     offsetY = scrollView.contentOffset.y;
     NSInteger contentHeight = scrollView.contentSize.height;
-    NSInteger boundary =  contentHeight - scrollView.frame.size.height/1.2;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height;
     
     if (offsetY >= boundary)
     {
@@ -159,18 +175,21 @@ static NSString * cellIdentifier = @"cellidentifier";
         if (!isUpdateItem) {
             start +=count ;
             isUpdateItem = YES;
-            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-            [myDelegate showLoginViewOnView:self.view];
+            [loadingView hide:NO];
+            [loadingView show:YES];
             [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
                     [dataSource addObjectsFromArray:commoditys];
+                    isUpdateItem = NO;
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
                 }
             } withErrorBlock:^(NSError *error) {
                 start -=count;
-                [myDelegate removeLoadingViewWithView:nil];
+                isUpdateItem = NO;
+                 [loadingView show:NO];
+                [loadingView hide:YES];
             }];
-             [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:5.0];
+             
         }
         //执行再次加载新的数据
     }

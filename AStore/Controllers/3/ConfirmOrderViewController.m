@@ -406,6 +406,14 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 -(void)pushCommodityListViewcontroller
 {
     CommodityListViewController * viewcontroller = [[CommodityListViewController alloc]initWithNibName:@"CommodityListViewController" bundle:nil];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+
+    if (giftSumMoney != 0) {
+        [viewcontroller setGiftArray:myDelegate.buiedPresentArray];
+    }else if (commoditySumMoney != 0)
+    {
+        [viewcontroller setCommoditiesArray:myDelegate.buiedCommodityArray];
+    }
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller = nil;
 }

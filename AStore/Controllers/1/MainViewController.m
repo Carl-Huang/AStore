@@ -21,7 +21,6 @@
 #import "CommodityChangeViewController.h"
 #import "TZMarketViewController.h"
 #import "SearchResultViewController.h"
-#import "CustomScrollView.h"
 #import "MainCell2.h"
 #import "MainCell3.h"
 #import "MainCell4.h"
@@ -33,7 +32,8 @@
 #import "CommodityViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "AdViewController.h"
-@interface MainViewController ()<UITextFieldDelegate>
+#import "CycleScrollView.h"
+@interface MainViewController ()<UITextFieldDelegate,CycleScrollViewDelegate>
 {
     UITextField * searchField;
     NSArray * recommandFootData;
@@ -42,7 +42,7 @@
     BOOL isFetchFoodDataSuccess;
     BOOL isFetchStuffDataSuccess;
     NSMutableArray * imagesArray;
-    CustomScrollView * scrollView;
+    CycleScrollView * scrollView;
     NSInteger imageCouont;
 }
 @end
@@ -142,15 +142,18 @@
             [imageview addGestureRecognizer:tapGesture];
             imageview.userInteractionEnabled = YES;
             imageview.tag = i;
-            [tempArray addObject:imageview];
+            [tempArray addObject:dic[@"FecthImage"]];
         }
-        
-        scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
-        
+
+        scrollView = [[CycleScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)
+                                                         cycleDirection:CycleDirectionLandscape
+                                                               pictures:tempArray autoScroll:YES];
+        scrollView.delegate = self;
         [self.tableView reloadData];
     }
    
 }
+
 
 -(void)pushToAdViewcontroller:(UIGestureRecognizer *)recon
 {
@@ -462,7 +465,17 @@
     }
 }
 
-
+#pragma mark - CycleScrollViewDelegate
+- (void)cycleScrollViewDelegate:(CycleScrollView *)cycleScrollView didSelectImageView:(int)index {
+    
+    NSLog(@"%s",__func__);
+    NSDictionary *dic = [imagesArray objectAtIndex:index-1];
+    __weak MainViewController * viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+        NSString * str = (NSString *)item;
+        [viewController performSelector:@selector(adView:) withObject:str];
+    }];
+}
 
 
 @end

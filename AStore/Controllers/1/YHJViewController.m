@@ -13,10 +13,12 @@
 #import "UIImageView+AFNetworking.h"
 #import "HttpHelper.h"
 #import "AdViewController.h"
-@interface YHJViewController ()
+#import "CycleScrollView.h"
+@interface YHJViewController ()<CycleScrollViewDelegate>
 {
-    CustomScrollView * scrollView;
+    CycleScrollView * scrollView;
     NSMutableArray * imagesArray;
+    NSInteger imagecount;
 }
 @property (nonatomic,retain) NSArray * catalogArr;
 @end
@@ -41,12 +43,12 @@
     
     
     imagesArray = [NSMutableArray array];
-    scrollView = [[CustomScrollView alloc] initWithFrame:_tmpLabel.frame withViews:@[_tmpLabel]];
-    [self.view addSubview:scrollView];
+   
     [HttpHelper getAdsWithURL:@"http://www.youjianpuzi.com/?page-jyh.html" withNodeClass:@"mainColumn pageMain" withSuccessBlock:^(NSArray *items) {
         NSLog(@"%@",items);
         
         if ([items count]) {
+            imagecount = [items count];
             for (NSDictionary *dic in items) {
                 UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 108)];
                 NSURL *url = [NSURL URLWithString:[dic objectForKey:@"image"]];
@@ -98,29 +100,42 @@
 -(void)configureImagesArrayWithObj:(NSDictionary *)dic
 {
     [imagesArray addObject:dic];
-    NSMutableArray * tempArray = [NSMutableArray array];
-    for (int i = 0 ;i < [imagesArray count];i++) {
-        NSDictionary *dic = [imagesArray objectAtIndex:i];
-        UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
-        [imageview addGestureRecognizer:tapGesture];
-        imageview.userInteractionEnabled = YES;
-        imageview.tag = i;
-        [tempArray addObject:imageview];
+    if ([imagesArray count] == imagecount) {
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (int i = 0 ;i < [imagesArray count];i++) {
+            NSDictionary *dic = [imagesArray objectAtIndex:i];
+            UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
+            [imageview addGestureRecognizer:tapGesture];
+            imageview.userInteractionEnabled = YES;
+            imageview.tag = i;
+            [tempArray addObject:dic[@"FecthImage"]];
+        }
+        
+        
+        if([self.view.subviews containsObject:scrollView])
+        {
+            [scrollView removeFromSuperview];
+        }
+        
+        //    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 108) withViews:tempArray];
+        scrollView = [[CycleScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 108) cycleDirection:CycleDirectionLandscape pictures:tempArray autoScroll:YES];
+        scrollView.delegate  = self;
+        [self.view addSubview:scrollView];
     }
-    
-    
-    if([self.view.subviews containsObject:scrollView])
-    {
-        [scrollView removeFromSuperview];
-    }
-    
-    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 108) withViews:tempArray];
-    [self.view addSubview:scrollView];
-    
 }
 
-
+#pragma mark - CycleScrollViewDelegate
+- (void)cycleScrollViewDelegate:(CycleScrollView *)cycleScrollView didSelectImageView:(int)index {
+    
+    NSLog(@"%s",__func__);
+    NSDictionary *dic = [imagesArray objectAtIndex:index-1];
+    __weak YHJViewController * viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+        NSString * str = (NSString *)item;
+        [viewController performSelector:@selector(adView:) withObject:str];
+    }];
+}
 
 -(void)pushToAdViewcontroller:(UIGestureRecognizer *)recon
 {

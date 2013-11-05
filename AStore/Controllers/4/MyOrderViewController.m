@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 carl. All rights reserved.
 //
 
-#define OrderAlerMessage @"订单为空"
+#define OrderAlerMessage @"获取订单失败，是否重新获取"
 
 
 #import "MyOrderViewController.h"

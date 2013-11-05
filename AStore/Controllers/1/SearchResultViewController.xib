@@ -63,13 +63,14 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{55, 56}, {221, 21}}</string>
 								<reference key="NSSuperview" ref="925885927"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">非常抱歉，没有找到相关商品。</string>
+								<string key="IBUIText">连接服务器失败，请检查网络是否可用</string>
 								<object class="NSColor" key="IBUITextColor" id="216705862">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>

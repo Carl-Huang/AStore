@@ -93,6 +93,7 @@
 		4EEA2F90181C080800E18EA0 /* confirmOrderInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F8F181C080800E18EA0 /* confirmOrderInfoCell.xib */; };
 		4EEA2F92181C08BE00E18EA0 /* ConfirmOrderMemo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */; };
 		4EEA2F95181C08D800E18EA0 /* ConfirmOrderMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */; };
+		4EEB6D80182919200008C45F /* CycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEB6D7F182919200008C45F /* CycleScrollView.m */; };
 		4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF714C0182356F500F028A6 /* SubCatalogViewController.m */; };
 		4EF714C3182356F500F028A6 /* SubCatalogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */; };
 		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
@@ -421,6 +422,8 @@
 		4EEA2F91181C08BE00E18EA0 /* ConfirmOrderMemo.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfirmOrderMemo.xib; sourceTree = "<group>"; };
 		4EEA2F93181C08D800E18EA0 /* ConfirmOrderMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmOrderMemoCell.h; sourceTree = "<group>"; };
 		4EEA2F94181C08D800E18EA0 /* ConfirmOrderMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmOrderMemoCell.m; sourceTree = "<group>"; };
+		4EEB6D7E182919200008C45F /* CycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CycleScrollView.h; sourceTree = "<group>"; };
+		4EEB6D7F182919200008C45F /* CycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CycleScrollView.m; sourceTree = "<group>"; };
 		4EF714BF182356F500F028A6 /* SubCatalogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubCatalogViewController.h; sourceTree = "<group>"; };
 		4EF714C0182356F500F028A6 /* SubCatalogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubCatalogViewController.m; sourceTree = "<group>"; };
 		4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubCatalogViewController.xib; sourceTree = "<group>"; };
@@ -1238,6 +1241,8 @@
 		C3C999C617F2CE1700043727 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4EEB6D7E182919200008C45F /* CycleScrollView.h */,
+				4EEB6D7F182919200008C45F /* CycleScrollView.m */,
 				4EAEE3EC17FE3621002857F1 /* constants.h */,
 				C3505A0817F6856C00D590A7 /* UIViewController+LeftTitle.h */,
 				C3505A0917F6856C00D590A7 /* UIViewController+LeftTitle.m */,
@@ -1578,6 +1583,7 @@
 				C322E7D318202B3600246C9A /* TZCommodityViewController.m in Sources */,
 				4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */,
 				4E0AD0BF1824AC030057C84E /* CustomBadge.m in Sources */,
+				4EEB6D80182919200008C45F /* CycleScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

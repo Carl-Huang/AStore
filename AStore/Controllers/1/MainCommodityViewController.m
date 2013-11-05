@@ -21,6 +21,8 @@ static NSString * cellIdentifier = @"cellidentifier";
     BOOL isUpdateItem;
     NSInteger start;
     NSInteger count;
+    BOOL isFirstLoad;
+    NSString * promptStr;
 }
 @end
 
@@ -36,6 +38,7 @@ static NSString * cellIdentifier = @"cellidentifier";
     if (self) {
         // Custom initialization
         dataSource = nil;
+        isFirstLoad = YES;
     }
     return self;
 }
@@ -57,7 +60,8 @@ static NSString * cellIdentifier = @"cellidentifier";
     loadingView = [[MBProgressHUD alloc]initWithView:self.view];
     loadingView.dimBackground = YES;
     loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
-    loadingView.labelText = @"正在加载...";
+    promptStr = @"正在加载...";
+    loadingView.detailsLabelText = promptStr;
     [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
     loadingView.taskInProgress = YES;
     [self.view addSubview:loadingView];
@@ -65,6 +69,12 @@ static NSString * cellIdentifier = @"cellidentifier";
     [loadingView show:YES];
     // Do any additional setup after loading the view from its nib.
 }
+
+-(void)resetLoadingText
+{
+    loadingView.detailsLabelText = promptStr;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -81,6 +91,7 @@ static NSString * cellIdentifier = @"cellidentifier";
 {
     start = 0;
     count = 10;
+    __weak MainCommodityViewController * weakSelf = self;
     if ([dataSource count]==0) {
         [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
             if ([commoditys count]) {
@@ -88,7 +99,8 @@ static NSString * cellIdentifier = @"cellidentifier";
                 [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             }
         } withErrorBlock:^(NSError *error) {
-            ;
+            promptStr = @"连接服务器失败，\n请检查网络是否可用";
+            [weakSelf resetLoadingText];
         }];
     }
 }
@@ -98,8 +110,6 @@ static NSString * cellIdentifier = @"cellidentifier";
     [loadingView show:NO];
     [loadingView hide:YES];
 
-//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//    [myDelegate  removeLoadingViewWithView:nil];
 
     [self.tableview reloadData];
 }
@@ -180,14 +190,22 @@ static NSString * cellIdentifier = @"cellidentifier";
             [HttpHelper getCommodityWithCatalogTabID:[tabId integerValue] withTagName:titleStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
                     [dataSource addObjectsFromArray:commoditys];
-                    isUpdateItem = NO;
+                    [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:1.0];
+                    promptStr = @"正在加载...";
+                    [weakSelf resetLoadingText];
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                }else
+                {
+                    promptStr = @"商品列表已全部获取";
+                    [weakSelf resetLoadingText];
                 }
             } withErrorBlock:^(NSError *error) {
                 start -=count;
-                isUpdateItem = NO;
+                [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:1.0];
                  [loadingView show:NO];
                 [loadingView hide:YES];
+                promptStr = @"商品列表已全部获取";;
+                [weakSelf resetLoadingText];
             }];
              
         }

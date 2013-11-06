@@ -23,17 +23,20 @@
 #import "NSString+MD5_32.h"
 #import "constants.h"
 #import "ProductStoreInfo.h"
+#import "CycleScrollView.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
     OfflinePaymentType,
 };
 static NSString * cellIdentifier = @"cellIdentifier";
-@interface CommodityViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+@interface CommodityViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,CycleScrollViewDelegate>
 {
     UITextField *textField;
     UITextField *textField2;
     UIAlertView *prompt;
+    NSInteger imagecount;
+    NSMutableArray *imageArray;
 }
 @property (assign ,nonatomic)  PaymentType payType;
 @property (strong ,nonatomic)  HeaderView * headerView;
@@ -43,7 +46,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 @synthesize comodityInfo;
 @synthesize payType;
 @synthesize headerView;
-
+@synthesize scrollView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -60,7 +63,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self setBackItem:nil];
     self.commodityTableView.backgroundColor = [UIColor clearColor];
     [self initializedInterface];
-    
+    imageArray = [NSMutableArray array];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -88,19 +91,39 @@ static NSString * cellIdentifier = @"cellIdentifier";
         NSString * mKPriceStr = [NSString stringWithFormat:@"%.1f",floatString2];
         self.costLabel.text = priceStr;
         self.proceLabel.text = mKPriceStr;
-        NSString * imageUrlStr = [self extractImageURLWithStr:comodityInfo.small_pic];
-        NSURL *url = [NSURL URLWithString:imageUrlStr];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-        [self.produceImage setImageWithURLRequest:request placeholderImage:nil
-                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                [self.produceImage setImage:image];
-                                           } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                               NSLog(@"下载图片失败");
-                                           }];
+
+    [HttpHelper getThumbnailImageWithGood_id:comodityInfo.goods_id completedBlock:^(id item, NSError *error) {
+        NSArray * array =item;
+        imagecount = [array count];
+        __weak CommodityViewController * weakSelf = self;
+        for (NSDictionary * dic in array) {
+            NSString * imageUrlStr = [self extractImageURLWithStr:dic[@"thumbnail"]];
+            NSURL *url = [NSURL URLWithString:imageUrlStr];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+             UIImageView * weakImageView = [[UIImageView alloc]init];
+            [weakImageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                [weakSelf configureImagesArrayWithObj:image];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                NSLog(@"%@",[error description]);
+            }];
+        }
+    }];
 
     }
     [self initializeContentview];
 }
+
+-(void)configureImagesArrayWithObj:(UIImage *)image
+{
+    [imageArray addObject:image];
+    if ([imageArray count] == imagecount) {
+        scrollView = [[CycleScrollView alloc] initWithFrame:CGRectMake(15, 0, 250, 149)                                                cycleDirection:CycleDirectionLandscape
+                                                   pictures:imageArray autoScroll:NO];
+        [self.view addSubview:scrollView];
+        [self.commodityTableView reloadData];
+    }
+}
+
 
 -(NSString *)extractImageURLWithStr:(NSString *)str
 {
@@ -151,7 +174,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
     [self setCostLabel:nil];
     [self setProceLabel:nil];
     [self setCommodityTableView:nil];
-    [self setProduceImage:nil];
     [super viewDidUnload];
 }
 

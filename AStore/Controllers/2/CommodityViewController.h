@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Commodity.h"
+@class CycleScrollView;
 @interface CommodityViewController : UIViewController
 @property (strong ,nonatomic) Commodity * comodityInfo;
 @property (weak, nonatomic) IBOutlet UILabel *costLabel;
 @property (weak, nonatomic) IBOutlet UILabel *proceLabel;
 @property (weak, nonatomic) IBOutlet UITableView *commodityTableView;
-@property (weak, nonatomic) IBOutlet UIImageView *produceImage;
+@property (strong, nonatomic)  CycleScrollView *scrollView;
 - (IBAction)putInCartAction:(id)sender;
 - (IBAction)buyImmediatelyAction:(id)sender;
 

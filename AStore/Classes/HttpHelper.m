@@ -883,4 +883,17 @@
     NSString * urlString = [NSString stringWithFormat:@"%@%@?%@&%@&%@",SERVER_URL,route,component_1,component_2,component_3];
     [HttpHelper requestCommodityWithString:urlString successBlock:success errorBlock:failure];
 }
+
++(void)getThumbnailImageWithGood_id:(NSString *)goodId completedBlock:(void (^)(id item,NSError * error))block
+{
+    NSString * cmdStr = [NSString stringWithFormat:@"getImage=%@",goodId];
+    NSLog(@"cmdStr :%@",cmdStr);
+    [HttpHelper getAllCatalogWithSuffix:cmdStr SuccessBlock:^(NSArray *catInfo) {
+        NSLog(@"%@",catInfo);
+        block(catInfo,nil);
+    } errorBlock:^(NSError *error) {
+        block(nil,error);
+    }];
+}
+
 @end

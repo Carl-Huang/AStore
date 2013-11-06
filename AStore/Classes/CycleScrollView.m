@@ -37,7 +37,10 @@
         
         // 定时器 循环
         if (shouldAutoScroll) {
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
+            NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:timer
+                                         forMode:NSRunLoopCommonModes];
+            
         }
         [self addSubview:scrollView];
         

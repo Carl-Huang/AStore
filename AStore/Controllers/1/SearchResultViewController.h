@@ -13,4 +13,6 @@
 @property (strong , nonatomic) NSString * lTitle;
 @property (strong , nonatomic) NSString * searchStr;
 @property (weak, nonatomic) IBOutlet UIView *noResultView;
+@property (weak, nonatomic) IBOutlet UILabel *netWorkStatusText;
+@property (weak, nonatomic) IBOutlet UILabel *searchStatusText;
 @end

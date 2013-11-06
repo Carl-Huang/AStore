@@ -16,6 +16,7 @@
 @interface CatalogViewController ()
 {
     NSMutableArray * totalCatalogData;
+    NSString  * promptStr;
 }
 @property (strong, nonatomic) NSArray *firstSectionData;
 @property (strong, nonatomic) NSArray *secondSectionData;
@@ -26,7 +27,7 @@
 
 @implementation CatalogViewController
 @synthesize firstSectionData,secondSectionData;
-
+@synthesize loadingView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -41,13 +42,26 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"全部分类"];
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate  showLoginViewOnView:self.view];
+//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//    [myDelegate  showLoginViewOnView:self.view];
+    
+    loadingView = [[MBProgressHUD alloc]initWithView:self.view];
+    loadingView.dimBackground = YES;
+    loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    promptStr = @"正在加载...";
+    loadingView.detailsLabelText = promptStr;
+    [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
+    loadingView.taskInProgress = YES;
+    [self.view addSubview:loadingView];
+    [loadingView hide:NO];
+    [loadingView show:YES];
+
 }
 
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    
     [HttpHelper getAllCatalogWithSuccessBlock:^(NSDictionary *catInfo) {
         if ([catInfo count]) {
             totalCatalogData = [catInfo objectForKey:@"totalObj"];
@@ -61,14 +75,33 @@
         }
         
     } errorBlock:^(NSError *error) {
-         NSLog(@"%@",[error description]);
+        if ([[error domain] isEqualToString:@"NSURLErrorDomain"]) {
+            promptStr = @"请检查网络";
+        }else
+        {
+            promptStr = @"非常抱歉，分类没有产品！";
+        }
+        [self resetLoadingText];
     }];
+}
+
+-(void)resetLoadingText
+{
+    loadingView.detailsLabelText = promptStr;
+    [self performSelector:@selector(hideLoadingView) withObject:nil afterDelay:2.0];
+    
+}
+
+-(void)hideLoadingView
+{
+    [loadingView show:NO];
+    [loadingView hide:YES];
 }
 
 -(void)refreshTableview
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate  removeLoadingViewWithView:nil];
+    [loadingView show:NO];
+    [loadingView hide:YES];
     [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning

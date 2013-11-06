@@ -58,6 +58,8 @@
 - (void)viewDidUnload {
     [self setTableView:nil];
     [self setNoResultView:nil];
+    [self setNetWorkStatusText:nil];
+    [self setSearchStatusText:nil];
     [super viewDidUnload];
 }
 
@@ -66,19 +68,34 @@
     start = 0;
     count = 5;
     [self.noResultView setHidden:YES];
+    __weak SearchResultViewController * weakSelf = self;
     //根据title获取相关内容
     [HttpHelper searchCommodityWithKeyworkd:searchStr withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
         [dataSource addObjectsFromArray:commoditys];
         if ([dataSource count]) {
             [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+        }else
+        {
+            [weakSelf.noResultView setHidden:NO];
+            [weakSelf.searchStatusText setHidden:NO];
+            [weakSelf.netWorkStatusText setHidden:YES];
         }
      
     } withErrorBlock:^(NSError *error) {
         [self performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
-        NSLog(@"%@",[error description]);
-
+        NSLog(@"%@",[error domain]);
+        if ([[error domain] isEqualToString:@"NSURLErrorDomain"]) {
+            [weakSelf.noResultView setHidden:NO];
+            [weakSelf.netWorkStatusText setHidden:NO];
+            [weakSelf.searchStatusText setHidden:YES];
+        }else
+        {
+            [weakSelf.noResultView setHidden:NO];
+            [weakSelf.netWorkStatusText setHidden:YES];
+            [weakSelf.searchStatusText setHidden:NO];
+        }
+       
     }];
-    
 }
 
 -(void)refreshTableView

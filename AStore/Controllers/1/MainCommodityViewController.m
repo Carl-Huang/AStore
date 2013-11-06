@@ -200,12 +200,18 @@ static NSString * cellIdentifier = @"cellidentifier";
                     [weakSelf resetLoadingText];
                 }
             } withErrorBlock:^(NSError *error) {
+                if ([[error domain] isEqualToString:@"NSURLErrorDomain"]) {
+                    promptStr = @"请检查网络";
+                }else
+                {
+                    promptStr = @"商品列表已全部获取";;
+                }
+
                 start -=count;
                 [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:1.0];
-                 [loadingView show:NO];
-                [loadingView hide:YES];
-                promptStr = @"商品列表已全部获取";;
                 [weakSelf resetLoadingText];
+                [loadingView show:NO];
+                [loadingView hide:YES];
             }];
              
         }

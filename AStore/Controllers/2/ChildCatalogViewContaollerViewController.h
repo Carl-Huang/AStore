@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class MBProgressHUD;
 @interface ChildCatalogViewContaollerViewController : UITableViewController
 @property (strong ,nonatomic) NSMutableArray  * dataSource;
 @property (strong ,nonatomic) NSString * cat_id;
 @property (strong ,nonatomic) NSString * cat_name;
 @property (strong, nonatomic) IBOutlet UITableView *catalogTableview;
-
+@property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end

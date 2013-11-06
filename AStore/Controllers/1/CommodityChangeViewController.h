@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UIViewController+LeftTitle.h"
+@class MBProgressHUD;
 @interface CommodityChangeViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end

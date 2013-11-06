@@ -18,13 +18,14 @@
     NSInteger start;
     NSInteger count;
     BOOL   isUpdateItem;
+    NSString * promptStr;
 }
 @property (strong ,nonatomic) NSMutableArray * dataSource;
 @end
 
 @implementation CommodityChangeViewController
 @synthesize dataSource;
-
+@synthesize loadingView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,6 +46,17 @@
     [_tableView registerNib:cellNib forCellReuseIdentifier:@"CommodityEXCell"];
     dataSource = [NSMutableArray array];
     isUpdateItem = NO;
+    loadingView = [[MBProgressHUD alloc]initWithView:self.view];
+    loadingView.dimBackground = YES;
+    loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    promptStr = @"正在加载...";
+    loadingView.detailsLabelText = promptStr;
+    [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
+    loadingView.taskInProgress = YES;
+    [self.view addSubview:loadingView];
+    [loadingView hide:NO];
+    [loadingView show:YES];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -52,17 +64,19 @@
     start = 0;
     count = 10;
     if ([dataSource count] == 0) {
-        AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        [myDelegate showLoginViewOnView:self.view];
         __weak CommodityChangeViewController * weakSelf = self;
-        
         [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
             if (error) {
-                NSLog(@"%@",[error description]);
+                if ([[error domain] isEqualToString:@"NSURLErrorDomain"]) {
+                    promptStr = @"请检查网络";
+                }else
+                {
+                    promptStr = @"非常抱歉，分类没有产品！";
+                }
+                [self resetLoadingText];
             }else if([item count])
             {
                 [dataSource addObjectsFromArray:item];
-//                dataSource = item;
                  [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
             }
            
@@ -70,11 +84,24 @@
 
     }
 }
+-(void)resetLoadingText
+{
+    loadingView.detailsLabelText = promptStr;
+    [self performSelector:@selector(hideLoadingView) withObject:nil afterDelay:2.0];
+    
+}
+
+-(void)hideLoadingView
+{
+    [loadingView show:NO];
+    [loadingView hide:YES];
+}
+
 
 -(void)refreshTableView
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [myDelegate removeLoadingViewWithView:nil];
+    [loadingView show:NO];
+    [loadingView hide:YES];
     [self.tableView reloadData];
 }
 - (void)didReceiveMemoryWarning
@@ -158,18 +185,30 @@
         if (!isUpdateItem) {
             isUpdateItem = YES;
             start +=count;
-            AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-            [myDelegate showLoginViewOnView:self.view];
+            [loadingView hide:NO];
+            [loadingView show:YES];
+
             //执行再次加载新的数据
             [HttpHelper getGiftStart:start count:count  WithCompleteBlock:^(id item, NSError *error) {
                 if (error) {
                     start -=count;
-                    [myDelegate removeLoadingViewWithView:nil];
-                    NSLog(@"%@",[error description]);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        promptStr = @"商品列表已全部获取";
+                        [weakSelf resetLoadingText];
+                        [loadingView hide:YES];
+                        [loadingView show:NO];
+                    });
+//                    [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+//                    NSLog(@"%@",[error description]);
                 }else if([item count])
                 {
                     [dataSource addObjectsFromArray:item];
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableView) withObject:nil waitUntilDone:NO];
+                    
+                }else
+                {
+                    promptStr = @"商品列表已全部获取";
+                    [weakSelf resetLoadingText];
                 }
                 
             }];

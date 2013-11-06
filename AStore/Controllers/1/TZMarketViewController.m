@@ -14,11 +14,13 @@
 #import "CustomScrollView.h"
 #import "UIImageView+AFNetworking.h"
 #import "AdViewController.h"
+#import "CycleScrollView.h"
 #define TABLE_CELL_HEIGHT_1 124
-@interface TZMarketViewController ()
+@interface TZMarketViewController ()<CycleScrollViewDelegate>
 {
-    CustomScrollView * scrollView;
+    CycleScrollView * scrollView;
     NSMutableArray * imagesArray;
+    NSInteger imageCount;
 }
 @property (nonatomic,retain) NSArray * dataSource;
 @end
@@ -47,6 +49,7 @@
         NSLog(@"%@",items);
         
         if ([items count]) {
+            imageCount = [items count];
             for (NSDictionary *dic in items) {
                 UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1)];
                 NSURL *url = [NSURL URLWithString:[dic objectForKey:@"image"]];
@@ -98,20 +101,34 @@
 -(void)configureImagesArrayWithObj:(NSDictionary *)dic
 {
     [imagesArray addObject:dic];
-    NSMutableArray * tempArray = [NSMutableArray array];
-    for (int i = 0 ;i < [imagesArray count];i++) {
-        NSDictionary *dic = [imagesArray objectAtIndex:i];
-        UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
-        [imageview addGestureRecognizer:tapGesture];
-        imageview.userInteractionEnabled = YES;
-        imageview.tag = i;
-        [tempArray addObject:imageview];
+    if (imageCount == [imagesArray count]) {
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (int i = 0 ;i < [imagesArray count];i++) {
+            NSDictionary *dic = [imagesArray objectAtIndex:i];
+            UIImageView * imageview = [[UIImageView alloc]initWithImage:dic[@"FecthImage"]];
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToAdViewcontroller:)];
+            [imageview addGestureRecognizer:tapGesture];
+            imageview.userInteractionEnabled = YES;
+            imageview.tag = i;
+            [tempArray addObject:dic[@"FecthImage"]];
+        }
+
+        scrollView = [[CycleScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) cycleDirection:CycleDirectionLandscape pictures:tempArray autoScroll:YES];
+        scrollView.delegate = self;
+        [self.tableView setTableHeaderView:scrollView];
     }
+   
+}
+#pragma mark - CycleScrollViewDelegate
+- (void)cycleScrollViewDelegate:(CycleScrollView *)cycleScrollView didSelectImageView:(int)index {
     
-    scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, TABLE_CELL_HEIGHT_1) withViews:tempArray];
-    
-    [self.tableView setTableHeaderView:scrollView];
+    NSLog(@"%s",__func__);
+    NSDictionary *dic = [imagesArray objectAtIndex:index-1];
+    __weak TZMarketViewController * viewController = self;
+    [HttpHelper getSpecificUrlContentOfAdUrl:dic[@"url"] completedBlock:^(id item, NSError *error) {
+        NSString * str = (NSString *)item;
+        [viewController performSelector:@selector(adView:) withObject:str];
+    }];
 }
 
 

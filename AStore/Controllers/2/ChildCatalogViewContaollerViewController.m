@@ -29,8 +29,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
     NSString * promptStr;
 }
 
-
-@property (strong ,nonatomic) MBProgressHUD * loadingView;
 @end
 
 @implementation ChildCatalogViewContaollerViewController
@@ -70,9 +68,9 @@ static NSString * cellIdentifier = @"cellIdentifier";
     loadingView.detailsLabelText = promptStr;
     [loadingView setMode:MBProgressHUDModeDeterminate];   //圆盘的扇形进度显示
     loadingView.taskInProgress = YES;
+    [self.view addSubview:loadingView];
     [loadingView hide:NO];
     [loadingView show:YES];
-    [self.view addSubview:loadingView];
     
 
 }
@@ -96,7 +94,13 @@ static NSString * cellIdentifier = @"cellIdentifier";
                 [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
             }
         } withErrorBlock:^(NSError *error) {
-            promptStr = @"非常抱歉，该分类下没有找到产品！";
+            if ([[error domain] isEqualToString:@"NSURLErrorDomain"]) {
+                 promptStr = @"请检查网络";
+            }else
+            {
+                promptStr = @"非常抱歉，该分类下没有找到产品！";
+            }
+
             [weakSelf resetLoadingText];
         }];
     }
@@ -212,46 +216,60 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }
 }
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     
     __weak ChildCatalogViewContaollerViewController * weakSelf= self;
     CGFloat offsetY=0.0;
     offsetY = scrollView.contentOffset.y;
     NSInteger contentHeight = scrollView.contentSize.height;
-    NSInteger boundary =  contentHeight - scrollView.frame.size.height-20;
+    NSInteger boundary =  contentHeight - scrollView.frame.size.height;
     
     if (offsetY >= boundary)
     {
         if (!isUpdateItem) {
             isUpdateItem = YES;
             start +=count;
-
-            [loadingView hide:NO];
-            [loadingView show:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [loadingView hide:NO];
+                [loadingView show:YES];
+            });
+            
+            [self.catalogTableview setScrollEnabled:NO];
             //执行再次加载新的数据
             [HttpHelper getCommodityWithTab:cat_id withStart:start withCount:count withSuccessBlock:^(NSArray *commoditys) {
                 if ([commoditys count]) {
+                   
+                    [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:1.5];
                     [dataSource addObjectsFromArray:commoditys];
+                    promptStr = @"正在加载...";
+                    [weakSelf resetLoadingText];
                     [weakSelf performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
+                }else
+                {
+                    promptStr = @"商品列表已全部获取";
+                    [weakSelf resetLoadingText];
                 }
             } withErrorBlock:^(NSError *error) {
+                  [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:0.5];
                 start -=count;
-                promptStr = @"商品列表已全部获取";
-                [loadingView hide:YES];
-                [loadingView show:NO];
-                [weakSelf resetLoadingText];
-            }];
-            
-            
-            [weakSelf performSelector:@selector(resetUpdateStatus) withObject:nil afterDelay:2.0];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    promptStr = @"商品列表已全部获取";
+                    [weakSelf resetLoadingText];
+                    [loadingView hide:YES];
+                    [loadingView show:NO];
+                });
+              
 
+            }];
         }
     }
 }
 
 -(void)resetUpdateStatus
 {
+    [self.catalogTableview setScrollEnabled:YES];
     isUpdateItem = NO;
 }
 - (void)viewDidUnload {

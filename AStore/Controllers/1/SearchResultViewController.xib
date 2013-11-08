@@ -100,7 +100,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">建议：请缩短你的关键词或更改关键词后重新搜索。如：将“美汁源果粒橙” 改为“美汁源” 或者 “果粒橙”</string>
+								<string key="IBUIText">非常抱歉，没有找到相关商品，建议修改关键词。</string>
 								<reference key="IBUITextColor" ref="216705862"/>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>

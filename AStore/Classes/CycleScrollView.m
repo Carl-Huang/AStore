@@ -34,16 +34,6 @@
         scrollView.delegate = self;
         [self addSubview:scrollView];
         
-        
-        // 定时器 循环
-        if (shouldAutoScroll) {
-            NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
-            [[NSRunLoop currentRunLoop] addTimer:timer
-                                         forMode:NSRunLoopCommonModes];
-            
-        }
-        [self addSubview:scrollView];
-        
         viewCount = 0;
         if(pictureArray != nil)
         {
@@ -57,7 +47,14 @@
         pageControl.currentPage = 0;
         currentPage = 0;
         [pageControl addTarget:self action:@selector(turnPage) forControlEvents:UIControlEventValueChanged];
-        [self addSubview:pageControl];
+        
+        // 定时器 循环
+        if (shouldAutoScroll) {
+            NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:timer
+                                         forMode:NSRunLoopCommonModes];
+            [self addSubview:pageControl];
+        }
 
         
         // 在水平方向滚动

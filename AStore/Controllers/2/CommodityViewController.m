@@ -24,6 +24,7 @@
 #import "constants.h"
 #import "ProductStoreInfo.h"
 #import "CycleScrollView.h"
+#import "CustomScrollView.h"
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -102,7 +103,9 @@ static NSString * cellIdentifier = @"cellIdentifier";
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
              UIImageView * weakImageView = [[UIImageView alloc]init];
             [weakImageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                [weakSelf configureImagesArrayWithObj:image];
+                NSData * data = UIImageJPEGRepresentation(image, 1.0);
+                UIImage *formatImage = [UIImage imageWithData:data];
+                [weakSelf configureImagesArrayWithObj:formatImage];
             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                 NSLog(@"%@",[error description]);
             }];
@@ -115,10 +118,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)configureImagesArrayWithObj:(UIImage *)image
 {
-    [imageArray addObject:image];
+    UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
+    [imageArray addObject:imageView];
     if ([imageArray count] == imagecount) {
-        scrollView = [[CycleScrollView alloc] initWithFrame:CGRectMake(15, 0, 250, 149)                                                cycleDirection:CycleDirectionLandscape
-                                                   pictures:imageArray autoScroll:NO];
+//        scrollView = [[CycleScrollView alloc] initWithFrame:CGRectMake(35, 0, 180, 150)                                                cycleDirection:CycleDirectionLandscape
+//                                                   pictures:imageArray autoScroll:NO];
+        scrollView = [[CustomScrollView alloc]initWithFrame:CGRectMake(70, 0, 180, 150)  withViews:imageArray];
         [self.view addSubview:scrollView];
         [self.commodityTableView reloadData];
     }

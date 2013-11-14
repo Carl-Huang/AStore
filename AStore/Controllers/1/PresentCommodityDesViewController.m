@@ -37,8 +37,8 @@
     self.goods_id.text = comodityInfo.gift_id;
     
     //webView
-    NSString *htmlContent = [self analysisStr:comodityInfo.intro];
-    [self.webViewDes loadHTMLString:htmlContent baseURL:nil];
+//    NSString *htmlContent = [self analysisStr:comodityInfo.intro];
+    [self.webViewDes loadHTMLString:comodityInfo.gift_describe baseURL:nil];
     [self.webViewDes setScalesPageToFit:YES];
     [self.webViewDes setAutoresizingMask:UIViewAutoresizingFlexibleWidth |UIViewAutoresizingFlexibleHeight];
 

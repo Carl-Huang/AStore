@@ -41,7 +41,7 @@
     //查询本地是否有用户已经登录
     synDicInfo = [[NSDictionary alloc]init];
     [self setLeftTitle:@"个人中心"];
-    _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"],@[@"检查版本"]];
+    _dataSource = @[@[@"我的订单",@"我的优惠卷",@"修改密码",@"地址管理"]];
 }
 -(void)viewWillAppear:(BOOL)animated
 {

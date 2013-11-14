@@ -96,6 +96,13 @@
 		4EEB6D80182919200008C45F /* CycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEB6D7F182919200008C45F /* CycleScrollView.m */; };
 		4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF714C0182356F500F028A6 /* SubCatalogViewController.m */; };
 		4EF714C3182356F500F028A6 /* SubCatalogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */; };
+		4EF93BD5182E141F00273AC2 /* ZYPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF93BD4182E141F00273AC2 /* ZYPush.framework */; };
+		4EF93BDC182E142F00273AC2 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF93BD8182E142F00273AC2 /* AsyncSocket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4EF93BDD182E142F00273AC2 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF93BDB182E142F00273AC2 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4EF93BDF182E15AF00273AC2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF93BDE182E15AF00273AC2 /* CFNetwork.framework */; };
+		4EF93BE1182E16E700273AC2 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EF93BE0182E16E700273AC2 /* PushConfig.plist */; };
+		4EF93BE4182E18FA00273AC2 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF93BE2182E18FA00273AC2 /* libMobClickLibrary.a */; };
+		4EF93BE6182E191100273AC2 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF93BE5182E191100273AC2 /* libz.dylib */; };
 		4EFF56EF181E5E8500DC9E8E /* NSString+MD5_32.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */; };
 		C3051F3F181CBDFE0042032D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3A181CBDFE0042032D /* TFHpple.m */; };
 		C3051F40181CBDFE0042032D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = C3051F3C181CBDFE0042032D /* TFHppleElement.m */; };
@@ -427,6 +434,16 @@
 		4EF714BF182356F500F028A6 /* SubCatalogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubCatalogViewController.h; sourceTree = "<group>"; };
 		4EF714C0182356F500F028A6 /* SubCatalogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubCatalogViewController.m; sourceTree = "<group>"; };
 		4EF714C1182356F500F028A6 /* SubCatalogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubCatalogViewController.xib; sourceTree = "<group>"; };
+		4EF93BD4182E141F00273AC2 /* ZYPush.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZYPush.framework; sourceTree = "<group>"; };
+		4EF93BD7182E142F00273AC2 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
+		4EF93BD8182E142F00273AC2 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
+		4EF93BDA182E142F00273AC2 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		4EF93BDB182E142F00273AC2 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		4EF93BDE182E15AF00273AC2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		4EF93BE0182E16E700273AC2 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
+		4EF93BE2182E18FA00273AC2 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		4EF93BE3182E18FA00273AC2 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		4EF93BE5182E191100273AC2 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4EFF56ED181E5E8500DC9E8E /* NSString+MD5_32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5_32.h"; sourceTree = "<group>"; };
 		4EFF56EE181E5E8500DC9E8E /* NSString+MD5_32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5_32.m"; sourceTree = "<group>"; };
 		C3051F39181CBDFE0042032D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
@@ -671,6 +688,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EF93BE6182E191100273AC2 /* libz.dylib in Frameworks */,
+				4EF93BDF182E15AF00273AC2 /* CFNetwork.framework in Frameworks */,
 				C3051F43181CBE1F0042032D /* libxml2.2.dylib in Frameworks */,
 				C3845CE617F3F63600DED3C5 /* QuartzCore.framework in Frameworks */,
 				C3845C9E17F3D8D400DED3C5 /* SystemConfiguration.framework in Frameworks */,
@@ -679,6 +698,8 @@
 				C34217AA17F1E1F500B42F5E /* UIKit.framework in Frameworks */,
 				C34217AC17F1E1F500B42F5E /* Foundation.framework in Frameworks */,
 				C34217AE17F1E1F500B42F5E /* CoreGraphics.framework in Frameworks */,
+				4EF93BD5182E141F00273AC2 /* ZYPush.framework in Frameworks */,
+				4EF93BE4182E18FA00273AC2 /* libMobClickLibrary.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,6 +813,24 @@
 			path = Lib/ACPScrollMenu;
 			sourceTree = "<group>";
 		};
+		4EF93BD6182E142F00273AC2 /* AsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				4EF93BD7182E142F00273AC2 /* AsyncSocket.h */,
+				4EF93BD8182E142F00273AC2 /* AsyncSocket.m */,
+			);
+			path = AsyncSocket;
+			sourceTree = "<group>";
+		};
+		4EF93BD9182E142F00273AC2 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				4EF93BDA182E142F00273AC2 /* JSONKit.h */,
+				4EF93BDB182E142F00273AC2 /* JSONKit.m */,
+			);
+			path = JSONKit;
+			sourceTree = "<group>";
+		};
 		C3051F38181CBDFE0042032D /* TFHpple */ = {
 			isa = PBXGroup;
 			children = (
@@ -808,6 +847,10 @@
 		C342179D17F1E1F500B42F5E = {
 			isa = PBXGroup;
 			children = (
+				4EF93BE5182E191100273AC2 /* libz.dylib */,
+				4EF93BE2182E18FA00273AC2 /* libMobClickLibrary.a */,
+				4EF93BE3182E18FA00273AC2 /* MobClick.h */,
+				4EF93BDE182E15AF00273AC2 /* CFNetwork.framework */,
 				C3F6F0E91821413D00726F2A /* Default-568h@2x.png */,
 				C3F6F0E71821413900726F2A /* Default@2x.png */,
 				C3F6F0E51821412900726F2A /* Default.png */,
@@ -831,6 +874,9 @@
 		C34217A817F1E1F500B42F5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EF93BD6182E142F00273AC2 /* AsyncSocket */,
+				4EF93BD9182E142F00273AC2 /* JSONKit */,
+				4EF93BD4182E141F00273AC2 /* ZYPush.framework */,
 				C3845CE517F3F63500DED3C5 /* QuartzCore.framework */,
 				C3845C9D17F3D8D400DED3C5 /* SystemConfiguration.framework */,
 				C3845C9B17F3D8C900DED3C5 /* MobileCoreServices.framework */,
@@ -868,6 +914,7 @@
 				C34217BB17F1E1F600B42F5E /* Default.png */,
 				C34217BD17F1E1F600B42F5E /* Default@2x.png */,
 				C34217BF17F1E1F600B42F5E /* Default-568h@2x.png */,
+				4EF93BE0182E16E700273AC2 /* PushConfig.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1471,6 +1518,7 @@
 				4EB1B64B18254C5B004B5A0B /* right.png in Resources */,
 				4E0455781826900D00FA3BD4 /* 箭头.png in Resources */,
 				4E04557A1826901500FA3BD4 /* 箭头@2x.png in Resources */,
+				4EF93BE1182E16E700273AC2 /* PushConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1584,6 +1632,8 @@
 				4EF714C2182356F500F028A6 /* SubCatalogViewController.m in Sources */,
 				4E0AD0BF1824AC030057C84E /* CustomBadge.m in Sources */,
 				4EEB6D80182919200008C45F /* CycleScrollView.m in Sources */,
+				4EF93BDC182E142F00273AC2 /* AsyncSocket.m in Sources */,
+				4EF93BDD182E142F00273AC2 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1669,11 +1719,19 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Carl Huang (2FZNLHFD97)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl Huang (2FZNLHFD97)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3ACA22DB-5502-48DD-9AB9-89F7AE83EBF4";
@@ -1688,11 +1746,19 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Carl Huang (2FZNLHFD97)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Carl Huang (2FZNLHFD97)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AStore/AStore-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "AStore/AStore-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "3ACA22DB-5502-48DD-9AB9-89F7AE83EBF4";

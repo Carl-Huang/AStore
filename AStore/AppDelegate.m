@@ -17,6 +17,13 @@
 #import "NSMutableArray+SaveCustomiseData.h"
 #import "CustomBadge.h"
 #import "constants.h"
+
+//推送
+#import <ZYPush/LPService.h>
+
+//更新
+#import "MobClick.h"
+
 @implementation AppDelegate
 @synthesize loadingView;
 @synthesize commodityArray;
@@ -27,6 +34,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //版本更新
+     [MobClick startWithAppkey:@"527de3c456240b7c2a09c2ad"];
+    [MobClick checkUpdate];
+    [MobClick checkUpdate:@"New version" cancelButtonTitle:@"Skip" otherButtonTitles:@"Go to Store"];
+    [MobClick setLogEnabled:YES];
+    
+    //推送服务
+    [LPService  registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound
+                                                     |UIRemoteNotificationTypeAlert)];
+    [LPService setupWithOption:launchOptions];
+    
+    
     //初始化badgeView
     NSInteger count = [[[NSUserDefaults standardUserDefaults]objectForKey:@"CarViewProductCount"]integerValue];
     NSString  *originBadgeViewText = [NSString stringWithFormat:@"%d",count];
@@ -189,6 +208,10 @@
     }
     [[NSUserDefaults standardUserDefaults]setInteger:originBadgeNum forKey:@"CarViewProductCount"];
     [badgeView autoBadgeSizeWithString:badgeText];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [LPService registerDeviceToken:deviceToken];
 }
 
 -(void)dealloc

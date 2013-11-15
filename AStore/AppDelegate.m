@@ -31,7 +31,7 @@
 @synthesize buiedCommodityArray;
 @synthesize buiedPresentArray;
 @synthesize badgeView,badgeViewStr;
-
+@synthesize infoLab=_infoLab;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //版本更新
@@ -44,7 +44,13 @@
     [LPService  registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound
                                                      |UIRemoteNotificationTypeAlert)];
     [LPService setupWithOption:launchOptions];
-    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+//    [defaultCenter addObserver:self selector:@selector(networkDidSetup:) name:@"LPAPNetworkDidSetupNotification" object:nil];
+//    [defaultCenter addObserver:self selector:@selector(networkDidClose:) name:@"LPAPNetworkDidCloseNotification" object:nil];
+//    [defaultCenter addObserver:self selector:@selector(networkDidRegister:) name:@"LPAPNetworkDidRegisterNotification" object:nil];
+//    [defaultCenter addObserver:self selector:@selector(networkDidLogin:) name:@"LPAPNetworkDidLoginNotification" object:nil];
+//    [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:@"LPAPNetworkDidReceiveMessageNotification" object:nil];
+    [defaultCenter addObserver:self selector:@selector(networkDidVersionMessage:) name:@"LPAPNetworkDidVersionNotification" object:nil];
     
     //初始化badgeView
     NSInteger count = [[[NSUserDefaults standardUserDefaults]objectForKey:@"CarViewProductCount"]integerValue];
@@ -210,13 +216,31 @@
     [badgeView autoBadgeSizeWithString:badgeText];
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [LPService registerDeviceToken:deviceToken];
-}
 
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+#pragma mark ZY推送
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [LPService registerDeviceToken:deviceToken];
+}
+
+
+- (void)networkDidVersionMessage:(NSNotification *)notification {
+    /*
+     使用[notification object]获取返回versoin信息，结果为NSString。
+     10000:标示当前为最新版本
+     10001:标示当前版本虽不是最新版本，但是不影响当前功能使用。
+     10002:标示当前版本不是最新版本，并且功能已经不能正常使用。
+     */
+    NSString *resultStr =[notification object];
+    if ([resultStr isEqualToString:@"10001"]) {
+        //需要更新
+        NSLog(@"需要版本更新");
+    }
+    NSLog(@"版本信息:----->%@",resultStr);
 }
 
 @end

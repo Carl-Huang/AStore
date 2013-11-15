@@ -22,6 +22,8 @@
 
 @property (strong ,nonatomic) CustomBadge * badgeView;
 @property (strong ,nonatomic) NSString * badgeViewStr;
+
+@property (nonatomic,retain) UILabel *infoLab;
 -(void)showLoginViewOnView:(UIView *)view;
 -(void)removeLoadingViewWithView:(UIView *)view;
 @end

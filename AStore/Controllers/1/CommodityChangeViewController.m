@@ -141,17 +141,20 @@
     static NSString *CellIdentifier = @"CommodityEXCell";
     CommodityEXCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     GetGiftInfo * info = [dataSource objectAtIndex:indexPath.row];
-    NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
-    __weak CommodityEXCell *weakCell = cell;
-    NSURL *url = [NSURL URLWithString:imageUrlStr];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-    [cell.commodityImageView setImageWithURLRequest:request placeholderImage:nil
-                                       success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                           [weakCell.commodityImageView setImage:image];
-                                           [weakCell setNeedsLayout];
-                                       } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                           NSLog(@"下载图片失败");
-                                       }];
+    if (![info.small_pic isKindOfClass:[NSNull class]]) {
+        NSString * imageUrlStr = [HttpHelper extractImageURLWithStr:info.small_pic];
+        __weak CommodityEXCell *weakCell = cell;
+        NSURL *url = [NSURL URLWithString:imageUrlStr];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
+        [cell.commodityImageView setImageWithURLRequest:request placeholderImage:nil
+                                                success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                                    [weakCell.commodityImageView setImage:image];
+                                                    [weakCell setNeedsLayout];
+                                                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                                    NSLog(@"下载图片失败");
+                                                }];
+    }
+   
 
     cell.titleLabel.text = info.name;
     cell.pointLabel.text = info.point;

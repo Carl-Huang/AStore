@@ -38,6 +38,12 @@ static NSString * cellIdentifier = @"cellIdentifier";
     UIAlertView *prompt;
     NSInteger imagecount;
     NSMutableArray *imageArray;
+    
+    //保存分类的btn
+    NSMutableArray * btnArray ;
+    UIView *btnContentView;
+    NSString * typeStr;
+    NSMutableArray * typeStrArray;
 }
 @property (assign ,nonatomic)  PaymentType payType;
 @property (strong ,nonatomic)  HeaderView * headerView;
@@ -65,6 +71,10 @@ static NSString * cellIdentifier = @"cellIdentifier";
     self.commodityTableView.backgroundColor = [UIColor clearColor];
     [self initializedInterface];
     imageArray = [NSMutableArray array];
+    btnArray = [NSMutableArray array];
+    btnContentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 280, 70)];
+    [btnContentView setBackgroundColor:[UIColor clearColor]];
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -113,7 +123,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }];
 
     }
-    [self initializeContentview];
+
 }
 
 -(void)configureImagesArrayWithObj:(UIImage *)image
@@ -138,23 +148,64 @@ static NSString * cellIdentifier = @"cellIdentifier";
     return [Resource_URL_Prefix stringByAppendingString:[str substringWithRange:strRange]];
 }
 
--(void)initializeContentview
+-(void)initializeContentview:(NSArray *)array
 {
     NSLog(@"pdt_desc :%@" ,comodityInfo.pdt_desc);
+    
     NSLog(@"spec: %@" ,comodityInfo.spec);
-    headerView = [[[NSBundle mainBundle]loadNibNamed:@"HeaderView" owner:self options:nil]objectAtIndex:0];
-    //TODO:读取商品分类
-    headerView.onLineTextLabel.text = @"原味";
-    headerView.offLineTextLabel.text = @"芝士味";
-    [headerView.offlinePayBtn addTarget:self action:@selector(offlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
-    //默认为货到付款
-    payType = OfflinePaymentType;
-    [headerView.offlinePayBtn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateNormal];
-    [headerView.onlinePayBtn addTarget:self action:@selector(onlinePayAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    [headerView setBackgroundColor:[UIColor whiteColor]];
-    
+    if ([btnArray count]==0) {
+        NSInteger maxRow = 3;
+        NSInteger row = 0;
+        NSInteger offsetX = 0;
+        NSInteger offsetY = 0;
+        for (int i=0; i<[array count]; i++) {
+            NSString * str = [array objectAtIndex:i];
+            
+            UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+            btn.tag = i;
+            [btn setBackgroundImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal];
+            [btn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateSelected];
+            
+            if (offsetX >=240) {
+                row ++;
+            }
+            offsetX = i*80- row*240;
+            offsetY = row*30;
+            
+            [btn setFrame:CGRectMake(20+offsetX, 10+offsetY, 20, 20)];
+            CGRect rect = btn.frame;
+            rect.origin.x = rect.origin.x+rect.size.width +2;
+            rect.size.width = 58;
+            
+            UILabel * btnDes = [[UILabel alloc]initWithFrame:rect];
+            btnDes.adjustsFontSizeToFitWidth = YES;
+            [btnDes setBackgroundColor:[UIColor clearColor]];
+            btnDes.text = str;
+            [btnContentView addSubview:btn];
+            [btnContentView addSubview:btnDes];
+            [btnArray  addObject:btn];
+            btn = nil;
+            btnDes = nil;
+        }
+
+    }
 }
+
+-(void)btnClick:(id)sender
+{
+    UIButton * btn = sender;
+    for (UIButton * button in btnArray) {
+        if (button.tag == btn.tag) {
+            typeStr = [typeStrArray objectAtIndex:button.tag];
+            [button setSelected:!button.selected];
+        }else
+            [button setSelected:NO];
+    }
+
+}
+
 
 -(void)offlinePayAction:(id)sender
 {
@@ -222,12 +273,20 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 1 || indexPath.section ==2) && indexPath.row ==1) {
-        return 50;
-    }else 
+    if ((indexPath.section == 1)) {
+        if (indexPath.row ==1) {
+             return 50;
+        }
+       
+    }else if(indexPath.section ==2)
     {
-        return 35;
+        if (indexPath.row ==1) {
+            return 70.0f;
+        }
     }
+    
+    return 35;
+
 }
 
 -(UITableViewCell * )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -236,8 +295,9 @@ static NSString * cellIdentifier = @"cellIdentifier";
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    
-    
+    NSArray * array = cell.contentView.subviews;
+    [array makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    cell.textLabel.text = nil;
     if (indexPath.section == 0) {
         NSString * tempStr = @"所得积分: ";
         NSString * str = [tempStr stringByAppendingString:comodityInfo.score];
@@ -261,10 +321,19 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else if(indexPath.section == 2)
     {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"请选择口味";
+            NSString * str = comodityInfo.spec;
+            NSRange start = [str rangeOfString:@"\""];
+            NSRange end = [str rangeOfString:@"\"" options:NSBackwardsSearch];
+            NSRange range = NSMakeRange(start.location+start.length, end.location-start.location);
+            NSString * descriptionStr = [str substringWithRange:range];
+            cell.textLabel.text = descriptionStr;
         }else
         {
-            [cell.contentView addSubview:headerView];
+            if ([typeStrArray count]==0) {
+                typeStrArray = [NSMutableArray arrayWithArray:@[@"hell",@"youe"]];
+            }
+            [self initializeContentview:typeStrArray];
+            [cell.contentView addSubview:btnContentView];
         }
         
     }
@@ -272,6 +341,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
     cell.backgroundColor = [UIColor whiteColor];
     cell.textLabel.font = [UIFont systemFontOfSize:14];
     return cell;
+}
+
+-(void)subStr:(NSString *)str
+{
+    NSRange start = [str rangeOfString:@"\""];
+    str = [str substringToIndex:start.location];
+    NSRange end = [str rangeOfString:@"\"" options:NSBackwardsSearch];
+    NSRange range = NSMakeRange(start.location+start.length, end.location-start.location);
+    NSString * descriptionStr = [str substringWithRange:range];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

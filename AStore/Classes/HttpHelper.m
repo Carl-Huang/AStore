@@ -288,10 +288,11 @@
 
 +(NSString *)extractImageURLWithStr:(NSString *)str
 {
+    
     NSString * tempStr = [NSString stringWithFormat:@"%@",str];
     NSRange range = [tempStr rangeOfString:@"|" options:NSCaseInsensitiveSearch];
     NSRange strRange = NSMakeRange(0, range.location);
-    return [Resource_URL_Prefix stringByAppendingString:[str substringWithRange:strRange]];
+    return [Resource_URL_Prefix stringByAppendingString:[tempStr substringWithRange:strRange]];
 }
 
 +(void)userLoginWithName:(NSString *)name pwd:(NSString *)pwd completedBlock:(void (^)(id items)) completedBlock failedBlock:(void (^) (NSError * error))faliedBlock

@@ -232,6 +232,7 @@
 {
 //    NSInteger page = pageControl.currentPage;
     NSLog(@"%d",currentPage);
+    pageControl.currentPage = currentPage;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self autoScroll];
     });

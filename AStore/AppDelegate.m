@@ -19,8 +19,10 @@
 #import "constants.h"
 
 //推送
+//#define ZYpush
+#ifdef ZYpush
 #import <ZYPush/LPService.h>
-
+#endif
 //更新
 #import "MobClick.h"
 
@@ -41,10 +43,13 @@
     [MobClick setLogEnabled:YES];
     
     //推送服务
+#ifdef ZYpush
     [LPService  registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound
                                                      |UIRemoteNotificationTypeAlert)];
     [LPService setupWithOption:launchOptions];
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+
+#endif
+      NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 //    [defaultCenter addObserver:self selector:@selector(networkDidSetup:) name:@"LPAPNetworkDidSetupNotification" object:nil];
 //    [defaultCenter addObserver:self selector:@selector(networkDidClose:) name:@"LPAPNetworkDidCloseNotification" object:nil];
 //    [defaultCenter addObserver:self selector:@selector(networkDidRegister:) name:@"LPAPNetworkDidRegisterNotification" object:nil];
@@ -224,7 +229,11 @@
 
 #pragma mark ZY推送
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [LPService registerDeviceToken:deviceToken];
+#ifdef ZYpush
+   [LPService registerDeviceToken:deviceToken];    
+#endif
+    
+    
 }
 
 

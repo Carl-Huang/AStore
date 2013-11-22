@@ -150,10 +150,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(void)initializeContentview:(NSArray *)array
 {
-    NSLog(@"pdt_desc :%@" ,comodityInfo.pdt_desc);
-    
-    NSLog(@"spec: %@" ,comodityInfo.spec);
-    
+
     if ([btnArray count]==0) {
         NSInteger maxRow = 3;
         NSInteger row = 0;
@@ -168,7 +165,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
             [btn setBackgroundImage:[UIImage imageNamed:@"单选btn-n@2x"] forState:UIControlStateNormal];
             [btn setBackgroundImage:[UIImage imageNamed:@"单选btn-s@2x"] forState:UIControlStateSelected];
             
-            if (offsetX >=240) {
+            if (offsetX >=160) {
                 row ++;
             }
             offsetX = i*80- row*240;
@@ -180,7 +177,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
             rect.size.width = 58;
             
             UILabel * btnDes = [[UILabel alloc]initWithFrame:rect];
-            btnDes.adjustsFontSizeToFitWidth = YES;
+            btnDes.font = [UIFont systemFontOfSize:11];
+            btnDes.adjustsFontSizeToFitWidth = NO;
             [btnDes setBackgroundColor:[UIColor clearColor]];
             btnDes.text = str;
             [btnContentView addSubview:btn];
@@ -192,6 +190,23 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
     }
 }
+//提取商品的种类
+-(NSArray *)subProductTypeStrIntoArray:(NSString *)productStr
+{
+    NSError * error;
+    NSMutableArray * tempArray = [NSMutableArray array];
+    
+    NSRegularExpression * regex = [[NSRegularExpression alloc]initWithPattern:@"[\u4e00-\u9fa5]*[\u4e00-\u9fa5]" options:NSRegularExpressionAllowCommentsAndWhitespace error:&error];
+    NSString * searchStr = productStr;
+    NSArray * compomentArray =[regex matchesInString:searchStr options:NSMatchingReportProgress range:NSMakeRange(0, [searchStr length])];
+    for (NSTextCheckingResult * checktStr in compomentArray) {
+        NSRange range = [checktStr rangeAtIndex:0];
+        [tempArray addObject:[searchStr substringWithRange:range]];
+        NSLog(@"%@",[searchStr substringWithRange:range]);
+    }
+    return tempArray;
+
+}
 
 -(void)btnClick:(id)sender
 {
@@ -199,6 +214,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
     for (UIButton * button in btnArray) {
         if (button.tag == btn.tag) {
             typeStr = [typeStrArray objectAtIndex:button.tag];
+            NSLog(@"%@",typeStr);
+            comodityInfo.productType = typeStr;
             [button setSelected:!button.selected];
         }else
             [button setSelected:NO];
@@ -321,16 +338,15 @@ static NSString * cellIdentifier = @"cellIdentifier";
     }else if(indexPath.section == 2)
     {
         if (indexPath.row == 0) {
-            NSString * str = comodityInfo.spec;
-            NSRange start = [str rangeOfString:@"\""];
-            NSRange end = [str rangeOfString:@"\"" options:NSBackwardsSearch];
-            NSRange range = NSMakeRange(start.location+start.length, end.location-start.location);
-            NSString * descriptionStr = [str substringWithRange:range];
-            cell.textLabel.text = descriptionStr;
+            NSArray *tempArray = [self subProductTypeStrIntoArray:comodityInfo.spec];
+            if ([tempArray count]) {
+                 cell.textLabel.text = [tempArray objectAtIndex:0];
+            }
+           
         }else
         {
             if ([typeStrArray count]==0) {
-                typeStrArray = [NSMutableArray arrayWithArray:@[@"hell",@"youe"]];
+                typeStrArray = [[self subProductTypeStrIntoArray:comodityInfo.pdt_desc]mutableCopy];
             }
             [self initializeContentview:typeStrArray];
             [cell.contentView addSubview:btnContentView];
@@ -343,14 +359,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
     return cell;
 }
 
--(void)subStr:(NSString *)str
-{
-    NSRange start = [str rangeOfString:@"\""];
-    str = [str substringToIndex:start.location];
-    NSRange end = [str rangeOfString:@"\"" options:NSBackwardsSearch];
-    NSRange range = NSMakeRange(start.location+start.length, end.location-start.location);
-    NSString * descriptionStr = [str substringWithRange:range];
-}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -374,7 +382,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         if ([array count]) {
             AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
                 for (ProductStoreInfo * info in item) {
-                NSLog(@"%@",info.store);
+//                NSLog(@"%@",info.store);
                 //判断是否超过库存
                 BOOL isReachtStoreNum = YES;
                 if ([myDelegate.commodityArray count]) {

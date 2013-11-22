@@ -515,6 +515,10 @@
           withCompletedBlock:(void (^)(id item,NSError * error))block
 {
     NSDictionary *userInfo = [User getUserInfo];
+    NSString *typeStr = nil;
+    if ([userData count]) {
+        typeStr = [userData objectAtIndex:0];
+    }
     
     
     NSString * product_id_str   = [[NSString alloc]init];
@@ -549,7 +553,13 @@
         NSString * countStr = [NSString stringWithFormat:@"%d",count];
         arr_nums_str = [arr_nums_str stringByAppendingString:countStr];
         
-        tostr = [NSString stringWithFormat:@"%@(%@)",arr_name_str,countStr];
+        if (typeStr) {
+            tostr = [NSString stringWithFormat:@"%@(%@)(%@)",arr_name_str,typeStr,countStr];
+        }else
+        {
+            tostr = [NSString stringWithFormat:@"%@(%@)",arr_name_str,countStr];
+        }
+        
         //总积分
         NSInteger totalScore = count * commodityInfo.score.integerValue;
         NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];

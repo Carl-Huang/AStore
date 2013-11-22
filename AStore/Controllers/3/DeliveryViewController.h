@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *deliveryTable;
 @property (weak, nonatomic) IBOutlet UIButton *deliveryBtn;
 @property (strong ,nonatomic) DeliveryTypeInfo * deliveryMethod;
+@property (weak ,nonatomic) UIViewController * weakViewController;
 - (IBAction)deliveryBtnAction:(id)sender;
 
 @end

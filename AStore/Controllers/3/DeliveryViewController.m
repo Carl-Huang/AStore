@@ -195,5 +195,10 @@ static NSString * const selectKey = @"selectKey";
     return  cell;
 
 }
+-(void)dealloc
+{
+    [self removeObserver:self.weakViewController forKeyPath:@"deliveryMethod"];
+    
+}
 
 @end

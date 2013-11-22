@@ -65,7 +65,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 @synthesize payType;
 @synthesize commoditySumMoney;
 @synthesize giftSumMoney;
-
+@synthesize type;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -205,7 +205,11 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             [self showAlertViewWithTitle:@"提示" message:@"请选择商品" tag:0];
             return;
         }
-        [HttpHelper postOrderWithUserInfo:nil
+        NSArray *userData = nil;
+        if ([self.type length]) {
+            userData = @[self.type];
+        }
+        [HttpHelper postOrderWithUserInfo:userData
                              deliveryType:deliveryTypeInfo
                                    Weight: [NSString stringWithFormat:@"%d",totalWeight]
                                productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
@@ -398,6 +402,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
 -(void)pushDeliveryViewController
 {
     DeliveryViewController * viewcontroller = [[DeliveryViewController alloc]initWithNibName:@"DeliveryViewController" bundle:nil];
+    [viewcontroller setWeakViewController:self];
     [viewcontroller addObserver:self forKeyPath:@"deliveryMethod" options:NSKeyValueObservingOptionNew context:NULL];
     [self.navigationController pushViewController:viewcontroller animated:YES];
     viewcontroller = nil;
@@ -646,4 +651,5 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             break;
     }
 }
+
 @end

@@ -30,7 +30,7 @@
 @synthesize bn;
 @synthesize mktprice;
 @synthesize pdt_desc;
-
+@synthesize productType;
 +(void)printCommodityInfo:(Commodity *)info
 {
     unsigned int varCount;
@@ -68,6 +68,7 @@
         self.bn         = [aDecoder decodeObjectForKey:@"bn"];
         self.mktprice   = [aDecoder decodeObjectForKey:@"mktprice"];
         self.pdt_desc   = [aDecoder decodeObjectForKey:@"pdt_desc"];
+        self.productType = [aDecoder decodeObjectForKey:@"productType"];
     }
     return  self;
 }
@@ -94,6 +95,7 @@
     [aCoder encodeObject:self.bn        forKey:@"bn"];
     [aCoder encodeObject:self.mktprice  forKey:@"mktprice"];
     [aCoder encodeObject:self.pdt_desc  forKey:@"pdt_desc"];
+    [aCoder encodeObject:self.productType forKey:@"productType"];
 }
 
 +(void)archivingCommodityObj:(Commodity *)item

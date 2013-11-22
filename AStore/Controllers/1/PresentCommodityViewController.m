@@ -116,7 +116,23 @@ static NSString * cellIdentifier = @"cellIdentifier";
         [NSMutableArray archivingObjArray:myDelegate.presentArray withKey:@"PresentArray"];
     }
 }
-
+//提取商品的种类
+-(NSArray *)subProductTypeStrIntoArray:(NSString *)productStr
+{
+    NSError * error;
+    NSMutableArray * tempArray = [NSMutableArray array];
+    
+    NSRegularExpression * regex = [[NSRegularExpression alloc]initWithPattern:@"[\u4e00-\u9fa5]*[\u4e00-\u9fa5]" options:NSRegularExpressionAllowCommentsAndWhitespace error:&error];
+    NSString * searchStr = productStr;
+    NSArray * compomentArray =[regex matchesInString:searchStr options:NSMatchingReportProgress range:NSMakeRange(0, [searchStr length])];
+    for (NSTextCheckingResult * checktStr in compomentArray) {
+        NSRange range = [checktStr rangeAtIndex:0];
+        [tempArray addObject:[searchStr substringWithRange:range]];
+        NSLog(@"%@",[searchStr substringWithRange:range]);
+    }
+    return tempArray;
+    
+}
 -(void)pushBack
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -165,17 +181,6 @@ static NSString * cellIdentifier = @"cellIdentifier";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    switch (section) {
-//        case 0:
-//            return 1;
-//            break;
-//        case 1:
-//            return 3;
-//            break;
-//        default:
-//            return 1;
-//            break;
-//    }
     return 3;
 }
 
@@ -252,11 +257,7 @@ static NSString * cellIdentifier = @"cellIdentifier";
         NSString * tempStr = @"截止时间: ";
         NSString * str = [tempStr stringByAppendingString:comodityInfo.limit_end_time];
         cell.textLabel.text = str;
-    }else if(row == 4)
-    {
-        
     }
-
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor whiteColor];
     cell.textLabel.font = [UIFont systemFontOfSize:14];

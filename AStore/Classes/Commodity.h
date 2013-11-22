@@ -29,7 +29,7 @@
 @property (nonatomic,retain) NSString * cat_id;
 @property (nonatomic,retain) NSString * mktprice;
 @property (nonatomic,retain) NSString * pdt_desc;
-
+@property (nonatomic,retain) NSString * productType;
 +(void)printCommodityInfo:(Commodity *)info;
 +(void)archivingCommodityObj:(Commodity *)item;
 +(Commodity *)unarchivingCommodityObj;

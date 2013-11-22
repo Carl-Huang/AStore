@@ -12,4 +12,5 @@
 @property (weak, nonatomic) IBOutlet UITableView *confirmTable;
 @property (assign,nonatomic) float commoditySumMoney;
 @property (assign,nonatomic) float giftSumMoney;
+@property (strong ,nonatomic) NSString * type;
 @end

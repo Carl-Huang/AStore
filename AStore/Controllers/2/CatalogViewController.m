@@ -20,13 +20,16 @@
 }
 @property (strong, nonatomic) NSArray *firstSectionData;
 @property (strong, nonatomic) NSArray *secondSectionData;
+@property (strong, nonatomic) NSArray *thirdSectionData;
 @property (strong, nonatomic) NSString * firstSectionKey;
 @property (strong, nonatomic) NSString * secondSectionKey;
+@property (strong, nonatomic) NSString * thirdSectionKey;
+
 @property (strong,nonatomic) NSMutableDictionary * dictionary;
 @end
 
 @implementation CatalogViewController
-@synthesize firstSectionData,secondSectionData;
+@synthesize firstSectionData,secondSectionData,thirdSectionData;
 @synthesize loadingView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,9 +45,6 @@
 {
     [super viewDidLoad];
     [self setLeftTitle:@"全部分类"];
-//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//    [myDelegate  showLoginViewOnView:self.view];
-    
     loadingView = [[MBProgressHUD alloc]initWithView:self.view];
     loadingView.dimBackground = YES;
     loadingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
@@ -69,8 +69,10 @@
             _dictionary = (NSMutableDictionary *)catalogInfo;
             _firstSectionKey = [[_dictionary allKeys]objectAtIndex:0];
             _secondSectionKey = [[_dictionary allKeys]objectAtIndex:1];
+            _thirdSectionKey = [[_dictionary allKeys]objectAtIndex:2];
             firstSectionData = (NSArray *)[_dictionary objectForKey:_firstSectionKey];
             secondSectionData = (NSArray *)[_dictionary objectForKey:_secondSectionKey];
+            thirdSectionData = (NSArray *)[_dictionary objectForKey:_thirdSectionKey];
             [self performSelectorOnMainThread:@selector(refreshTableview) withObject:nil waitUntilDone:NO];
         }
         
@@ -155,6 +157,9 @@
         label.text = _firstSectionKey;
     } else if(section == 1){
         label.text = _secondSectionKey;
+    }else
+    {
+        label.text =_thirdSectionKey;
     }
     [headerView addSubview:imageView];
     [headerView addSubview:label];
@@ -213,7 +218,7 @@
             [self.navigationController pushViewController:cCatList animated:YES];
         }
         
-    }else
+    }else if(indexPath.section ==1)
     {
         NSDictionary * tempDic = [secondSectionData objectAtIndex:indexPath.row];
         NSString * parent_idStr = [tempDic objectForKey:@"cat_id"];
@@ -238,6 +243,32 @@
             [cCatList setCat_id:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
             [cCatList setCat_name:[[secondSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
              [self.navigationController pushViewController:cCatList animated:YES];
+        }
+    }else
+    {
+        NSDictionary * tempDic = [thirdSectionData objectAtIndex:indexPath.row];
+        NSString * parent_idStr = [tempDic objectForKey:@"cat_id"];
+        NSMutableArray * tempArray = [NSMutableArray array];
+        for (NSDictionary * dic in totalCatalogData) {
+            if ([[dic objectForKey:@"parent_id"] isEqualToString:parent_idStr])
+            {
+                [tempArray addObject:dic];
+            }
+        }
+        
+        if ([tempArray count]) {
+            SubCatalogViewController * subViewController = [[SubCatalogViewController alloc]initWithNibName:@"SubCatalogViewController" bundle:nil];
+            [subViewController setDataSource:tempArray];
+            tempArray = nil;
+            [subViewController setTitleStr:[tempDic objectForKey:@"cat_name"]];
+            [self.navigationController pushViewController:subViewController animated:YES];
+        }else
+        {
+            ChildCatalogViewContaollerViewController * cCatList = [[ChildCatalogViewContaollerViewController alloc] initWithNibName:nil bundle:nil];
+            
+            [cCatList setCat_id:[[thirdSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_id"]];
+            [cCatList setCat_name:[[thirdSectionData objectAtIndex:indexPath.row]objectForKey:@"cat_name"]];
+            [self.navigationController pushViewController:cCatList animated:YES];
         }
     }
 }

@@ -147,7 +147,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
             NSInteger tempWeight = tempCount*info.weight.integerValue;
             totalWeight += tempWeight;
             totalCommodityNum += tempCount;
-            totalPoint += info.score.integerValue * tempCount;
+            totalPoint += info.score.integerValue * tempCount*2;
         }
 
     }

@@ -561,7 +561,7 @@
         }
         
         //总积分
-        NSInteger totalScore = count * commodityInfo.score.integerValue;
+        NSInteger totalScore =  2* count * commodityInfo.score.integerValue;
         NSString * scoreStr = [NSString stringWithFormat:@"%d",totalScore];
         arr_score_str = [arr_score_str stringByAppendingString:scoreStr];
         

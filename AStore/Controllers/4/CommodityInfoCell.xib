@@ -42,7 +42,7 @@
 							<object class="IBUILabel" id="860726232">
 								<reference key="NSNextResponder" ref="1029489181"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{14, 14}, {56, 21}}</string>
+								<string key="NSFrame">{{13, 14}, {60, 21}}</string>
 								<reference key="NSSuperview" ref="1029489181"/>
 								<reference key="NSNextKeyView" ref="56059161"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -51,7 +51,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">编号：</string>
+								<string key="IBUIText">订单号：</string>
 								<object class="NSColor" key="IBUITextColor" id="946241298">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -485,7 +485,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{73, 199}, {209, 21}}</string>
 								<reference key="NSSuperview" ref="1029489181"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>

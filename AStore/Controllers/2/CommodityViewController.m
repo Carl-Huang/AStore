@@ -317,7 +317,8 @@ static NSString * cellIdentifier = @"cellIdentifier";
     cell.textLabel.text = nil;
     if (indexPath.section == 0) {
         NSString * tempStr = @"所得积分: ";
-        NSString * str = [tempStr stringByAppendingString:comodityInfo.score];
+        NSInteger num = comodityInfo.score.integerValue*2;
+        NSString * str = [tempStr stringByAppendingString:[NSString stringWithFormat:@"%d",num]];
         cell.textLabel.text = str;
     }else if (indexPath.section == 1)
     {

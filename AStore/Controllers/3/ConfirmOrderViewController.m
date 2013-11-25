@@ -27,6 +27,9 @@
 #import <objc/runtime.h>
 #import "GetGiftInfo.h"
 #import "NSMutableArray+SaveCustomiseData.h"
+#import "ProductStoreInfo.h"
+#import "GiftStoreInfo.h"
+
 typedef NS_ENUM(NSInteger, PaymentType)
 {
     OnlinePaymentType = 1,
@@ -204,22 +207,145 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
         if (myDelegate.buiedCommodityArray == nil) {
             [self showAlertViewWithTitle:@"提示" message:@"请选择商品" tag:0];
             return;
+        }else
+        {
+            //检查库存
+            NSMutableArray * productIdStoreArray = [NSMutableArray array];
+            __block NSMutableArray * productStoreArray = [NSMutableArray array];
+            for (int i = 0; i < [myDelegate.buiedCommodityArray count]; i++) {
+                NSDictionary * dic = [myDelegate.buiedCommodityArray  objectAtIndex:i];
+                Commodity * info = [dic objectForKey:@"commodity"];
+                [productIdStoreArray addObject:info.product_id];
+            }
+            
+            __weak ConfirmOrderViewController *weakSelf = self;
+            [HttpHelper getProductStoreWithProductId:productIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+                ;
+                if (error) {
+                    NSLog(@"%@",[error description]);
+                    return ;
+                }
+                productStoreArray =item;
+                if ([productStoreArray count]) {
+                    for (ProductStoreInfo * info in productStoreArray) {
+//                        NSLog(@"%@: %@",info.product_id,info.store);
+                        for (NSDictionary * dic in myDelegate.buiedCommodityArray) {
+                            Commodity * commodity = [dic objectForKey:@"commodity"];
+                            if ([commodity.product_id isEqualToString:info.product_id]&&[dic[@"count"]integerValue]>info.store.integerValue) {
+                                //库存不足
+                                NSString * commodityStr = [NSString stringWithFormat:@"%@ 库存不足",commodity.name];
+                                [weakSelf showAlertViewWithTitle:@"提示" message:commodityStr tag:0];
+                                return;
+                            }
+                        }
+                    }
+                }
+                [weakSelf confirmCommodityBuyingAction];
+            }];
+            
         }
-        NSArray *userData = nil;
-        if ([self.type length]) {
-            userData = @[self.type];
+    }
+    if (giftSumMoney!= 0) {
+        if (myDelegate.buiedPresentArray == nil) {
+            [self showAlertViewWithTitle:@"提示" message:@"请选择赠品" tag:0];
+            return;
+            
+        }else
+        {
+            //检查赠品库存
+            NSMutableArray * giftIdStoreArray = [NSMutableArray array];
+            for (int i = 0; i < [myDelegate.buiedPresentArray count]; i++) {
+                NSDictionary * dic = [myDelegate.buiedPresentArray objectAtIndex:i];
+                GetGiftInfo * info = [dic objectForKey:@"present"];
+                [giftIdStoreArray addObject:info.gift_id];
+            }
+            [HttpHelper getGiftStoreWithGiftId:giftIdStoreArray withCompletedBlock:^(id item, NSError *error) {
+                
+                if (error) {
+                    NSLog(@"%@",[error description]);
+                    return ;
+                }
+               NSMutableArray * giftStoreArray =item;
+                if ([giftStoreArray count]) {
+                    for (GiftStoreInfo * info in giftStoreArray) {
+                        NSLog(@"%@: %@",info.gift_id,info.storage);
+                        for (NSDictionary * dic in myDelegate.buiedPresentArray) {
+                            GetGiftInfo * present = [dic objectForKey:@"present"];
+                            if ([info.gift_id isEqualToString:present.gift_id]&&info.storage.integerValue <[dic[@"count"]integerValue])
+                            {
+                                NSString * presentStr = [NSString stringWithFormat:@"%@ 库存不足",present.name];
+                                [weakSelf showAlertViewWithTitle:@"提示" message:presentStr tag:0];
+                                return;
+                            }
+                        }
+                    }
+                }
+                [weakSelf confirmPresentBuyingAction];
+            }];
+
         }
-        [HttpHelper postOrderWithUserInfo:userData
+               
+    }
+  
+}
+
+-(void)confirmCommodityBuyingAction
+{
+    //执行购买操作
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    __weak ConfirmOrderViewController * weakSelf = self;
+    NSArray *userData = nil;
+    if ([self.type length]) {
+        userData = @[self.type];
+    }
+    
+    [HttpHelper postOrderWithUserInfo:userData
+                         deliveryType:deliveryTypeInfo
+                               Weight: [NSString stringWithFormat:@"%d",totalWeight]
+                           productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
+                              address:addressTypeInfo
+                    totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",commoditySumMoney]
+                         deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
+                             getPoint:[NSString stringWithFormat:@"%d",totalPoint]
+                           totalMoney:[NSString stringWithFormat:@"%0.1f",totalMoney]
+                                 memo:memoStr
+                   withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
+                       if (error) {
+                           NSLog(@"%@",[error description]);
+                       }
+                       NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
+                       
+                       if ([str isEqualToString:@"1"]) {
+                           NSLog(@"提交订单成功");
+                           [weakSelf cleanCommodityData];
+                           [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单成功" tag:SuccessfullyPostTag];
+                           
+                       }else
+                       {
+                           NSLog(@"提交订单失败");
+                           [myDelegate removeLoadingViewWithView:nil];
+                           [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败" tag:FailedPostTag];
+                           
+                       }
+                   }];
+}
+
+-(void)confirmPresentBuyingAction
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+    __weak ConfirmOrderViewController * weakSelf = self;
+    [HttpHelper postGiftOrderWithUserInfo:nil
                              deliveryType:deliveryTypeInfo
-                                   Weight: [NSString stringWithFormat:@"%d",totalWeight]
+                                   Weight:[NSString stringWithFormat:@"%d",totalWeight]
+                                    tostr:@""
                                productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
                                   address:addressTypeInfo
-                        totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",commoditySumMoney]
+                        totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",giftSumMoney]
                              deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
-                                 getPoint:[NSString stringWithFormat:@"%d",totalPoint]
-                               totalMoney:[NSString stringWithFormat:@"%0.1f",totalMoney]
+                                 getPoint:@"0"
+                               totalMoney:[NSString stringWithFormat:@"%d",deliveryCost]
                                      memo:memoStr
-                       withCommodityArray:myDelegate.buiedCommodityArray withCompletedBlock:^(id item, NSError *error) {
+                       withCommodityArray:myDelegate.buiedPresentArray withCompletedBlock:^(id item, NSError *error) {
                            if (error) {
                                NSLog(@"%@",[error description]);
                            }
@@ -227,7 +353,7 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                            
                            if ([str isEqualToString:@"1"]) {
                                NSLog(@"提交订单成功");
-                               [weakSelf cleanCommodityData];
+                               [weakSelf cleanPresentData];
                                [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单成功" tag:SuccessfullyPostTag];
                                
                            }else
@@ -237,50 +363,10 @@ static NSString * const orderMemoCellIdentifier = @"orderMemoCellIdentifier";
                                [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败" tag:FailedPostTag];
                                
                            }
+                           
                        }];
-            }
-    if (giftSumMoney!= 0) {
-        if (myDelegate.buiedPresentArray == nil) {
-            [self showAlertViewWithTitle:@"提示" message:@"请选择赠品" tag:0];
-            return;
-            
-        }
-        [HttpHelper postGiftOrderWithUserInfo:nil
-                                 deliveryType:deliveryTypeInfo
-                                       Weight:[NSString stringWithFormat:@"%d",totalWeight]
-                                        tostr:@""
-                                   productNum:[NSString stringWithFormat:@"%d",totalCommodityNum]
-                                      address:addressTypeInfo
-                            totalProuctMomeny:[NSString stringWithFormat:@"%0.1f",giftSumMoney]
-                                 deliveryCost:[NSString stringWithFormat:@"%d",deliveryCost]
-                                     getPoint:@"0"
-                                   totalMoney:[NSString stringWithFormat:@"%d",deliveryCost]
-                                         memo:memoStr
-                           withCommodityArray:myDelegate.buiedPresentArray withCompletedBlock:^(id item, NSError *error) {
-                               if (error) {
-                                   NSLog(@"%@",[error description]);
-                               }
-                               NSString * str = [[item objectAtIndex:0]objectForKey:RequestStatusKey];
-                               
-                               if ([str isEqualToString:@"1"]) {
-                                   NSLog(@"提交订单成功");
-                                   [weakSelf cleanPresentData];
-                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单成功" tag:SuccessfullyPostTag];
-                                   
-                               }else
-                               {
-                                   NSLog(@"提交订单失败");
-                                   [myDelegate removeLoadingViewWithView:nil];
-                                   [weakSelf showAlertViewWithTitle:@"提示" message:@"提交订单失败" tag:FailedPostTag];
-                                   
-                               }
 
-        }];
-       
-    }
-  
 }
-
 -(void)cleanCommodityData
 {
     //DeliveryViewController

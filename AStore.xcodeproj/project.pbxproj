@@ -1663,8 +1663,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1679,8 +1679,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
+				PROVISIONING_PROFILE = "71695CA9-A211-491E-B99F-59039E870102";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71695CA9-A211-491E-B99F-59039E870102";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1697,8 +1697,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1706,8 +1706,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
+				PROVISIONING_PROFILE = "71695CA9-A211-491E-B99F-59039E870102";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71695CA9-A211-491E-B99F-59039E870102";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1716,8 +1716,8 @@
 		C34217CA17F1E1F600B42F5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1734,8 +1734,8 @@
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
+				PROVISIONING_PROFILE = "71695CA9-A211-491E-B99F-59039E870102";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71695CA9-A211-491E-B99F-59039E870102";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1743,8 +1743,8 @@
 		C34217CB17F1E1F600B42F5E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: xiaoqi Huang (PNQK998G6W)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: xiaoqi Huang (Y8CJPVFVEM)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1761,8 +1761,8 @@
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "281A622E-DAF8-44D0-A570-87DBD2EFEE64";
+				PROVISIONING_PROFILE = "71695CA9-A211-491E-B99F-59039E870102";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "71695CA9-A211-491E-B99F-59039E870102";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
